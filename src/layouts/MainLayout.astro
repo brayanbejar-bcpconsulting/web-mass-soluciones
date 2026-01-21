@@ -1,0 +1,55 @@
+---
+import Header from "../components/layout/Header.astro";
+import SubHeader from "../components/layout/SubHeader.astro";
+import Footer from "../components/layout/Footer.astro";
+import BaseHead from "../components/seo/BaseHead.astro";
+import ScriptTracking from "../components/seo/ScriptTracking.astro";
+import "@styles/global.css";
+
+interface Props {
+    title: string;
+    description: string;
+    image?: string;
+    canonicalURL?: string;
+    type?: string;
+    noIndex?: boolean;
+}
+
+const { title, description, image, canonicalURL, type, noIndex } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+    <head>
+        <BaseHead
+            title={title}
+            description={description}
+            image={image}
+            canonicalURL={canonicalURL}
+            type={type}
+            noIndex={noIndex}
+        />
+        <ScriptTracking noIndex={noIndex} />
+    </head>
+    <body>
+        <!-- Google Tag Manager (noscript)
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K5KJR59T"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    End Google Tag Manager (noscript) -->
+
+        <!-- Skip Link para accesibilidad -->
+        <a
+            href="#main-content"
+            class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-100 focus:px-4 focus:py-2 focus:bg-white focus:text-primary-700 focus:rounded-lg focus:shadow-lg focus:font-medium"
+        >
+            Saltar al contenido principal
+        </a>
+
+        <Header />
+        <SubHeader />
+        <main id="main-content" tabindex="-1">
+            <slot />
+        </main>
+        <Footer />
+    </body>
+</html>

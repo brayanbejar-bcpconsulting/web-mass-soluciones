@@ -1,0 +1,74 @@
+---
+interface Props {
+    title: string;
+    description: string;
+    image?: string;
+    canonicalURL?: string;
+    type?: string;
+    noIndex?: boolean;
+}
+
+const {
+    title,
+    description,
+    image = "/og-cambios-mass.webp",
+    canonicalURL,
+    type = "website",
+    noIndex = false,
+} = Astro.props;
+
+const siteUrl = "https://cambiosmass.com/";
+const finalCanonical =
+    canonicalURL || new URL(Astro.url.pathname, siteUrl).href;
+const imageUrl = new URL(image, siteUrl).href;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<meta name="generator" content={Astro.generator} />
+
+<!-- Google Search Console Verification
+<meta name="google-site-verification" content="JRS376YZkvQjNMALg4uUn6lAqySNkXwWaYRVnn5Q4TY" />
+-->
+
+<!-- SEO Principal -->
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={finalCanonical} />
+{noIndex && <meta name="robots" content="noindex, nofollow" />}
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={finalCanonical} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={imageUrl} />
+<meta property="og:locale" content="es_PE" />
+<meta property="og:site_name" content="Cambios Mass" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={finalCanonical} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageUrl} />
+<meta name="twitter:site" content="@cambiosmass" />
+
+<!-- RSS Feed -->
+<link
+    rel="alternate"
+    type="application/rss+xml"
+    title="Cambios Mass Blog RSS"
+    href="/rss.xml"
+/>
+
+<!-- Preload recursos críticos -->
+<link rel="preload" as="image" href="/logo.webp" type="image/webp" />
+
+<!-- DNS Prefetch para servicios externos -->
+<link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+<link rel="dns-prefetch" href="https://www.google-analytics.com" />
+<link rel="dns-prefetch" href="https://www.clarity.ms" />
+
+<link rel="sitemap" href="/sitemap-index.xml" />
