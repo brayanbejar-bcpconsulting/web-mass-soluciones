@@ -1,0 +1,166 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import Button from '@/components/ui/Button.astro';
+---
+
+<div 
+  id="calc-container" 
+  class="w-full max-w-md font-sans"
+>
+  <div class="text-center mb-6">
+    <p class="text-neutral-200 text-h5 font-bold m-0">¡Precio del dólar hoy en Perú!</p>
+    <div class="flex justify-center items-center gap-4 mt-1">
+      <span class="text-neutral-200 text-btn">Compra: <strong id="display-compra" class="font-bold">
+        <span class="inline-block w-12 h-5 bg-neutral-400/50 rounded animate-pulse"></span>
+      </strong></span>
+      |
+      <span class="text-neutral-200 text-btn">Venta: <strong id="display-venta" class="font-bold">
+        <span class="inline-block w-12 h-5 bg-neutral-400/50 rounded animate-pulse"></span>
+      </strong></span>
+    </div>
+  </div>
+
+  <div class="space-y-3 relative">
+    <div class="p-4 bg-neutral-50 rounded-2xl border-2 border-transparent focus-within:border-primary-500 transition-all">
+      <span class="text-xs font-bold text-neutral-500 uppercase tracking-tight">Tú Envías</span>
+      <div class="flex justify-between items-center mt-1">
+        <span id="label-envio" class="text-xl font-extrabold text-primary-950">Dólares</span>
+        <input 
+          type="number" 
+          id="input-envio" 
+          value="1000"
+          class="w-1/2 text-right text-2xl font-extrabold bg-transparent outline-none text-neutral-700"
+        />
+      </div>
+    </div>
+
+    <button 
+      id="btn-switch"
+      aria-label="Cambiar tipo de moneda"
+      title="Invertir monedas"
+      class="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 bg-secondary-400 p-2 rounded-full shadow-md border border-neutral-200 hover:scale-110 transition-transform active:rotate-180 duration-300"
+    >
+      <Icon name="refresh" />
+    </button>
+
+    <div class="p-4 bg-neutral-50 rounded-2xl border-2 border-transparent focus-within:border-success-500 transition-all">
+      <span class="text-xs font-bold text-neutral-500 uppercase tracking-tight">Tú Recibes</span>
+      <div class="flex justify-between items-center mt-1">
+        <span id="label-recibo" class="text-xl font-extrabold text-primary-950">Soles</span>
+        <input 
+          type="number" 
+          id="input-recibo" 
+          readonly
+          class="w-1/2 text-right text-2xl font-black bg-transparent outline-none text-success-600 text-secondary-400"
+        />
+      </div>
+    </div>
+  </div>
+
+  <Button
+    id="btn-cambiar-ahora"
+    data-app-link="true"
+    variant="secondary"
+    class='mt-6 font-bold! text-shadow-none w-full'
+    target='_self'
+  >
+    Cambiar ahora
+  </Button>
+
+  <ul class="my-4 flex flex-col gap-4 text-sm">
+    <li class="flex gap-2 items-center justify-center text-start">
+      <Icon name='icon-hand-coin' class='size-14'/>
+      <span class="mb-0">Solicita una tasa preferencial por montos mayores a <strong>$5.000</strong> o <strong>S/. 18.000</strong></span>
+    </li>
+    <li class="flex gap-2 items-center justify-center text-start">
+      <Icon name='shield-check' class='size-14'/>
+      <span class="mb-0 font-bold">Registrados en la Superintendencia de Banca y Seguros y AFP</span>
+    </li>
+  </ul>
+</div>
+
+<script>
+  import { APP_URLS } from '@/utils/navigation';
+import { buildURLWithUTM } from '@/utils/queryParams';
+  
+  // Variables globales para los precios
+  let compra = 0;
+  let venta = 0;
+  let tipoOperacion: 'USD' | 'PEN' = 'USD';
+
+  // Elementos del DOM
+  const container = document.querySelector('#calc-container') as HTMLElement;
+  const inputEnvio = document.querySelector('#input-envio') as HTMLInputElement;
+  const inputRecibo = document.querySelector('#input-recibo') as HTMLInputElement;
+  const btnSwitch = document.querySelector('#btn-switch');
+  const labelEnvio = document.querySelector('#label-envio');
+  const labelRecibo = document.querySelector('#label-recibo');
+  const displayCompra = document.querySelector('#display-compra');
+  const displayVenta = document.querySelector('#display-venta');
+  const btnCambiarAhora = document.querySelector('#btn-cambiar-ahora') as HTMLButtonElement;
+
+  // Redirigir a la app con UTMs preservados
+  if (btnCambiarAhora) {
+    btnCambiarAhora.addEventListener('click', () => {
+      const appUrl = buildURLWithUTM(`${APP_URLS.login}`);
+      window.location.href = appUrl;
+    });
+  }
+
+  function calcular() {
+    if (compra === 0 || venta === 0) return; // Esperar a que carguen los datos
+    
+    const monto = Number(inputEnvio.value);
+    let resultado = 0;
+
+    if (tipoOperacion === 'USD') {
+      resultado = monto * compra;
+    } else {
+      resultado = monto / venta;
+    }
+    
+    inputRecibo.value = resultado.toFixed(2);
+  }
+
+  async function fetchRates() {
+    try {
+      const response = await fetch('/api/exchange-rate');
+      if (!response.ok) throw new Error('Error al obtener tasas');
+      
+      const data = await response.json();
+      compra = data.compra;
+      venta = data.venta;
+
+      // Actualizar UI con los precios reales
+      if (displayCompra) displayCompra.textContent = compra.toFixed(3);
+      if (displayVenta) displayVenta.textContent = venta.toFixed(3);
+
+      // Calcular con los nuevos valores
+      calcular();
+    } catch (error) {
+      console.error('Error cargando tasas:', error);
+      // Fallback en caso de error
+      compra = 3.353;
+      venta = 3.356;
+      if (displayCompra) displayCompra.textContent = compra.toFixed(3);
+      if (displayVenta) displayVenta.textContent = venta.toFixed(3);
+      calcular();
+    }
+  }
+
+  btnSwitch?.addEventListener('click', () => {
+    tipoOperacion = tipoOperacion === 'USD' ? 'PEN' : 'USD';
+    
+    if(labelEnvio && labelRecibo) {
+      labelEnvio.textContent = tipoOperacion === 'USD' ? 'Dólares' : 'Soles';
+      labelRecibo.textContent = tipoOperacion === 'USD' ? 'Soles' : 'Dólares';
+    }
+    
+    calcular();
+  });
+
+  inputEnvio.addEventListener('input', calcular);
+
+  // Cargar tasas al iniciar
+  fetchRates();
+</script>

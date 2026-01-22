@@ -1,0 +1,129 @@
+---
+// Componente de tabla de historial de precios (últimos 7 días)
+// Los datos se cargan desde el cliente para no bloquear el renderizado
+---
+
+<div id="price-history-container" class="md:hidden xl:inline-block w-full max-w-sm bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
+  <h3 class="text-lg font-bold text-neutral-100 mb-3 text-center">
+    Historial de Precios
+  </h3>
+  
+  <div class="overflow-hidden rounded-xl">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="bg-primary-800/50 text-neutral-200">
+          <th class="py-2 px-3 text-left font-semibold">Fecha</th>
+          <th class="py-2 px-3 text-center font-semibold">Compra</th>
+          <th class="py-2 px-3 text-center font-semibold">Venta</th>
+        </tr>
+      </thead>
+      <tbody id="history-table-body">
+        <!-- Skeleton rows mientras carga -->
+        {Array.from({ length: 7 }).map((_, i) => (
+          <tr class="skeleton-row border-b border-white/10 last:border-0">
+            <td class="py-2 px-3">
+              <span class="inline-block w-16 h-4 bg-neutral-400/30 rounded animate-pulse"></span>
+            </td>
+            <td class="py-2 px-3 text-center">
+              <span class="inline-block w-12 h-4 bg-neutral-400/30 rounded animate-pulse"></span>
+            </td>
+            <td class="py-2 px-3 text-center">
+              <span class="inline-block w-12 h-4 bg-neutral-400/30 rounded animate-pulse"></span>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  
+  <p id="last-update" class="text-xs text-neutral-300 text-center mt-3 opacity-70">
+    Cargando...
+  </p>
+</div>
+
+<script>
+  interface HistoryItem {
+    compra: number;
+    venta: number;
+    fecha: string;
+  }
+
+  interface PriceHistoryData {
+    current: {
+      compra: number;
+      venta: number;
+      updatedAt: string;
+    };
+    history: HistoryItem[];
+  }
+
+  function formatDate(isoString: string): string {
+    const date = new Date(isoString);
+    return date.toLocaleDateString('es-PE', {
+      day: '2-digit',
+      month: 'short',
+    }).replace('.', '');
+  }
+
+  function formatTime(isoString: string): string {
+    const date = new Date(isoString);
+    return date.toLocaleTimeString('es-PE', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  }
+
+  async function loadPriceHistory() {
+    const tableBody = document.getElementById('history-table-body');
+    const lastUpdate = document.getElementById('last-update');
+
+    try {
+      const response = await fetch('/api/rates-history');
+      if (!response.ok) throw new Error('Error al obtener historial');
+
+      const data: PriceHistoryData = await response.json();
+
+      // Tomar solo los últimos 7 registros
+      const last7 = data.history.slice(0, 7);
+
+      if (tableBody) {
+        tableBody.innerHTML = last7.map((item, index) => `
+          <tr class="border-b border-white/10 last:border-0 ${index === 0 ? 'bg-secondary-400/20' : ''} text-neutral-100 hover:bg-white/5 transition-colors">
+            <td class="py-2 px-3 font-medium">${formatDate(item.fecha)}</td>
+            <td class="py-2 px-3 text-center font-semibold text-success-400">${item.compra.toFixed(3)}</td>
+            <td class="py-2 px-3 text-center font-semibold text-error-400">${item.venta.toFixed(3)}</td>
+          </tr>
+        `).join('');
+
+        // Si no hay datos, mostrar mensaje
+        if (last7.length === 0) {
+          tableBody.innerHTML = `
+            <tr class="text-neutral-300">
+              <td colspan="3" class="py-4 text-center">Sin datos disponibles</td>
+            </tr>
+          `;
+        }
+      }
+
+      if (lastUpdate && data.current.updatedAt) {
+        lastUpdate.textContent = `Actualizado: ${formatDate(data.current.updatedAt)} a las ${formatTime(data.current.updatedAt)}`;
+      }
+
+    } catch (error) {
+      console.error('Error cargando historial:', error);
+      if (tableBody) {
+        tableBody.innerHTML = `
+          <tr class="text-neutral-300">
+            <td colspan="3" class="py-4 text-center">Error al cargar datos</td>
+          </tr>
+        `;
+      }
+      if (lastUpdate) {
+        lastUpdate.textContent = 'No se pudo actualizar';
+      }
+    }
+  }
+
+  // Cargar al iniciar
+  loadPriceHistory();
+</script>
