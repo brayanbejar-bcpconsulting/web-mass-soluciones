@@ -1,1 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 @import "tailwindcss";
+
+@theme {
+  /* Tipografías */
+  --font-montserrat: "Montserrat", sans-serif;
+  --font-open-sans: "Open Sans", sans-serif;
+
+  /* Tamaños de fuentes tipográficas */
+  --text-h1: clamp(2rem, 4vw + 1rem, 3rem);
+  --text-h2: clamp(1.75rem, 3.75vw + 1rem, 2.75rem);
+  --text-h3: clamp(1.5rem, 3vw + 1rem, 2.5rem);
+  --text-h4: clamp(1.25rem, 2vw + 1rem, 2rem);
+  --text-h5: clamp(1.125rem, 1vw + 1rem, 1.5rem);
+  
+  --text-base: 1rem;
+  --text-btn: clamp(1.05rem, 1vw + 0.5rem, 1.15rem);
+
+  /* ==========================================================================
+     SISTEMA DE COLORES CENTRALIZADO
+     Cambia estos valores para actualizar toda la web
+     ========================================================================== */
+
+  /* Primary – Color principal de marca */
+  --color-primary-50:  oklch(96% 0.03 265);
+  --color-primary-100: oklch(92% 0.05 265);
+  --color-primary-200: oklch(87% 0.08 265);
+  --color-primary-300: oklch(80% 0.12 265);
+  --color-primary-400: oklch(72% 0.16 265);
+  --color-primary-500: oklch(64% 0.19 265);
+  --color-primary-600: oklch(56% 0.21 265);
+  --color-primary-700: oklch(48% 0.22 265);
+  --color-primary-800: oklch(40% 0.19 265);
+  --color-primary-900: oklch(34% 0.16 265);
+  --color-primary-950: oklch(24% 0.12 265);
+
+  
+  /* Secondary – Teal (acento moderno y profesional) */
+  --color-secondary-50:  oklch(96% 0.03 175);
+  --color-secondary-100: oklch(92% 0.05 175);
+  --color-secondary-200: oklch(86% 0.08 175);
+  --color-secondary-300: oklch(78% 0.12 175);
+  --color-secondary-400: oklch(70% 0.15 175);
+  --color-secondary-500: oklch(62% 0.18 175);
+  --color-secondary-600: oklch(54% 0.19 175);
+  --color-secondary-700: oklch(46% 0.18 175);
+  --color-secondary-800: oklch(38% 0.15 175);
+  --color-secondary-900: oklch(32% 0.12 175);
+
+
+  /* Neutral cool (ligeramente azulado) */
+  --color-neutral-cool-50:  oklch(98% 0.01 255);
+  --color-neutral-cool-100: oklch(95% 0.02 255);
+  --color-neutral-cool-200: oklch(90% 0.03 255);
+  --color-neutral-cool-300: oklch(83% 0.04 255);
+  --color-neutral-cool-400: oklch(74% 0.05 255);
+  --color-neutral-cool-500: oklch(62% 0.06 255);
+  --color-neutral-cool-600: oklch(50% 0.06 255);
+  --color-neutral-cool-700: oklch(40% 0.05 255);
+  --color-neutral-cool-800: oklch(28% 0.04 255);
+  --color-neutral-cool-900: oklch(18% 0.03 255);
+}
+
+@layer base {
+  *, *:before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  :root {
+    font-size: 16px;
+    color-scheme: light;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-open-sans);
+    font-size: var(--text-base);
+    line-height: 1.6; /* Altura de línea estándar para lectura */
+    color: var(--color-neutral-cool-700);
+  }
+
+  /* Suavizar el scroll para los enlaces ancla como #beneficios */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Aplicación de fuentes y escalas a encabezados */
+  h1, h2, h3, h4, h5 {
+    font-family: var(--font-montserrat);
+    font-weight: 700;
+    line-height: 1.2; /* Altura de línea más cerrada para títulos */
+    text-wrap: balance; /* Práctica SEO/UX moderna para evitar líneas huérfanas */
+  }
+
+  h1 { font-size: var(--text-h1); }
+  h2 { font-size: var(--text-h2); }
+  h3 { font-size: var(--text-h3); }
+  h4 { font-size: var(--text-h4); }
+  h5 { font-size: var(--text-h5); }
+
+  p {
+    font-weight: 400;
+  }
+
+  a {
+    font-family: var(--font-mont);
+  }
+
+  button, .btn {
+    font-family: var(--font-open-sans);
+    font-size: var(--text-btn);
+    font-weight: 500;
+  }
+}

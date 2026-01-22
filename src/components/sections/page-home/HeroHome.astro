@@ -1,0 +1,54 @@
+---
+import ContainerSection from "@/components/ui/ContainerSection.astro";
+import { Image } from "astro:assets";
+
+// Imágenes
+import sbsLogo from "@assets/home/sbs-logo.webp";
+import Calculadora from "@/components/Calculadora.astro";
+import RateHistoryTable from "@/components/RateHistoryTable.astro";
+---
+<ContainerSection
+  ariaLabelledby="hero-heading"
+  bgColor="bg-linear-to-br from-primary-500 to-primary-800"
+  classContainer="text-neutral-cool-50 text-center flex flex-col lg:flex-row items-center lg:justify-between lg:gap-8 gap-12"
+>
+  <header
+    class="flex flex-col items-center lg:items-start gap-4 lg:text-left lg:w-[45%]"
+  >
+    <span
+      class="w-fit bg-primary-100 px-4 py-1 rounded-full text-primary-700 font-bold"
+    >
+      Cambia Dólares Online
+    </span>
+    <h1 id="hero-heading">
+      El tipo de cambio que tu dinero merece: <strong class="text-secondary-200">Seguro, rápido y 100% online.</strong>
+    </h1>
+
+    <p class="text-sm lg:text-base">
+      Ahorra en cada transacción con la casa de cambio digital que entiende el valor de tu esfuerzo. <strong>Cambia tus dólares y soles</strong> desde cualquier lugar del Perú con respaldo legal y rapidez bancaria.
+    </p>
+
+    <article class="flex flex-col gap-4">
+      <p>
+        <strong>
+          Estamos registrados ante la SBS:
+        </strong>
+      </p>
+
+      <div class="bg-neutral-cool-50 px-6 py-2 rounded-full max-w-65">
+        <Image
+          src={sbsLogo}
+          alt="Logo SBS"
+          quality={85}
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+    </article>
+  </header>
+
+  <article class="flex flex-col items-center justify-end lg:flex-row gap-8 lg:w-[55%]">
+    <RateHistoryTable />
+    <Calculadora/>
+  </article>
+</ContainerSection>
