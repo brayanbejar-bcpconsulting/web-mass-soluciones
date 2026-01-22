@@ -1,0 +1,16 @@
+---
+interface Props {
+  name: string;
+  size?: number | string;
+  class?: string;
+}
+
+const { name, size = 24, class: className } = Astro.props;
+
+// Esto añade un timestamp o una cadena aleatoria al final de la URL
+const version = Date.now(); 
+---
+
+<svg width={size} height={size} class={className} aria-hidden="true">
+  <use href={`/icon-sprite.svg?v=${version}#${name}`}></use>
+</svg>

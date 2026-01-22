@@ -1,0 +1,53 @@
+---
+import { parseSimpleMarkdown } from "@utils/markdown"
+
+interface Props {
+  title: string;
+  shortText?: string,
+  description?: string,
+  subtitle?: string;
+  id: string;
+  align?: 'left' | 'center';
+  barColor?: string;
+  textColor?: string;
+  class?: string;
+}
+
+const { 
+  title,
+  shortText,
+  description,
+  subtitle, 
+  id, 
+  align = 'left',
+  barColor = 'bg-secondary-400',
+  textColor = 'text-neutral-600',
+  class: className = '' 
+} = Astro.props;
+
+const alignmentClass = align === 'center' ? 'text-center lg:w-[85%] mx-auto' : 'text-left';
+const barAlignmentClass = align === 'center' ? 'mx-auto' : 'mx-0';
+
+const parsedDescription = description ? parseSimpleMarkdown(description) : '';
+---
+
+<header class={`${alignmentClass} ${className}`}>
+  {shortText && (
+    <span class="text-primary-600 font-bold text-xs uppercase tracking-[0.2em] bg-primary-50 px-4 py-1.5 rounded-full w-fit mx-auto lg:mx-0">
+      {shortText}
+    </span>
+  )}
+  <h2 id={id} class="text-2xl lg:text-4xl font-bold my-4">
+    {title}
+    {subtitle && (
+      <span class="text-primary-600 block mb-2">{subtitle}</span>
+    )}
+  </h2>
+  <div 
+    class={`h-1.5 ${barColor} w-20 rounded-full my-4 ${barAlignmentClass}`} 
+    aria-hidden="true"
+  ></div>
+  {description && (
+    <p class=`mb-0 ${textColor}` set:html={parsedDescription} />
+  )}
+</header>
