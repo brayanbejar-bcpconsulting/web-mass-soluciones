@@ -1,0 +1,82 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'button'> {
+  variant?: 'primary' | 'secondary' | 'outline' | 'whatsapp';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+  target?: '_blank' | '_self' | '_parent' | '_top';
+}
+
+const { 
+  variant = 'primary', 
+  size = 'md', 
+  href, 
+  target,
+  class: className,
+  ...rest 
+} = Astro.props;
+
+// Diccionario de estilos con paddings más equilibrados
+const variants = {
+  primary: "bg-primary-600 text-white hover:bg-primary-500 shadow-sm border border-white/10",
+  secondary: "bg-secondary-400 text-neutral-cool-50 hover:bg-secondary-500 shadow-md",
+  outline: "border-2 bg-transparent border-primary-600 text-primary-600 hover:bg-primary-50",
+  whatsapp: "bg-success-500 text-white hover:bg-success-400 shadow-sm",
+};
+
+// Tamaños optimizados (Alturas fijas sugeridas para consistencia)
+const sizes = {
+  sm: "px-3 py-1.5 text-xs h-8",
+  md: "px-5 py-2.5 text-sm md:text-base h-11",
+  lg: "px-8 py-3.5 text-lg h-14 font-bold",
+};
+
+const buttonClasses = [
+  "inline-flex items-center justify-center rounded-full transition-all duration-300 animation-bounce",
+  "active:scale-95 cursor-pointer font-poppins font-semibold leading-tight text-center hover:scale-105",
+  variants[variant],
+  sizes[size],
+  className
+].filter(Boolean).join(" ");
+
+const Tag = href ? 'a' : 'button';
+const rel = target === '_blank' ? 'noopener noreferrer' : undefined;
+
+const isAppLink = href && (
+  href.includes('market-dollar-certi') || 
+  href.includes('app.market-dollar.com')
+);
+---
+
+<Tag
+  href={href}
+  class={buttonClasses}
+  rel={rel}
+  target={href ? target : undefined}
+  data-app-link={isAppLink ? 'true' : undefined}
+  {...rest}
+>
+  <slot />
+</Tag>
+
+<script>
+  // Este script se ejecuta una sola vez en el cliente, sin importar cuántos botones haya
+  import { buildURLWithUTM } from '@/utils/queryParams';
+
+  const updateLinks = () => {
+    const appLinks = document.querySelectorAll<HTMLAnchorElement>('a[data-app-link="true"]');
+    appLinks.forEach((link) => {
+      const originalHref = link.getAttribute('href');
+      if (originalHref && !link.dataset.utmProcessed) {
+        link.href = buildURLWithUTM(originalHref);
+        link.dataset.utmProcessed = 'true'; // Evita procesar dos veces
+      }
+    });
+  };
+
+  // Ejecutar al cargar y si usas View Transitions de Astro
+  document.addEventListener('astro:page-load', updateLinks);
+  // Compatibilidad básica si no usas View Transitions
+  document.addEventListener('DOMContentLoaded', updateLinks);
+</script>
