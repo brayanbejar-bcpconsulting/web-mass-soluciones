@@ -1,6 +1,7 @@
 ---
 import Icon from '@/components/ui/Icon.astro';
 import Button from '@/components/ui/Button.astro';
+import { APP_URLS } from '@/utils/navigation';
 ---
 
 <div 
@@ -58,10 +59,10 @@ import Button from '@/components/ui/Button.astro';
   </div>
 
   <Button
-    id="btn-cambiar-ahora"
+    href={APP_URLS.login} 
     data-app-link="true"
     variant="secondary"
-    class='mt-6 font-bold! text-shadow-none w-full'
+    class="text-neutral-800! mt-6 font-bold! text-shadow-none w-full"
     target='_self'
   >
     Cambiar ahora

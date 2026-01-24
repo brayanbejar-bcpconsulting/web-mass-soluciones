@@ -1,0 +1,99 @@
+---
+import { Image } from "astro:assets";
+
+// Avatar por defecto
+import imgUserDefault from "@assets/shared/user-default.webp";
+import SectionHeading from "./ui/SectionHeading.astro";
+import ContainerSection from "./ui/ContainerSection.astro";
+import Carousel from "./ui/Carousel.astro";
+import { parseSimpleMarkdown } from "@/utils/markdown";
+
+const testimoniosCards = [
+  {
+    imagen: imgUserDefault,
+    name: "Victor Ruiz M.",
+    opinion:
+      "Increíble. Tuve que **pagar mi tarjeta de crédito a las 9 PM** y Mass Soluciones fue la única que me atendió en minutos. Me salvaron de los intereses del banco.",
+    ubicacion: "Ica, Perú",
+  },
+  {
+    imagen: imgUserDefault,
+    name: "Ricardo Morales L.",
+    opinion:
+      "Tenía dudas por ser mi primera vez cambiando online, pero su asesor por WhatsApp me guio paso a paso. Todo transparente y seguro.",
+    ubicacion: "Arequipa, Perú",
+  },
+  {
+    imagen: imgUserDefault,
+    name: "Jesús Hernández U.",
+    opinion:
+      "Como freelancer recibo pagos en dólares. Con Mass Soluciones recibo mucho más soles que en mi banco habitual. La diferencia se nota a fin de mes.",
+    ubicacion: "Lima, Perú",
+  },
+  {
+    imagen: imgUserDefault,
+    name: "María Medina G.",
+    opinion:
+      "Excelente servicio. El proceso es intuitivo y la atención al cliente es personalizada. Definitivamente mi opción favorita para cambiar divisas.",
+    ubicacion: "Piura, Perú",
+  },
+];
+---
+
+<ContainerSection ariaLabelledby="titulo-testimonios">
+  <SectionHeading
+    id="titulo-testimonios"
+    title="Lo que dicen quienes ya confían en nosotros"
+    align="center"
+    shortText="Testimonios"
+    description="Más que clientes, somos aliados en sus finanzas diarias."
+    class="mb-10"
+  />
+
+  <Carousel data={testimoniosCards}>
+    {
+      testimoniosCards.map((testimonio, index) => {
+        const imgFinal = testimonio.imagen || imgUserDefault;
+
+        return (
+          <article class="testi-card group/card my-10">
+            <div class="flex flex-col h-full justify-between bg-white border border-neutral-100 shadow-sm rounded-2xl p-8 transition-all duration-300 hover:shadow-xl hover:border-primary-100">
+              <div>
+                <svg
+                  class="text-primary-100 size-10 mb-4"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.154c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                </svg>
+                <p class="italic text-neutral-600 leading-relaxed" set:html={parseSimpleMarkdown(testimonio.opinion)}/>
+              </div>
+
+              <footer class="flex gap-4 items-center border-t border-neutral-50 pt-4">
+                <div class="shrink-0">
+                  <Image
+                    src={imgFinal}
+                    alt={`Avatar de ${testimonio.name}`}
+                    width={48}
+                    height={48}
+                    class="rounded-full bg-neutral-100"
+                  />
+                </div>
+
+                <div class="text-start">
+                  <h3 class="text-base font-bold text-neutral-900 leading-tight">
+                    {testimonio.name}
+                  </h3>
+                  <span class="text-sm text-primary-600 font-medium">
+                    {testimonio.ubicacion}
+                  </span>
+                </div>
+              </footer>
+            </div>
+          </article>
+        );
+      })
+    })
+  </Carousel>
+</ContainerSection>

@@ -1,0 +1,265 @@
+---
+import Button from "@components/ui/Button.astro";
+import Icon from "@components/ui/Icon.astro";
+import SectionHeading from "@/components/ui/SectionHeading.astro";
+---
+
+<section class="py-16 bg-neutral-50" aria-labelledby="section-market-title">
+  <div class="mx-auto px-[5%] flex flex-col lg:row items-center gap-12">
+    <article
+      class="w-full flex flex-col gap-6 text-center lg:text-left items-center lg:items-start"
+    >
+      <SectionHeading
+        id="section-market-title"
+        shortText="Mercado en tiempo real"
+        title="Toma el control de tus cambios con datos reales"
+        description="Visualiza la tendencia del mercado y aprovecha el mejor momento para tu empresa."
+        align="center"
+      />
+
+      <nav
+        class="flex flex-col mx-auto sm:flex-row lg:flex-col xl:flex-row gap-4 w-full sm:w-auto"
+      >
+        <Button
+          variant="outline"
+          href="/registro"
+          class="flex gap-2 justify-center items-center"
+        >
+          <Icon name="user" class="size-5" /> Crea cuenta
+        </Button>
+        <Button
+          variant="whatsapp"
+          href="https://wa.me/51933214054"
+          class="flex gap-2 justify-center items-center"
+        >
+          <Icon name="whatsapp" class="size-5" /> Asesórate Hoy
+        </Button>
+      </nav>
+    </article>
+
+    <div class="w-full lg:w-3/5">
+      <div
+        class="bg-white p-4 md:p-8 rounded-3xl border border-neutral-200 shadow-xl"
+      >
+        <header
+          class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8"
+        >
+          <div class="grid gap-1">
+            <span class="italic text-xs text-neutral-400"
+              >Fuente: <a href="https://dolar.pe/" target="_blank">dolar.pe</a
+              ></span
+            >
+            <h3 class="text-xl font-bold text-neutral-900">
+              Tendencia del Dólar
+            </h3>
+          </div>
+
+          <nav class="flex bg-neutral-100 p-1 rounded-xl">
+            {
+              ["7", "15", "30"].map((range) => (
+                <button
+                  data-range={range}
+                  class="filter-btn px-4 py-1.5 rounded-lg text-xs font-bold transition-all text-neutral-500 hover:text-neutral-900"
+                >
+                  {range === "30" ? "1M" : range === "15" ? "15D" : "7D"}
+                </button>
+              ))
+            }
+          </nav>
+        </header>
+
+        <div
+          class="relative h-64 md:h-80 w-full flex items-center justify-center"
+        >
+          <canvas id="dollarChart"></canvas>
+
+          <div
+            id="chartLoader"
+            class="absolute inset-0 flex flex-col items-center justify-center bg-white/80 backdrop-blur-sm transition-opacity duration-500"
+          >
+            <div
+              class="animate-spin rounded-full h-12 w-12 border-4 border-neutral-200 border-t-blue-600"
+            >
+            </div>
+            <p class="mt-4 text-sm text-neutral-500 font-medium">
+              Actualizando tipo de cambio...
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @reference "../styles/global.css";
+  .filter-btn.active {
+    @apply bg-white text-blue-600 shadow-sm;
+  }
+</style>
+
+<script>
+  import Chart from "chart.js/auto";
+  import type { ScriptableContext } from "chart.js";
+  import { formatDateForChart, formatPEN } from "@utils/currency";
+
+  let chartInstance: Chart | null = null;
+  let rawData: number[] = [];
+  let rawLabels: string[] = [];
+
+  async function init() {
+    const loader = document.getElementById("chartLoader");
+
+    try {
+      const res = await fetch("/api/dolar?days=30");
+      if (!res.ok) throw new Error();
+
+      const json = await res.json();
+      rawData = json.series["USD-PEN"].data;
+      rawLabels = json.series["USD-PEN"].labels;
+
+      renderChart("30");
+
+      // OCULTAR LOADER: Una vez que el gráfico se crea
+      if (loader) {
+        loader.classList.add("opacity-0", "pointer-events-none");
+        // Opcional: eliminarlo del DOM después de la animación
+        setTimeout(() => (loader.style.display = "none"), 500);
+      }
+    } catch (e) {
+      console.error("Error al cargar datos:", e);
+      if (loader) {
+        loader.innerHTML =
+          '<p class="text-red-500">Error al cargar datos. Reintenta más tarde.</p>';
+      }
+    }
+  }
+
+  function renderChart(range: string) {
+    const canvas = document.getElementById(
+      "dollarChart",
+    ) as HTMLCanvasElement | null;
+    if (!canvas || !rawData.length) return;
+
+    const limit = parseInt(range);
+    const dataSlice = rawData.slice(-limit);
+    const labelSlice = rawLabels.slice(-limit).map(formatDateForChart);
+
+    document.querySelectorAll(".filter-btn").forEach((btn) => {
+      btn.classList.toggle("active", btn.getAttribute("data-range") === range);
+    });
+
+    if (chartInstance) chartInstance.destroy();
+
+    chartInstance = new Chart(canvas, {
+      type: "line",
+      data: {
+        labels: labelSlice,
+        datasets: [
+          {
+            data: dataSlice,
+            borderColor: "#2563eb",
+            backgroundColor: (ctx: ScriptableContext<"line">) => {
+              const chartArea = ctx.chart.chartArea;
+              if (!chartArea) return undefined;
+              const gradient = ctx.chart.ctx.createLinearGradient(
+                0,
+                chartArea.top,
+                0,
+                chartArea.bottom,
+              );
+              gradient.addColorStop(0, "rgba(37, 99, 235, 0.2)");
+              gradient.addColorStop(1, "rgba(37, 99, 235, 0)");
+              return gradient;
+            },
+            fill: true,
+            tension: 0.4,
+            pointRadius: limit <= 7 ? 4 : 0,
+            borderWidth: 3,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        // AÑADIMOS ESTO: Asegura que el mouse sea detectado correctamente
+        interaction: {
+          mode: "index",
+          intersect: false,
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            enabled: true, // Forzamos a que esté activo
+            backgroundColor: "#2563eb",
+            padding: 12,
+            titleFont: { size: 14, weight: "bold" },
+            bodyFont: { size: 13 },
+            displayColors: false, // Quita el cuadradito de color
+            callbacks: {
+              label: (ctx) => {
+                const value = ctx.parsed.y;
+                return typeof value === "number"
+                  ? `Precio: ${formatPEN(value)}`
+                  : "";
+              },
+            },
+          },
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 7 },
+          },
+          y: {
+            position: "right",
+            grid: { color: "#f1f5f9" },
+            ticks: {
+              callback: (val) =>
+                typeof val === "number" ? val.toFixed(3) : val,
+            },
+          },
+        },
+      },
+    });
+  }
+
+  function setupListeners() {
+    document.querySelectorAll(".filter-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const range = (e.currentTarget as HTMLButtonElement).getAttribute(
+          "data-range",
+        );
+        if (range) renderChart(range);
+      });
+    });
+  }
+
+  // OPTIMIZACIÓN: Solo un listener centralizado
+  document.addEventListener("DOMContentLoaded", () => {
+    const section = document.querySelector(
+      'section[aria-labelledby="section-market-title"]',
+    );
+
+    // Si la sección existe, usamos el Observer para cargar solo cuando sea visible
+    if (section) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              init();
+              setupListeners();
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.1 },
+      );
+      observer.observe(section);
+    } else {
+      // Fallback por si la sección no se encuentra (no debería pasar)
+      init();
+      setupListeners();
+    }
+  });
+</script>

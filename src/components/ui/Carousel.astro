@@ -1,0 +1,221 @@
+---
+interface Props {
+  data: any[];
+  visibleDesktop?: 1 | 2 | 3 | 4;
+}
+
+const { data, visibleDesktop = 3 } = Astro.props;
+
+const itemsCount = data?.length ?? 0;
+const isSliderDesktop = itemsCount > visibleDesktop;
+---
+
+<div
+  class="carousel-container group/main relative w-full"
+  data-carousel-container
+  data-visible-desktop={visibleDesktop}
+  data-is-slider-desktop={isSliderDesktop}
+>
+  <button data-prev class="nav-btn left-0" aria-label="Anterior" type="button">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m15 18-6-6 6-6"/>
+    </svg>
+  </button>
+
+  <button data-next class="nav-btn right-0" aria-label="Siguiente" type="button">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m9 18 6-6-6-6"/>
+    </svg>
+  </button>
+
+  <div
+    data-track
+    class:list={["carousel-track", !isSliderDesktop && "desktop-static"]}
+    style={`--visible-desktop:${visibleDesktop};`}
+  >
+    <slot />
+  </div>
+</div>
+
+<style>
+  @reference "../../styles/global.css";
+
+  .carousel-track {
+    /* Variables base */
+    --gap: 1rem;
+    --edge: 1rem;
+
+    @apply flex w-full scroll-smooth;
+    flex-wrap: nowrap;
+
+    gap: var(--gap);
+
+    /* En vez de margins en items, padding real del track */
+    padding-inline: var(--edge);
+    scroll-padding-inline: var(--edge);
+
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+
+    /* Snap estable para evitar “cortes” */
+    scroll-snap-type: x mandatory;
+  }
+
+  .carousel-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carousel-track :global(> *) {
+    /* Mobile: 1 card */
+    flex: 0 0 100%;
+    box-sizing: border-box;
+
+    /* Start evita recortes; el padding del track da el “aire” lateral */
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  /* Tablets: 2 cards */
+  @media (min-width: 640px) {
+    .carousel-track :global(> *) {
+      flex-basis: calc((100% - var(--gap)) / 2);
+    }
+  }
+
+  /* Desktop: N cards (cálculo correcto con (N-1) gaps) */
+  @media (min-width: 1024px) {
+    .carousel-track :global(> *) {
+      flex-basis: calc(
+        (100% - (var(--gap) * (var(--visible-desktop) - 1)))
+        / var(--visible-desktop)
+      );
+    }
+
+    /* Si NO es slider en desktop */
+    .desktop-static {
+      --gap: 1.5rem;
+      --edge: 0rem;
+
+      @apply justify-center;
+      overflow: visible;
+      scroll-snap-type: none;
+    }
+
+    /* Ocultar botones en desktop cuando no hay slider */
+    .carousel-container[data-is-slider-desktop="false"] .nav-btn {
+      display: none;
+    }
+  }
+
+  /* Ocultar botones cuando no hay overflow real (cualquier breakpoint) */
+  .carousel-container:not(.is-scrollable) .nav-btn {
+    display: none;
+  }
+
+  .nav-btn {
+    @apply absolute top-1/2 -translate-y-1/2 z-30 bg-white p-3 rounded-full shadow-xl
+           text-primary-600 border border-neutral-100 transition-all duration-300
+           hover:bg-primary-600 hover:text-white disabled:opacity-0 disabled:pointer-events-none;
+  }
+</style>
+
+<script>
+  const initCarousels = () => {
+    document.querySelectorAll('[data-carousel-container]').forEach((container) => {
+      // Evita doble inicialización si este script corre más de una vez
+      if (container.dataset.carouselInit === '1') return;
+      container.dataset.carouselInit = '1';
+
+      const track = container.querySelector('[data-track]');
+      const prev = container.querySelector('[data-prev]');
+      const next = container.querySelector('[data-next]');
+      if (!track || !prev || !next) return;
+
+      const getItems = () => Array.from(track.children).filter(Boolean);
+
+      const getPaddingLeft = () => {
+        const cs = getComputedStyle(track);
+        return parseFloat(cs.paddingLeft) || 0;
+      };
+
+      const isScrollable = () => track.scrollWidth > track.clientWidth + 1;
+
+      const updateButtons = () => {
+        const scrollable = isScrollable();
+        container.classList.toggle('is-scrollable', scrollable);
+
+        if (!scrollable) {
+          prev.disabled = true;
+          next.disabled = true;
+          return;
+        }
+
+        const max = track.scrollWidth - track.clientWidth;
+        const x = track.scrollLeft;
+
+        prev.disabled = x <= 1;
+        next.disabled = x >= max - 1;
+      };
+
+      const getCurrentIndex = () => {
+        const items = getItems();
+        if (!items.length) return 0;
+
+        const pad = getPaddingLeft();
+        const target = track.scrollLeft + pad + 1;
+
+        let bestIndex = 0;
+        let bestDist = Infinity;
+
+        items.forEach((el, i) => {
+          const dist = Math.abs(el.offsetLeft - target);
+          if (dist < bestDist) {
+            bestDist = dist;
+            bestIndex = i;
+          }
+        });
+
+        return bestIndex;
+      };
+
+      const scrollToIndex = (index) => {
+        const items = getItems();
+        if (!items.length) return;
+
+        const i = Math.max(0, Math.min(index, items.length - 1));
+        const pad = getPaddingLeft();
+
+        const left = Math.round(items[i].offsetLeft - pad);
+        track.scrollTo({ left, behavior: 'smooth' });
+      };
+
+      const scrollOne = (dir) => {
+        const current = getCurrentIndex();
+        scrollToIndex(current + (dir === 'next' ? 1 : -1));
+      };
+
+      prev.addEventListener('click', () => scrollOne('prev'));
+      next.addEventListener('click', () => scrollOne('next'));
+
+      track.addEventListener('scroll', () => requestAnimationFrame(updateButtons), { passive: true });
+
+      const ro = new ResizeObserver(() => updateButtons());
+      ro.observe(track);
+
+      updateButtons();
+    });
+  };
+
+  const boot = () => initCarousels();
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot, { once: true });
+  } else {
+    boot();
+  }
+
+  document.addEventListener('astro:after-swap', () => {
+    initCarousels();
+  });
+</script>

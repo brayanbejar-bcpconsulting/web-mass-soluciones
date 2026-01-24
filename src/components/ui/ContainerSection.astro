@@ -6,6 +6,7 @@ interface Props {
   id?: string;
   class?: string;          // Para la sección exterior
   classContainer?: string; // Para el div interior
+  maxWidth?: string;
 }
 
 const {
@@ -15,6 +16,7 @@ const {
   id,
   class: className,
   classContainer,
+  maxWidth = "max-w-350",
   ...rest // Para capturar otros atributos como data-attributes
 } = Astro.props;
 ---
@@ -32,7 +34,7 @@ const {
 >
   <div 
     class:list={[
-      "max-w-7xl mx-auto", 
+      `${maxWidth} mx-auto`, 
       classContainer
     ]}
   >

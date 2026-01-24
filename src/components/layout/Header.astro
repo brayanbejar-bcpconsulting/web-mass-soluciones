@@ -1,0 +1,61 @@
+---
+import { NAV_OPTIONS, APP_URLS, isActive as checkActive } from "@utils/navigation";
+import Button from "../ui/Button.astro";
+import { Image } from "astro:assets";
+
+import logoTipo from "@assets/shared/logotipo.png"
+import Icon from "../ui/Icon.astro";
+
+const { pathname } = Astro.url;
+
+// Estilos en constantes para evitar clases duplicadas y mejorar legibilidad
+const baseLinkStyles = "text-btn font-medium transition-all duration-300 hover:text-neutral-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary-600 rounded";
+const activeLinkStyles = "text-white font-bold relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-0.5 after:bg-secondary-400";
+
+// Usar función centralizada
+const isActive = (href: string) => checkActive(href, pathname);
+---
+
+<header
+  class="bg-primary-500"
+>
+  <div
+    class="max-w-350 mx-auto flex justify-between items-center py-4"
+  >
+    <Image
+      src={logoTipo}
+      alt="Logotipo de la empresa de Market Dollar"
+      loading="eager"
+      width={200}
+      fetchpriority="high"
+      class="w-25 lg:w-40"
+    />
+
+    <nav aria-label="Navegación principal" class="hidden xl:inline-block">
+      <ul class="nav-list flex gap-8">
+        {NAV_OPTIONS.map((option) => {
+          const active = isActive(option.href);
+          return (
+            <li>
+              <a 
+                href={option.href} 
+                class={`${baseLinkStyles} ${active ? activeLinkStyles : 'text-primary-100'}`}
+                aria-current={active ? 'page' : undefined}
+              >
+                {option.name}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+
+    <Button
+      variant="secondary"
+      class="flex gap-2"
+    >
+      <Icon name="user"/>
+      Acceder Ahora
+    </Button>
+  </div>
+</header>
