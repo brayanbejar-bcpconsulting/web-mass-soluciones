@@ -1,5 +1,10 @@
 ---
+import Testimonios from "@components/Testimonios.astro"
+import TendenciaDolar from "@/components/TendenciaDolar.astro";
+import BannerBancos from "@/components/sections/page-home/BannerBancos.astro";
+import ComoFunciona from "@/components/sections/page-home/ComoFunciona.astro";
 import HeroHome from "@/components/sections/page-home/HeroHome.astro";
+import PorqueElegirnos from "@/components/sections/page-home/PorqueElegirnos.astro";
 import MainLayout from "@/layouts/MainLayout.astro";
 
 // Schema WebSite con SearchAction para habilitar Sitelinks Search Box
@@ -87,4 +92,9 @@ const schemaOrganization = {
   description="Cambia dólares y soles en minutos con la tasa más competitiva del mercado. Registrados en la SBS. Operaciones seguras, rápidas y sin comisiones ocultas."
 >
   <HeroHome />
+  <BannerBancos />
+  <ComoFunciona />
+  <PorqueElegirnos />
+  <TendenciaDolar />
+  <Testimonios />
 </MainLayout>

@@ -1,0 +1,85 @@
+---
+import { Image } from "astro:assets";
+
+// Imágenes
+import ImgPaso1 from "@assets/home/como-funciona-1.webp";
+import ImgPaso2 from "@assets/home/como-funciona-2.webp";
+import ImgPaso3 from "@assets/home/como-funciona-3.webp";
+import SectionHeading from "@components/ui/SectionHeading.astro";
+import ContainerSection from "@/components/ui/ContainerSection.astro";
+import Carousel from "@/components/ui/Carousel.astro";
+
+const cardPasos = [
+  {
+    title: "Cotiza y Regístrate",
+    description:
+      "Selecciona el monto en nuestra calculadora y crea tu cuenta en menos de 2 minutos. Verás exactamente cuánto vas a recibir antes de confirmar.",
+    image: ImgPaso1,
+    shortText: "Tasa garantizada: El precio que ves es el que recibes",
+  },
+  {
+    title: "Transfiere desde tu App",
+    description:
+      "Realiza la transferencia desde tu banca móvil a la cuenta de Market Dollar que te indicaremos. Es un proceso 100% bancarizado y seguro.",
+    image: ImgPaso2,
+    shortText: "Aceptamos todos los bancos locales sin comisiones ocultas",
+  },
+  {
+    title: "Recibe tu dinero",
+    description:
+      "Una vez verificado tu depósito, enviamos el cambio a tu cuenta destino. Te notificaremos vía WhatsApp y correo en cada etapa del proceso.",
+    image: ImgPaso3,
+    shortText: "Tiempo promedio: 15 a 45 minutos",
+  },
+  {
+    title: "Recibe tu dinero",
+    description:
+      "Una vez verificado tu depósito, enviamos el cambio a tu cuenta destino. Te notificaremos vía WhatsApp y correo en cada etapa del proceso.",
+    image: ImgPaso3,
+    shortText: "Tiempo promedio: 15 a 45 minutos",
+  },
+];
+---
+
+<ContainerSection ariaLabelledby="titulo-como-funciona">
+  <SectionHeading
+    id="titulo-como-funciona"
+    shortText="¿Cómo Funciona?"
+    title="Cambia tus dólares en 3 pasos simples"
+    description="Sin trámites complejos, sin moverte de casa y con total transparencia."
+    align="center"
+    class="mb-20"
+  />
+
+  <Carousel data={cardPasos} visibleDesktop={3}>
+    {
+      cardPasos.map((card, index) => (
+        <article class="step-card group/card px-4 text-center">
+          <div class="flex justify-center items-center mb-8">
+            <div class="w-[75%] min-w-75 max-w-125">
+              <Image
+                src={card.image}
+                alt={card.shortText}
+                loading={index === 0 ? "eager" : "lazy"}
+                fetchpriority={index === 0 ? "high" : "low"}
+                class="w-full h-auto object-contain mx-auto transition-transform duration-500 group-hover/card:scale-105"
+              />
+            </div>
+          </div>
+
+          <div class="max-w-md mx-auto">
+            <span class="inline-block px-4 py-1 bg-primary-600 text-white text-xs font-bold rounded-full mb-4 uppercase tracking-widest shadow-md">
+              Paso {index + 1}
+            </span>
+            <h3 class="text-2xl font-bold text-neutral-900 mb-4 transition-colors group-hover/card:text-primary-600">
+              {card.title}
+            </h3>
+            <p class="text-neutral-600 leading-relaxed text-base">
+              {card.description}
+            </p>
+          </div>
+        </article>
+      ))
+    }
+  </Carousel>
+</ContainerSection>

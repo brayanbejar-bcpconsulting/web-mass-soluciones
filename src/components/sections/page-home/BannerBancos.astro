@@ -1,0 +1,119 @@
+---
+import ContainerSection from "@/components/ui/ContainerSection.astro";
+import Icon from "@components/ui/Icon.astro";
+import { Image } from "astro:assets";
+
+// Imágenes Bancos
+import bancoBCP from "@assets/bancos/banco-bcp.webp";
+import bancoBBVA from "@assets/bancos/banco-bbva.webp";
+import bancoScotiabank from "@assets/bancos/banco-scotiabank.webp";
+import bancoBanbif from "@assets/bancos/banco-banbif.webp";
+import bancoInterbank from "@assets/bancos/banco-interbank.webp";
+import bancoPichincha from "@assets/bancos/banco-pichincha.webp";
+
+const bancosInmediatos = [
+  { src: bancoBCP, alt: "Transferencia inmediata con Banco BCP Perú" },
+];
+
+const bancosInterbancarios = [
+  { src: bancoInterbank, alt: "Cambio de dólares online con Interbank Perú" },
+  { src: bancoPichincha, alt: "Banco Pichincha pagos interbancarios" },
+  { src: bancoBBVA, alt: "BBVA Continental transferencias seguras" },
+  { src: bancoBanbif, alt: "BanBif banca por internet" },
+  { src: bancoScotiabank, alt: "Scotiabank Perú operaciones en dólares" },
+];
+---
+
+<ContainerSection
+  maxWidth="max-w-300"
+  ariaLabelledby="title-banner"
+  class="bg-[linear-gradient(to_bottom,var(--color-primary-800)_0%,var(--color-primary-950)_50%,var(--color-white)_50%,var(--color-white)_100%)] py-10"
+  classContainer="w-[90%] lg:w-[85%] py-10 px-8 flex flex-col gap-8 bg-primary-600 text-white mx-auto rounded-3xl shadow-2xl border border-white/10"
+>
+  <header class="text-center flex flex-col items-center gap-3">
+    <span
+      class="text-xs font-black text-primary-200 uppercase tracking-[0.2em]"
+    >
+      Velocidad y Respaldo Bancario
+    </span>
+    <h2 class="text-2xl md:text-3xl font-bold text-secondary-300">
+      Transfiere con seguridad desde cualquier banco
+    </h2>
+  </header>
+
+  <div
+    class="flex flex-col lg:flex-row items-center justify-between gap-6 xl:gap-12"
+  >
+    <div class="hidden xl:flex items-center justify-center">
+      <Icon
+        name="timer-check"
+        class="size-20 text-secondary-300 drop-shadow-lg"
+      />
+    </div>
+
+    <article
+      class="flex flex-col items-center lg:items-start text-center lg:text-left"
+    >
+      <h3 class="text-lg font-bold text-secondary-400 mb-1">
+        Recibe tu dinero en minutos
+      </h3>
+      <p class="text-neutral-100 text-sm mb-4">
+        Tiempo promedio: <strong>15 a 45 min</strong>
+      </p>
+      <div>
+        {
+          bancosInmediatos.map((banco) => (
+            <Image
+              src={banco.src}
+              alt={banco.alt}
+              quality="high"
+              format="webp"
+              class="h-6 md:h-9 w-auto object-contain brightness-0 invert"
+            />
+          ))
+        }
+      </div>
+    </article>
+
+    <div class="hidden lg:block w-px h-20 bg-primary-400/30" aria-hidden="true">
+    </div>
+
+    <article
+      class="flex flex-col items-center lg:items-start text-center lg:text-left"
+    >
+      <h3 class="text-lg font-bold text-secondary-400 mb-1">
+        Cobertura Nacional
+      </h3>
+      <p class="text-neutral-100 text-sm mb-4">
+        Transferencias interbancarias <strong>(Hasta 24h)</strong>
+      </p>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-6 items-center">
+        {
+          bancosInterbancarios.map((banco) => (
+            <Image
+              src={banco.src}
+              alt={banco.alt}
+              quality="high"
+              class="h-6 md:h-7 w-auto mx-auto md:mx-0 object-contain brightness-0 invert"
+            />
+          ))
+        }
+      </div>
+    </article>
+  </div>
+  <a
+    href="/terminos-condiciones"
+    class="underline underline-offset-4 text-neutral-300 text-xs self-end lg:pr-10 -mt-10"
+  >
+    * Aplica TyC *
+  </a>
+</ContainerSection>
+
+<style>
+  /* Filtro para que los logos se vean blancos y nítidos si el fondo es azul */
+  /* Si prefieres que mantengan su color original, quita 'brightness-0 invert' */
+  .invert {
+    filter: brightness(0) invert(1);
+    opacity: 0.9;
+  }
+</style>
