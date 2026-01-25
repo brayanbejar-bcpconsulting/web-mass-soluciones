@@ -1,0 +1,26 @@
+---
+import Icon from "./Icon.astro";
+
+const socialMedia = [
+  { iconName: 'facebook', href: 'https://www.facebook.com/', ariaLabel: 'Facebook Market Dollar' },
+  { iconName: 'instagram', href: 'https://www.facebook.com/', ariaLabel: 'Instagram Market Dollar' },
+  { iconName: 'tiktok', href: 'https://www.facebook.com/', ariaLabel: 'Tiktok Market Dollar' },
+  { iconName: 'youtube', href: 'https://www.facebook.com/', ariaLabel: 'Youtube Market Dollar' },
+] as const;
+---
+
+<div class="flex gap-4">
+  {socialMedia.map((iconSocial) => (
+    <a 
+      href={iconSocial.href}
+      aria-label={iconSocial.ariaLabel}
+      target="_blank"
+      rel="noopener"
+    >
+      <Icon 
+        name={iconSocial.iconName}
+        class="size-8 hover:scale-110 transition-transform"
+      />
+    </a>
+  ))}
+</div>

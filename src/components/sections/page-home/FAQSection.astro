@@ -1,0 +1,131 @@
+---
+import { parseSimpleMarkdown } from "@/utils/markdown";
+import SectionHeading from "@components/ui/SectionHeading.astro";
+
+const faqs = [
+  {
+    question: "¿Qué respaldo legal tiene Market Dollar?",
+    answer: "Somos una casa de cambio formal, registrada en la **SBS (Resolución N° 04561-2023)** y supervisada por la **UIF**. Esto garantiza que operamos bajo estándares de **seguridad bancaria** y total transparencia legal."
+  },
+  {
+    question: "¿Cómo sé que mi dinero llegará a mi cuenta?",
+    answer: "Todas las operaciones son **bancarias y trazables**. Nunca manejamos efectivo. Además, recibes un **comprobante de operación** y notificaciones en tiempo real. Miles de operaciones exitosas y nuestra reputación nos respaldan."
+  },
+  {
+    question: "¿Qué pasa si tengo un problema con mi transferencia?",
+    answer: "No estarás solo. Contamos con **soporte humano inmediato**. Puedes escribirnos directamente a nuestro **[WhatsApp oficial: +51 933 214 054](https://wa.me/51933214054)** y un asesor real te ayudará en minutos. **¡Nada de bots!**"
+  },
+  {
+    question: "¿Cobran comisiones por transferencias de provincia?",
+    answer: "Market Dollar **no cobra comisiones**, pero algunos bancos aplican cargos por plazas (provincias). Te recomendamos **consultar con nuestro equipo por WhatsApp** antes de operar para indicarte la mejor estrategia y evitar descuentos de tu banco."
+  },
+  {
+    question: "¿Qué beneficios ofrecen para empresas (RUC 20)?",
+    answer: "Ofrecemos **tipos de cambio preferenciales** para montos altos, atención personalizada y **emisión de facturas** para tu crédito fiscal. [Ver beneficios corporativos](/empresas) o [Contactar asesor](https://wa.me/51933214054)."
+  },
+  {
+    question: "¿Puedo cambiar dinero fuera del horario de oficina?",
+    answer: "¡Sí! Atendemos de Lunes a Viernes hasta las **11:00 PM**, un horario extendido que no encontrarás en bancos ni en la mayoría de casas de cambio online."
+  }
+];
+
+// Generación de Schema.org para Google (Limpiando caracteres de markdown)
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map(faq => ({
+    "@type": "Question",
+    "name": faq.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.answer.replace(/\*\*|\[|\]\(.*?\)/g, '')
+    }
+  }))
+};
+---
+
+<section class="py-16 md:py-24 bg-neutral-50" aria-labelledby="faq-title">
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <div class="max-w-212.5 mx-auto px-6">
+    <SectionHeading
+      id="header-faq-home"
+      title="FAQ: Resolviendo tus dudas en segundos"
+      align="center"
+      shortText="Preguntas Frecuentes"
+    />
+
+    <div class="grid gap-4 mt-15" role="list">
+      {faqs.map((faq) => (
+        <details 
+          class="group bg-white border border-neutral-200 rounded-2xl transition-all duration-300 hover:shadow-md overflow-hidden"
+          role="listitem"
+        >
+          <summary 
+            class="flex items-center justify-between p-6 cursor-pointer list-none focus:bg-neutral-50 outline-none"
+            aria-expanded="false"
+          >
+            <h3 class="text-base font-semibold text-neutral-800 pr-4 leading-tight">
+              {faq.question}
+            </h3>
+            <span class="text-primary-600 transition-transform duration-300 group-open:rotate-180 shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </span>
+          </summary>
+          
+          <div class="px-6 pb-6 pt-2 text-neutral-600 leading-relaxed border-t border-neutral-50 animate-fade-in">
+             <p set:html={parseSimpleMarkdown(faq.answer)} />
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  @reference "../../../styles/global.css";
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details[open] {
+    @apply border-primary-200 shadow-lg ring-1 ring-primary-50;
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.4s ease-out;
+  }
+</style>
+
+<script>
+  const initFaq = () => {
+    const accordions = document.querySelectorAll('details');
+    
+    accordions.forEach((el) => {
+      const summary = el.querySelector('summary');
+      
+      el.addEventListener('toggle', () => {
+        if (summary) {
+          summary.setAttribute('aria-expanded', el.open ? 'true' : 'false');
+        }
+
+        // Lógica de acordeón: cerrar otros al abrir uno
+        if (el.open) {
+          accordions.forEach((other) => {
+            if (other !== el && other.open) other.open = false;
+          });
+        }
+      });
+    });
+  };
+
+  initFaq();
+  // Reinicializar para Astro View Transitions
+  document.addEventListener('astro:after-swap', initFaq);
+</script>

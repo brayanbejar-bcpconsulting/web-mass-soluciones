@@ -1,0 +1,37 @@
+---
+import Icon from "./Icon.astro";
+import Button from "./Button.astro";
+import { APP_URLS } from "@/utils/navigation";
+
+const signsButton = [
+  {
+    text: 'Iniciar Sesión',
+    icon: 'login',
+    variant: 'secondary',
+    href: APP_URLS.login
+  },
+  {
+    text: 'Crear Cuenta',
+    icon: 'user',
+    variant: 'outline',
+    href: APP_URLS.register
+  }
+
+] as const;
+---
+<nav
+  class="flex flex-col sm:flex-row lg:flex-col xl:flex-row gap-4 w-full sm:w-auto"
+>
+  {
+    signsButton.map((btn) => (
+      <Button
+        variant={btn.variant}
+        href={btn.href}
+        class="flex gap-2 justify-center items-center"
+      >
+        <Icon name={btn.icon} class="size-5" />
+        {btn.text}
+      </Button>
+    ))
+  }
+</nav>

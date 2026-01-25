@@ -1,10 +1,8 @@
 ---
 import { NAV_OPTIONS, APP_URLS, isActive as checkActive } from "@utils/navigation";
-import Button from "../ui/Button.astro";
 import { Image } from "astro:assets";
 
-import logoTipo from "@assets/shared/logotipo.png"
-import Icon from "../ui/Icon.astro";
+import SignsButtons from "../ui/SignsButtons.astro";
 
 const { pathname } = Astro.url;
 
@@ -22,8 +20,8 @@ const isActive = (href: string) => checkActive(href, pathname);
   <div
     class="max-w-350 mx-auto flex justify-between items-center py-4"
   >
-    <Image
-      src={logoTipo}
+    <img
+      src="/logotipo.webp"
       alt="Logotipo de la empresa de Market Dollar"
       loading="eager"
       width={200}
@@ -50,12 +48,6 @@ const isActive = (href: string) => checkActive(href, pathname);
       </ul>
     </nav>
 
-    <Button
-      variant="secondary"
-      class="flex gap-2"
-    >
-      <Icon name="user"/>
-      Acceder Ahora
-    </Button>
+    <SignsButtons/>
   </div>
 </header>

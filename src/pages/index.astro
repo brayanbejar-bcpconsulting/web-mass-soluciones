@@ -6,6 +6,7 @@ import ComoFunciona from "@/components/sections/page-home/ComoFunciona.astro";
 import HeroHome from "@/components/sections/page-home/HeroHome.astro";
 import PorqueElegirnos from "@/components/sections/page-home/PorqueElegirnos.astro";
 import MainLayout from "@/layouts/MainLayout.astro";
+import FAQSection from "@/components/sections/page-home/FAQSection.astro";
 
 // Schema WebSite con SearchAction para habilitar Sitelinks Search Box
 const schemaWebSite = {
@@ -33,7 +34,7 @@ const schemaOrganization = {
   "description": "Casa de cambio online regulada por la SBS. Cambiamos dólares a soles con las mejores tasas del mercado peruano. Cobertura nacional con local en Huaral, Lima.",
   "foundingDate": "1993",
   "url": "https://market-dollar.com",
-  "logo": "https://market-dollar.com/logo.webp",
+  "logo": "https://market-dollar.com/logotipo.webp",
   "image": "https://market-dollar.com/og-market-dollar.jpg",
   "telephone": "+51933214054",
   "email": "marketdollar@gmail.com",
@@ -97,4 +98,5 @@ const schemaOrganization = {
   <PorqueElegirnos />
   <TendenciaDolar />
   <Testimonios />
+  <FAQSection />
 </MainLayout>

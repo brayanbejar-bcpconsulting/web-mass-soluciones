@@ -2,10 +2,12 @@
 import type { HTMLAttributes } from 'astro/types';
 
 interface Props extends HTMLAttributes<'button'> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'whatsapp';
+  variant?: 'primary' | 'secondary' | 'outline' | 'whatsapp' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   href?: string;
   target?: '_blank' | '_self' | '_parent' | '_top';
+  class?: string;
+  withGlow?: boolean; // Nueva prop para efecto de brillo
 }
 
 const { 
@@ -14,35 +16,107 @@ const {
   href, 
   target,
   class: className,
+  withGlow = false,
   ...rest 
 } = Astro.props;
 
-// Diccionario de estilos con paddings más equilibrados
+// Diccionario de estilos modernos con lineares y glassmorphism
 const variants = {
-  primary: "bg-primary-600 text-white hover:bg-primary-500 shadow-sm border border-white/10",
-  secondary: "bg-secondary-400 text-neutral-cool-50 hover:bg-secondary-500 shadow-md",
-  outline: "border-2 bg-transparent border-primary-600 text-primary-600 hover:bg-primary-50",
-  whatsapp: "bg-success-500 text-white hover:bg-success-400 shadow-sm",
+  primary: `
+    bg-linear-to-r from-primary-600 to-primary-700
+    text-white font-semibold
+    shadow-lg shadow-primary-500/30
+    hover:shadow-xl hover:shadow-primary-500/40
+    hover:from-primary-500 hover:to-primary-600
+    border border-primary-500/20
+    relative overflow-hidden
+    before:absolute before:inset-0 
+    before:bg-linear-to-r before:from-transparent before:via-white/20 before:to-transparent
+    before:translate-x-[-200%] hover:before:translate-x-[200%]
+    before:transition-transform before:duration-700
+  `,
+  
+  secondary: `
+    bg-linear-to-r from-secondary-300 to-secondary-400
+    text-neutral-700 font-bold
+    shadow-lg shadow-secondary-400/30
+    hover:shadow-xl hover:shadow-secondary-400/40
+    hover:from-secondary-300 hover:to-secondary-400
+    border border-secondary-600/20
+    relative overflow-hidden
+    before:absolute before:inset-0 
+    before:bg-linear-to-r before:from-transparent before:via-white/30 before:to-transparent
+    before:translate-x-[-200%] hover:before:translate-x-[200%]
+    before:transition-transform before:duration-700
+  `,
+  
+  outline: `
+    bg-white/80 backdrop-blur-sm
+    border-2 border-primary-600
+    text-primary-600 font-semibold
+    shadow-md shadow-primary-100/50
+    hover:bg-primary-50
+    hover:shadow-lg hover:shadow-primary-200/50
+    hover:border-primary-500
+    hover:-translate-y-0.5
+    transition-all duration-300
+  `,
+  
+  whatsapp: `
+    bg-linear-to-r from-success-500 to-success-600
+    text-white font-semibold
+    shadow-lg shadow-success-500/30
+    hover:shadow-xl hover:shadow-success-500/40
+    hover:from-success-400 hover:to-success-500
+    border border-success-400/20
+    relative overflow-hidden
+    before:absolute before:inset-0 
+    before:bg-linear-to-r before:from-transparent before:via-white/20 before:to-transparent
+    before:translate-x-[-200%] hover:before:translate-x-[200%]
+    before:transition-transform before:duration-700
+  `,
+
+  ghost: `
+    bg-transparent
+    text-neutral-700 font-medium
+    hover:bg-neutral-100
+    hover:text-neutral-900
+    transition-all duration-300
+  `,
 };
 
-// Tamaños optimizados (Alturas fijas sugeridas para consistencia)
 const sizes = {
-  sm: "px-3 py-1.5 text-xs h-8",
-  md: "px-5 py-2.5 text-sm md:text-base h-11",
-  lg: "px-8 py-3.5 text-lg h-14 font-bold",
+  sm: "px-4 py-2 text-sm gap-1.5",
+  md: "px-6 py-3 text-btn max-lg:text-base gap-2",
+  lg: "px-8 py-4 text-lg font-bold gap-2.5",
 };
 
+// Efecto de brillo adicional (opcional)
+const glowEffect = withGlow ? "animate-pulse-glow" : "";
+
+// Clase final combinada
 const buttonClasses = [
-  "inline-flex items-center justify-center rounded-full transition-all duration-300 animation-bounce",
-  "active:scale-95 cursor-pointer font-poppins font-semibold leading-tight text-center hover:scale-105",
+  "inline-flex items-center justify-center",
+  "rounded-full",
+  "transition-all duration-300 ease-out",
+  "active:scale-95",
+  "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100",
+  "cursor-pointer",
+  "font-poppins",
+  "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary-500/20",
   variants[variant],
   sizes[size],
+  glowEffect,
   className
 ].filter(Boolean).join(" ");
 
+// Determinamos si es un link o un botón
 const Tag = href ? 'a' : 'button';
+
+// Lógica de seguridad: solo aplicamos rel si target es _blank
 const rel = target === '_blank' ? 'noopener noreferrer' : undefined;
 
+// Detectar si es un link al sistema para propagación de UTMs
 const isAppLink = href && (
   href.includes('market-dollar-certi') || 
   href.includes('app.market-dollar.com')
@@ -57,26 +131,106 @@ const isAppLink = href && (
   data-app-link={isAppLink ? 'true' : undefined}
   {...rest}
 >
-  <slot />
+  <!-- Wrapper para contenido con z-index correcto -->
+  <span class="relative z-10 flex items-center gap-[inherit]">
+    <slot />
+  </span>
+
+  <!-- Efecto de ripple al hacer clic (solo para primary, secondary, whatsapp) -->
+  {(variant === 'primary' || variant === 'secondary' || variant === 'whatsapp') && (
+    <span class="ripple-effect" aria-hidden="true"></span>
+  )}
 </Tag>
 
-<script>
-  // Este script se ejecuta una sola vez en el cliente, sin importar cuántos botones haya
-  import { buildURLWithUTM } from '@/utils/queryParams';
+{isAppLink && (
+  <script>
+    import { buildURLWithUTM } from '@/utils/queryParams';
 
-  const updateLinks = () => {
-    const appLinks = document.querySelectorAll<HTMLAnchorElement>('a[data-app-link="true"]');
-    appLinks.forEach((link) => {
-      const originalHref = link.getAttribute('href');
-      if (originalHref && !link.dataset.utmProcessed) {
-        link.href = buildURLWithUTM(originalHref);
-        link.dataset.utmProcessed = 'true'; // Evita procesar dos veces
-      }
+    document.addEventListener('DOMContentLoaded', () => {
+      const appLinks = document.querySelectorAll('[data-app-link="true"]');
+      
+      appLinks.forEach((link) => {
+        if (link.tagName === 'A') { 
+          const anchor = link as HTMLAnchorElement;
+          const originalHref = anchor.getAttribute('href');
+          
+          if (originalHref) {
+            anchor.href = buildURLWithUTM(originalHref);
+          }
+        }
+      });
     });
-  };
+  </script>
+)}
 
-  // Ejecutar al cargar y si usas View Transitions de Astro
-  document.addEventListener('astro:page-load', updateLinks);
-  // Compatibilidad básica si no usas View Transitions
-  document.addEventListener('DOMContentLoaded', updateLinks);
-</script>
+<style>
+  /* Animación de brillo pulsante (opcional) */
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(37, 99, 235, 0.5);
+    }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  /* Efecto ripple al hacer clic */
+  .ripple-effect {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  /* Animación del ripple */
+  button:active .ripple-effect::after,
+  a:active .ripple-effect::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    animation: ripple 0.6s ease-out;
+  }
+
+  @keyframes ripple {
+    to {
+      width: 300px;
+      height: 300px;
+      opacity: 0;
+    }
+  }
+
+  /* Mejora de accesibilidad: indicador de foco visible */
+  button:focus-visible,
+  a:focus-visible {
+    outline: 2px solid var(--color-primary-500);
+    outline-offset: 3px;
+  }
+
+  /* Efecto de hover mejorado para outline */
+  button:hover,
+  a:hover {
+    transform: translateY(-2px);
+  }
+
+  button:active,
+  a:active {
+    transform: translateY(0) scale(0.95);
+  }
+
+  /* Prevenir el efecto hover en botones deshabilitados */
+  button:disabled:hover,
+  a:disabled:hover {
+    transform: none;
+  }
+</style>
