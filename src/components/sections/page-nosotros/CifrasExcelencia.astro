@@ -1,0 +1,97 @@
+---
+import Icon from "@components/ui/Icon.astro";
+import ContainerSection from "@components/ui/ContainerSection.astro";
+import SectionHeading from "@components/ui/SectionHeading.astro";
+import Carousel from "@components/ui/Carousel.astro";
+
+const cifras = [
+  {
+    icon: "calendar",
+    value: "+30 Años",
+    label: "Experiencia",
+    description: "Trayectoria impecable en el mercado financiero.",
+    color: "from-blue-500 to-indigo-600",
+    bgColor: "bg-blue-50",
+  },
+  {
+    icon: "users",
+    value: "+10,000",
+    label: "Clientes",
+    description: "Confían su capital en nosotros.",
+    color: "from-emerald-500 to-teal-600",
+    bgColor: "bg-emerald-50",
+  },
+  {
+    icon: "shield-check",
+    value: "100%",
+    label: "Regulados",
+    description: "Supervisados por las entidades SBS y UIF.",
+    color: "from-purple-500 to-violet-600",
+    bgColor: "bg-purple-50",
+  },
+  {
+    icon: "currency-dollar",
+    value: "S/ 0.00",
+    label: "Comisiones",
+    description: "Somos transparentes. Lo que ves es lo que recibes.",
+    color: "from-amber-500 to-orange-600",
+    bgColor: "bg-amber-50",
+  },
+];
+---
+
+<ContainerSection ariaLabelledby="title-section-cifras">
+  <SectionHeading
+    id="title-section-cifras"
+    title="Cifras que Respaldan nuestra Excelencia"
+    align="center"
+    class="mb-16 lg:mb-20"
+  />
+
+  <div aria-label="Estadísticas de respaldo">
+    <Carousel data={cifras} visibleDesktop={4} hasOverflow={true}>
+      {cifras.map((cifra, index) => (
+        <div class="h-full">
+          <article
+            class="group relative flex flex-col items-center text-center p-8 lg:p-10 bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 h-full border-2 border-neutral-100 hover:border-primary-200 hover:-translate-y-3 overflow-hidden"
+            aria-labelledby={`cifra-${index}`}
+          >
+            {/* Barra superior decorativa */}
+            <div
+              class={`absolute top-0 left-0 right-0 h-2 bg-linear-to-r ${cifra.color}`}
+              aria-hidden="true"
+            ></div>
+
+            {/* Icono destacado */}
+            <div class="relative mb-6 inline-flex" aria-hidden="true">
+              <div
+                class={`relative p-5 rounded-2xl bg-linear-to-br ${cifra.color} shadow-xl group-hover:scale-110 transition-transform duration-500`}
+              >
+                <Icon name={cifra.icon} class="text-white size-12 lg:size-14" aria-hidden="true" />
+                <div class="absolute inset-0 rounded-2xl bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
+              </div>
+            </div>
+
+            {/* Valor principal */}
+            <div class="mb-4">
+              <h3 id={`cifra-${index}`} class="text-xl lg:text-2xl font-extrabold text-primary-900 mb-1 leading-tight">
+                {cifra.value}
+              </h3>
+
+              {cifra.label && (
+                <p class="text-xl lg:text-2xl font-bold text-primary-700 mb-0">
+                  {cifra.label}
+                </p>
+              )}
+            </div>
+
+            {/* Descripción */}
+            <p class="text-sm lg:text-base text-neutral-600 leading-relaxed mb-0">
+              {cifra.description}
+            </p>
+          </article>
+        </div>
+      ))}
+    </Carousel>
+  </div>
+</ContainerSection>

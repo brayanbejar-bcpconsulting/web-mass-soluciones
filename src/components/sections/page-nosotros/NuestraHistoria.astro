@@ -1,0 +1,54 @@
+---
+import { Image } from "astro:assets";
+import ContainerSection from "@components/ui/ContainerSection.astro";
+import SectionHeading from "@components/ui/SectionHeading.astro";
+
+// Imagen temporal
+import imgHistoria from "@assets/nosotros/img-nuestra-historia.webp";
+---
+
+<ContainerSection
+  id="historia-section"
+  ariaLabelledby="title-history"
+  bgColor="bg-none"
+  classContainer="flex flex-col gap-8 lg:flex-row lg:gap-16 lg:items-center"
+>
+  <article class="text-left text-sm md:text-base lg:w-1/2 space-y-6">
+    <SectionHeading
+      id="title-history"
+      shortText="Nuestra Historia"
+      title="El Legado de Huaral al Perú"
+      align="left"
+    />
+
+    <p class="leading-relaxed">
+      Nacimos en Huaral hace tres décadas con una misión clara:
+      <strong>ofrecer transparencia y seguridad donde otros ponían barreras</strong>.
+      Lo que comenzó como un compromiso con nuestra comunidad local, ha evolucionado hoy en una
+      plataforma digital con <strong>cobertura nacional que sirve a miles de peruanos</strong>.
+    </p>
+
+    <p class="leading-relaxed">
+      No somos solo una aplicación; somos un equipo de expertos que entiende el valor de tu esfuerzo.
+      Combinamos nuestra herencia de confianza con procesos auditados y tecnología de vanguardia para que cada
+      <strong>cambio de divisas sea simple, justo y, sobre todo, seguro</strong>.
+    </p>
+
+    <blockquote class="bg-primary-100 pl-8 lg:pl-12 py-4 border-l-4 border-primary-600 pr-6 rounded-r-lg text-sm lg:text-base italic text-neutral-700 mt-6">
+      "En Market Dollar, no solo cambiamos monedas; construimos puentes para que empresas y familias alcancen sus metas con la seguridad de un respaldo histórico."
+    </blockquote>
+  </article>
+
+  <div class="lg:w-1/2">
+    <figure class="relative overflow-hidden rounded-2xl shadow-xl">
+      <Image
+        src={imgHistoria}
+        alt="Historia de Market Dollar: tres décadas de confianza en el cambio de divisas en Perú"
+        class="w-full h-auto object-cover"
+        width={800}
+        height={600}
+        loading="eager"
+      />
+    </figure>
+  </div>
+</ContainerSection>

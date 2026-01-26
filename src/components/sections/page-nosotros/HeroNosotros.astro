@@ -1,0 +1,35 @@
+---
+import Button from "@components/ui/Button.astro";
+import ContainerSection from "@components/ui/ContainerSection.astro"; // ajusta la ruta según tu proyecto
+import { APP_URLS } from "@/utils/navigation";
+---
+
+<ContainerSection
+  ariaLabelledby="hero-title"
+  bgColor="bg-linear-to-b from-primary-500 to-primary-950"
+  textColor="text-neutral-200"
+  class="text-center py-20 lg:py-28 px-6 md:px-12 lg:px-16"
+  maxWidth="max-w-4xl"
+  classContainer="space-y-8"
+>
+  <p class="text-2xl text-secondary-300 font-bold" aria-label="Sección">
+    Sobre Nosotros
+  </p>
+
+  <h1 id="hero-title" class="font-bold leading-tight">
+    30 Años de Confianza en Cambio de Divisas
+  </h1>
+
+  <p class="text-base md:text-lg text-neutral-300 max-w-2xl mx-auto leading-relaxed">
+    La solidez de la experiencia unida a la velocidad de la era digital para ofrecerte el mejor tipo de cambio en Perú.
+  </p>
+
+  <div class="flex flex-col sm:flex-row gap-3 justify-center pt-4" role="group" aria-label="Acciones principales">
+    <Button variant="secondary" href={APP_URLS.login} target="_self">
+      Cambiar Ahora
+    </Button>
+    <Button variant="outline" href="/ayuda" target="_self">
+      Contáctanos
+    </Button>
+  </div>
+</ContainerSection>

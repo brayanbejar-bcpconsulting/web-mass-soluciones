@@ -1,0 +1,81 @@
+---
+import Icon from "@components/ui/Icon.astro";
+import ContainerSection from "@components/ui/ContainerSection.astro";
+import SectionHeading from "@components/ui/SectionHeading.astro";
+
+const benefits = [
+  {
+    title: "El Spread más justo del mercado",
+    description:
+      "Gracias a nuestra estructura digital directa y décadas de negociación de divisas, eliminamos los márgenes excesivos de la banca tradicional.",
+    icon: "icon-hand-coin",
+    gradient: "from-blue-500 to-blue-600",
+  },
+  {
+    title: "Seguridad de Grado Bancario",
+    description:
+      "Operamos bajo los más altos estándares de ciberseguridad. Cada transacción está respaldada por una política de transparencia total.",
+    icon: "shield-check",
+    gradient: "from-blue-500 to-blue-600",
+  },
+  {
+    title: "Atención Humana Detrás de la Pantalla",
+    description:
+      "Nuestra esencia es humana. Contamos con un equipo especializado listo para guiarte, asegurando que tus fondos lleguen en tiempo récord.",
+    icon: "users",
+    gradient: "from-blue-500 to-blue-600",
+  },
+];
+---
+
+<ContainerSection ariaLabelledby="title-diferencia">
+  <SectionHeading
+    id="title-diferencia"
+    shortText="¿Qué nos diferencia?"
+    title="Un Nuevo Estándar en Cambio de Divisas"
+    description="Innovación, seguridad y atención personalizada que nos diferencia en el mercado peruano"
+    align="center"
+    class="mb-16"
+  />
+
+  <ul
+    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10"
+    aria-label="Beneficios principales"
+  >
+    {benefits.map((benefit, index) => (
+      <li class="group">
+        <article
+          class="relative h-full bg-white rounded-3xl p-8 lg:p-10 shadow-lg hover:shadow-2xl transition-all duration-500 border border-neutral-100 hover:border-primary-200 hover:-translate-y-2"
+          aria-labelledby={`benefit-title-${index}`}
+        >
+          {/* Icono con gradiente */}
+          <div class="mb-6 inline-flex items-center justify-center" aria-hidden="true">
+            <div
+              class={`relative p-5 rounded-2xl bg-linear-to-br ${benefit.gradient} shadow-lg group-hover:scale-110 transition-transform duration-500`}
+            >
+              <Icon name={benefit.icon} class="text-white size-12 lg:size-14" aria-hidden="true" />
+              <div class="absolute inset-0 rounded-2xl bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
+            </div>
+          </div>
+
+          {/* Contenido */}
+          <div class="space-y-4">
+            <h3
+              id={`benefit-title-${index}`}
+              class="text-xl lg:text-2xl font-bold text-primary-900 leading-tight group-hover:text-primary-700 transition-colors duration-300"
+            >
+              {benefit.title}
+            </h3>
+            <p class="text-neutral-600 leading-relaxed text-base">{benefit.description}</p>
+          </div>
+
+          {/* Barra decorativa inferior */}
+          <div
+            class={`absolute bottom-0 left-0 right-0 h-1.5 bg-linear-to-r ${benefit.gradient} rounded-b-3xl transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left`}
+            aria-hidden="true"
+          ></div>
+        </article>
+      </li>
+    ))}
+  </ul>
+</ContainerSection>
