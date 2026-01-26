@@ -1,0 +1,51 @@
+---
+import CTAPageBeneficios from "@/components/sections/page-beneficios/CTAPageBeneficios.astro";
+import ComoFuncionaReferidos from "@/components/sections/page-beneficios/page-referidos/ComoFuncionaReferidos.astro";
+import HeroReferidos from "@/components/sections/page-beneficios/page-referidos/HeroReferidos.astro";
+import FAQReferidos from "@components/sections/page-beneficios/page-referidos/FAQReferidos.astro"
+import MainLayout from "src/layouts/MainLayout.astro";
+
+// Schema: LandingPage + Offer (Programa de Referidos)
+const schemaReferidos = {
+  "@context": "https://schema.org",
+  "@type": "LandingPage",
+  "@id": "https://market-dollar.com/beneficios/referidos",
+  "url": "https://market-dollar.com/beneficios/referidos",
+  "name": "Programa de Referidos Market Dollar",
+  "description": "Invita a tus amigos a Market Dollar y obtén beneficios exclusivos por cada referido que complete una operación.",
+  "inLanguage": "es-PE",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Market Dollar",
+    "url": "https://market-dollar.com"
+  },
+  "about": {
+    "@type": "Offer",
+    "name": "Programa de referidos",
+    "description": "Programa que permite a los usuarios ganar beneficios por cada amigo referido que realice una operación.",
+    "availability": "https://schema.org/InStock",
+    "eligibleCustomerType": "https://schema.org/Customer",
+    "provider": {
+      "@type": "FinancialService",
+      "name": "Market Dollar",
+      "url": "https://market-dollar.com"
+    }
+  }
+};
+---
+<MainLayout
+  title="Programa de Referidos Market Dollar | Gana Beneficios por Invitar"
+  description="Invita a tus amigos a Market Dollar y gana beneficios exclusivos por cada referido que complete una operación. Fácil, seguro y 100% online."
+>
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(schemaReferidos)}
+  />
+
+  <!-- HERO REFERIDOS -->
+  <HeroReferidos />
+  <ComoFuncionaReferidos />
+  <CTAPageBeneficios />
+  <FAQReferidos />
+
+</MainLayout>

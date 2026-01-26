@@ -1,0 +1,140 @@
+---
+import ContainerSection from "@/components/ui/ContainerSection.astro";
+import SectionHeading from "@/components/ui/SectionHeading.astro";
+import Carousel from "@/components/ui/Carousel.astro";
+import Icon from "@/components/ui/Icon.astro";
+import { parseSimpleMarkdown } from "@/utils/markdown";
+
+const pasos = [
+  {
+    numero: "01",
+    titulo: "Comparte tu enlace",
+    descripcion: "Recomienda **Market Dollar** a tus contactos utilizando tu enlace de referidos personal.",
+    icon: "link-diagonal",
+    linear: "from-primary-500/10 to-primary-600/5",
+    iconBg: "from-primary-500 to-primary-600",
+  },
+  {
+    numero: "02",
+    titulo: "Tus referidos operan",
+    descripcion: "A medida que tus referidos comienzan a usar la plataforma, tu progreso dentro del programa avanza.",
+    icon: "users",
+    linear: "from-secondary-400/10 to-secondary-500/5",
+    iconBg: "from-secondary-500 to-secondary-600",
+  },
+  {
+    numero: "03",
+    titulo: "Accede a mejores pips",
+    descripcion: "Al alcanzar nuevos niveles de referidos, obtienes mejores pips que se aplican directamente a tus operaciones.",
+    icon: "icon-hand-coin",
+    linear: "from-success-500/10 to-success-600/5",
+    iconBg: "from-success-500 to-success-600",
+  },
+];
+
+const beneficiosGarantizados = [
+  { 
+    titulo: 'Pips reales', 
+    icon: 'currency-dollar' 
+  },
+  { 
+    titulo: 'Sin límites', 
+    icon: 'infinite' 
+  },
+  { 
+    titulo: 'Aplicación inmediata', 
+    icon: 'zap' 
+  }
+];
+---
+
+<ContainerSection 
+  id="como-funciona"
+  ariaLabelledby="titulo-referidos"
+  bgColor="bg-linear-to-b from-neutral-50 to-white"
+  class="relative overflow-hidden"
+  classContainer="flex flex-col gap-12" 
+>
+
+  <SectionHeading 
+    id="titulo-referidos"
+    align="center"
+    shortText="Proceso simple en 3 pasos"
+    title="Cómo funciona el programa de referidos"
+    description="Obtén **mejores pips de forma progresiva** recomendando Market Dollar a tus contactos."
+    class="max-w-3xl mx-auto"
+  />
+
+  <div class="relative">
+    <div class="hidden md:block absolute top-32 inset-x-0 h-0.5 max-w-5xl mx-auto px-[10%] -z-10 opacity-50 bg-linear-to-r from-primary-300 via-secondary-300 to-success-300" aria-hidden="true" />
+
+    <Carousel data={pasos} visibleDesktop={3}>
+      {pasos.map((paso, index) => (
+        <article class:list={[
+          "group relative flex flex-col h-full rounded-3xl border border-neutral-200 p-6 lg:p-8 transition-all duration-300 bg-linear-to-br hover:shadow-xl hover:-translate-y-2 hover:border-primary-200",
+          paso.linear
+        ]}>
+          <header class="flex items-center justify-between mb-6">
+            <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-neutral-200 shadow-sm text-xs font-bold uppercase tracking-wider">
+              <span class="text-primary-600">Paso</span>
+              <span class="text-neutral-900">{paso.numero}</span>
+            </span>
+            <div class="flex gap-1" aria-hidden="true">
+              {pasos.map((_, i) => (
+                <div class:list={["size-2 rounded-full", i <= index ? 'bg-primary-500' : 'bg-neutral-200']} />
+              ))}
+            </div>
+          </header>
+
+          <div class:list={[
+            "mb-6 size-14 lg:size-16 flex items-center justify-center rounded-2xl text-white shadow-lg transition-transform duration-300 group-hover:scale-110 bg-linear-to-br",
+            paso.iconBg
+          ]}>
+            <Icon name={paso.icon} class="size-7 lg:size-8" />
+          </div>
+
+          <h3 class="text-xl lg:text-2xl font-bold text-neutral-900 leading-tight mb-3">
+            {paso.titulo}
+          </h3>
+          <p class="text-sm lg:text-base text-neutral-700 leading-relaxed font-medium grow" set:html={parseSimpleMarkdown(paso.descripcion)} />
+
+          <footer class="mt-6 pt-4 border-t border-neutral-200/50 flex items-center justify-between text-xs text-neutral-500">
+            <span>Paso {paso.numero}/03</span>
+            <Icon name="check-circle" class="size-4 text-primary-500" />
+          </footer>
+        </article>
+      ))}
+    </Carousel>
+  </div>
+
+  <section class="max-w-4xl mx-auto relative overflow-hidden rounded-3xl bg-linear-to-r from-primary-600 to-primary-700 p-8 lg:p-12 shadow-2xl text-white text-center">
+    <div class="absolute -right-6 -top-6 size-32 rounded-full bg-white/10 blur-2xl pointer-events-none" aria-hidden="true" />
+    
+    <header class="relative z-10 space-y-4 mb-10">
+      <div class="flex items-center justify-center gap-2">
+        <Icon name="medal" class="size-6 text-secondary-400" />
+        <h3 class="text-xl font-bold lg:text-2xl">Beneficios garantizados</h3>
+      </div>
+      <p class="max-w-2xl mx-auto text-base leading-relaxed text-primary-50 lg:text-lg">
+        El programa de referidos está diseñado para premiar el uso real de la plataforma.
+      </p>
+    </header>
+
+    <div class="relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-8">
+      {beneficiosGarantizados.map((item) => (
+        <article class="flex flex-col items-center gap-3">
+          <div class="flex size-12 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/20">
+            <Icon name={item.icon} class="size-6 text-secondary-200" />
+          </div>
+          <span class="text-sm font-semibold tracking-wide uppercase">{item.titulo}</span>
+        </article>
+      ))}
+    </div>
+  </section>
+</ContainerSection>
+
+<style>
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; }
+  }
+</style>

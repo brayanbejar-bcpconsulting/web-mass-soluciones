@@ -1,0 +1,68 @@
+---
+---
+<!-- Card de niveles - 4 columnas -->
+      <div class="lg:col-span-4">
+        <div
+          class="
+            relative
+            rounded-3xl
+            bg-white
+            border border-neutral-200
+            p-6 lg:p-8
+            shadow-2xl
+            overflow-hidden
+          "
+        >
+          <!-- Decoración superior -->
+          <div class="absolute top-0 right-0 w-32 h-32 bg-linear-to-br from-primary-100 to-secondary-100 rounded-full blur-2xl opacity-50" aria-hidden="true"></div>
+          
+          <div class="relative z-10">
+            <!-- Header de la card -->
+            <div class="flex items-center gap-3 mb-6">
+              <div class="shrink-0 w-12 h-12 rounded-2xl bg-linear-to-br from-primary-500 to-primary-600 flex items-center justify-center shadow-lg">
+                <svg class="size-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                </svg>
+              </div>
+              <div>
+                <h2 class="text-lg lg:text-xl font-bold text-primary-700 leading-tight">
+                  Mejora tu nivel
+                </h2>
+                <p class="text-xs text-neutral-500">Gana pips por referir</p>
+              </div>
+            </div>
+
+            <!-- Lista de niveles mejorada -->
+            <ul class="space-y-3 mb-6">
+              {[
+                { referidos: 5, pips: '+10', color: 'from-primary-400 to-primary-500' },
+                { referidos: 10, pips: '+20', color: 'from-primary-600 to-primary-700' },
+                { referidos: 15, pips: '+30', color: 'from-secondary-500 to-secondary-600' },
+                { referidos: 20, pips: '+40', color: 'from-secondary-600 to-success-600' },
+              ].map((nivel, index) => (
+                <li class="flex items-center justify-between p-3 rounded-xl bg-linear-to-r from-neutral-50 to-neutral-100 border border-neutral-200/50 hover:shadow-md transition-shadow">
+                  <div class="flex items-center gap-3">
+                    <div class={`w-8 h-8 rounded-lg bg-linear-to-br ${nivel.color} flex items-center justify-center text-white font-bold text-sm shadow-md`}>
+                      {index + 1}
+                    </div>
+                    <span class="text-sm font-medium text-neutral-700">{nivel.referidos} referidos</span>
+                  </div>
+                  <span class="text-sm font-bold text-primary-600 px-3 py-1 bg-primary-50 rounded-full border border-primary-200">
+                    {nivel.pips} pips
+                  </span>
+                </li>
+              ))}
+            </ul>
+
+            <!-- Footer con info -->
+            <div class="pt-4 border-t border-neutral-200">
+              <p class="text-xs text-neutral-500 flex items-start gap-2">
+                <svg class="size-4 text-primary-500 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                </svg>
+                Los pips se aplican automáticamente en todas tus operaciones dentro de la plataforma. Cada pip equivale a 0.001 .
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>

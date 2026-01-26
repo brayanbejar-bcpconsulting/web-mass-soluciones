@@ -1,0 +1,88 @@
+---
+import ContainerSection from "@/components/ui/ContainerSection.astro";
+import SectionHeading from "@/components/ui/SectionHeading.astro";
+import Icon from "@/components/ui/Icon.astro";
+import { parseSimpleMarkdown } from "@/utils/markdown";
+
+const faqs = [
+  {
+    pregunta: "¿Qué se considera un referido válido?",
+    respuesta: "Un referido válido es una persona que se registra en **Market Dollar** a través de tu enlace y realiza operaciones reales dentro de la plataforma."
+  },
+  {
+    pregunta: "¿Existe un monto mínimo para que un referido cuente?",
+    respuesta: "Sí. Para que un referido sea contabilizado dentro del programa, debe haber realizado al menos una operación mínima establecida por la plataforma. Esto garantiza un uso real del sistema."
+  },
+  {
+    pregunta: "¿Cómo y cuándo se aplican los pips obtenidos?",
+    respuesta: "Los pips se aplican automáticamente a tus operaciones una vez que alcanzas un nivel dentro del programa de referidos. No es necesario realizar ninguna acción adicional."
+  },
+  {
+    pregunta: "¿Los beneficios del programa tienen fecha de vencimiento?",
+    respuesta: "Los beneficios del programa de referidos se mantienen activos mientras el programa esté vigente y sujeto a las políticas generales de la plataforma."
+  }
+];
+---
+
+<ContainerSection
+  id="faq"
+  ariaLabelledby="titulo-faq-referidos"
+  bgColor="bg-white"
+  maxWidth="max-w-4xl"
+>
+  <div class="space-y-14">
+    
+    <SectionHeading
+      id="titulo-faq-referidos"
+      align="center"
+      title="Preguntas frecuentes"
+      description="Conoce los detalles del programa de referidos y cómo se aplican los beneficios dentro de la plataforma."
+    />
+
+    <div class="space-y-4">
+      {faqs.map((item) => (
+        <details
+          class="group rounded-2xl border border-neutral-200 p-6 transition-all hover:shadow-sm hover:border-primary-200"
+        >
+          <summary
+            class="cursor-pointer font-semibold text-neutral-900 list-none flex items-center justify-between gap-4"
+          >
+            {item.pregunta}
+            <div class="shrink-0 text-primary-500 transition-transform duration-300 group-open:rotate-180">
+              <Icon name="chevron-down" class="size-5" />
+            </div>
+          </summary>
+
+          <div class="overflow-hidden group-open:animate-fadeIn">
+            <p class="mt-4 text-base text-neutral-600 leading-relaxed border-t border-neutral-100 pt-4" set:html={parseSimpleMarkdown(item.respuesta)}/>
+          </div>
+        </details>
+      ))}
+    </div>
+
+    <footer class="text-center">
+      <p class="text-xs text-neutral-500 max-w-2xl mx-auto leading-relaxed italic">
+        Market Dollar se reserva el derecho de validar las operaciones y ajustar
+        el programa de referidos conforme a sus políticas internas y normativas
+        aplicables.
+      </p>
+    </footer>
+
+  </div>
+</ContainerSection>
+
+<style>
+  /* Quitar la flecha por defecto en Safari/Chrome */
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .group-open\:animate-fadeIn {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+</style>
