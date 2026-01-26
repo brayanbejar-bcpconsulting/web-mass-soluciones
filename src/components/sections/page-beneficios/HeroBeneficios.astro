@@ -1,0 +1,111 @@
+---
+import Button from "@components/ui/Button.astro";
+import Icon from "@components/ui/Icon.astro";
+import ContainerSection from "@components/ui/ContainerSection.astro";
+import { Image } from "astro:assets";
+import { APP_URLS } from "@/utils/navigation";
+
+// Images
+import imgBeneficios from "@assets/beneficios/img-chica-beneficios.webp";
+
+const btnCTABeneficios = [
+  { text: "Ver cupones", href: "#cupones", variant: "outline" },
+  { text: "Regístrate ahora", href: `${APP_URLS.login}`, variant: "primary" },
+] as const;
+---
+
+<ContainerSection
+  id="hero-beneficios"
+  ariaLabelledby="hero-title"
+  bgColor="bg-linear-to-b from-white to-neutral-200"
+  class="relative overflow-hidden text-neutral-600 py-12 h-fit flex items-center"
+  classContainer="w-full flex flex-col lg:flex-row items-center gap-12 lg:gap-8"
+  maxWidth="max-w-7xl"
+>
+  <article class="lg:w-[55%] flex flex-col items-center lg:items-start text-center lg:text-left gap-8">
+    <header class="grid gap-4">
+      <h1 id="hero-title" class="text-3xl md:text-5xl text-neutral-900 leading-[1.2]">
+        Multiplica tu ahorro con los
+        <span class="text-primary-600">Beneficios de Market Dollar</span>
+      </h1>
+
+      <p class="text-base md:text-lg text-neutral-600 max-w-2xl mx-auto lg:mx-0 mb-0">
+        Hemos diseñado un ecosistema de <strong>recompensas</strong> para que cada sol y dólar rinda al máximo.
+        <span class="block mt-2 font-bold text-neutral-600">
+          Desde tu primer cambio hasta operaciones recurrentes, aquí siempre ganas.
+        </span>
+      </p>
+    </header>
+
+    <nav class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto" aria-label="Botones de beneficios">
+      {btnCTABeneficios.map((btn) => (
+        <Button href={btn.href} variant={btn.variant}>
+          {btn.text}
+        </Button>
+      ))}
+    </nav>
+
+    <ul class="grid gap-2 max-w-md" role="list">
+      <li class="flex items-start gap-4 text-sm text-neutral-500">
+        <Icon name="check-circle" class="size-6 text-primary-600 shrink-0" aria-hidden="true" />
+        <span>
+          Accede a una tasa preferencial por montos mayores a <strong>$5,000</strong>
+        </span>
+      </li>
+      <li class="flex items-start gap-4 text-sm text-neutral-500 border-t border-neutral-200 pt-3 lg:pt-0">
+        <Icon name="check-circle" class="size-6 text-primary-600 shrink-0" aria-hidden="true" />
+        <span>
+          Obtén <strong>una mejora de tasa</strong> en tu primera operación.
+        </span>
+      </li>
+    </ul>
+  </article>
+
+  <aside class="lg:w-[45%] relative group w-full max-w-125 lg:max-w-none">
+    <div class="aspect-square bg-linear-to-tr from-secondary-400 to-secondary-200 shadow-2xl shadow-secondary-500/20 rounded-[3rem] lg:rounded-full flex items-center justify-center p-4">
+      <Image
+        src={imgBeneficios}
+        alt="Dashboard de recompensas y cupones de Market Dollar"
+        width={600}
+        height={600}
+        loading="eager"
+        class="w-full h-auto object-contain transform group-hover:scale-105 transition-transform duration-500 mask-b-from-80% mask-b-to-100% rounded-full"
+      />
+    </div>
+
+    <div class="absolute -bottom-4 -left-4 bg-primary-600 p-4 rounded-2xl shadow-xl hidden md:flex items-center gap-3 animate-bounce-slow">
+      <div class="size-10 bg-primary-100 rounded-full flex items-center justify-center">
+        <Icon name="piggy-bank" class="text-primary-600 size-6" aria-hidden="true" />
+      </div>
+      <div class="text-left">
+        <p class="text-[10px] uppercase font-bold text-neutral-300 mb-0">Supervisados por la SBS</p>
+        <p class="text-sm font-bold text-neutral-100 mb-0">Operaciones 100% seguras</p>
+      </div>
+    </div>
+
+    <div class="absolute -top-4 -right-4 bg-success-200 p-4 rounded-2xl shadow-xl hidden md:flex items-center gap-3 animate-bounce-slow z-20">
+      <div class="size-10 bg-success-100 rounded-full flex items-center justify-center">
+        <Icon name="icon-hand-coin" class="text-success-600 size-6" aria-hidden="true" />
+      </div>
+      <div class="text-left">
+        <p class="text-[10px] uppercase font-bold text-neutral-400 mb-0">Ahorro Promedio</p>
+        <p class="text-sm font-bold text-neutral-800 mb-0">+S/ 150 por operación</p>
+      </div>
+    </div>
+  </aside>
+</ContainerSection>
+
+<style>
+  .animate-bounce-slow {
+    animation: bounce 3s infinite;
+  }
+  @keyframes bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+</style>

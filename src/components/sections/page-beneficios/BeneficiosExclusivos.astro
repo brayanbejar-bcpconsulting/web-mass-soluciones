@@ -1,0 +1,127 @@
+---
+import { Image } from "astro:assets";
+import ContainerSection from "@components/ui/ContainerSection.astro";
+import SectionHeading from "@components/ui/SectionHeading.astro";
+import Carousel from "@components/ui/Carousel.astro";
+import { APP_URLS } from "@/utils/navigation";
+import Button from "@/components/ui/Button.astro";
+
+// Imágenes
+import hotelHuaral from "@assets/beneficios/foto-hotel-huaral.webp";
+import campaña from "@assets/shared/campaña-referidos.webp";
+import beneficioCelulares from "@assets/beneficios/beneficio-celulares.webp";
+
+const btnCTA = [
+  { text: "Regístrate Hoy", href: `${APP_URLS.register}`, variant: "primary" },
+  { text: "Iniciar Sesión", href: `${APP_URLS.login}`, variant: "outline" },
+] as const;
+
+// Datos de ejemplo para el carrusel
+const beneficios = [
+  {
+    id: "hotel-huaral",
+    empresa: "Hotel El Gordito",
+    descuentoPorc: "Hasta 20% Dscto",
+    descripcion: "¡Accede al beneficio realizando tu primera operación!",
+    fechaExpiracion: "2026-12-31",
+    imagen: hotelHuaral,
+    botonTexto: "¡Ir a cambiar!",
+    botonHref: APP_URLS.register,
+  },
+  {
+    id: "referidos",
+    empresa: "Programa Referidos",
+    descuentoPorc: "Hasta 40 Pips",
+    descripcion: "¡Mejora tu tasa o tipo de cambio refiriendo a tus conocidos!",
+    fechaExpiracion: "2026-12-31",
+    imagen: campaña,
+    botonTexto: "¡Ir a cambiar!",
+    botonHref: APP_URLS.register,
+  },
+  {
+    id: "beneficios-premium",
+    empresa: "Celulares y Accesorios",
+    descuentoPorc: "Hasta S/50 Dscto",
+    descripcion: "¡Obtén este descuento realizando tu primer cambio!",
+    fechaExpiracion: "2026-12-31",
+    imagen: beneficioCelulares,
+    botonTexto: "¡Ir a cambiar!",
+    botonHref: APP_URLS.register,
+  },
+] as const;
+---
+
+<ContainerSection ariaLabelledby="title-beneficios" classContainer="flex flex-col items-center gap-10">
+  <SectionHeading
+    id="title-beneficios"
+    title="Beneficios exclusivos "
+    subtitle="pensados para ti"
+    description='Disfruta de tarifas especiales en el hotel "El Gordito" y otros descuentos seleccionados solo por ser parte de Market Dollar.'
+    align="center"
+  />
+
+  <div class="w-full" role="region" aria-label="Carrusel de beneficios">
+    <Carousel data={beneficios} visibleDesktop={3} hasOverflow={false}>
+      {beneficios.map((item) => (
+        <div class="h-full">
+          <article
+        class="group/card relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-md transition-all duration-300 hover:shadow-2xl"
+        role="listitem"
+      >
+            <!-- Badge de descuento -->
+            <span
+              class="absolute right-5 top-5 z-20 rounded-full bg-secondary-400 px-4 py-3 font-poppins text-base font-bold text-neutral-900 shadow-lg"
+              aria-hidden="true"
+            >
+              {item.descuentoPorc}
+            </span>
+
+            <!-- Imagen de la empresa -->
+            <div class="relative h-56 w-full overflow-hidden bg-neutral-100 md:h-64">
+              <Image
+                src={item.imagen}
+                alt={`Beneficio con ${item.descuentoPorc}% de descuento en ${item.empresa}`}
+                class="h-full w-full object-cover transition-transform duration-300 group-hover/card:scale-105"
+              />
+            </div>
+
+            <!-- Contenido -->
+            <div class="flex flex-1 flex-col justify-between px-5 py-6 md:px-6 md:py-7">
+              <!-- Nombre de empresa y descripción -->
+              <div class="flex flex-col gap-3">
+                <h3 class="font-poppins text-lg font-bold text-neutral-900 md:text-xl">
+                  {item.empresa}
+                </h3>
+                <p class="font-inter text-sm leading-relaxed text-neutral-600 md:text-base">
+                  {item.descripcion}
+                </p>
+              </div>
+
+              <!-- Fecha de expiración -->
+              <div class="mb-5 text-sm text-neutral-500 md:text-sm">
+                <span class="font-inter">
+                  Expira: <time datetime={item.fechaExpiracion} class="font-semibold">
+                    {item.fechaExpiracion}
+                  </time>
+                </span>
+              </div>
+
+              <!-- Botón de acción -->
+              <Button
+                href={item.botonHref}
+                variant="primary"
+                class="w-full"
+              >
+                {item.botonTexto}
+              </Button>
+            </div>
+          </article>
+        </div>
+      ))}
+    </Carousel>
+  </div>
+
+  <small class="text-neutral-400 italic">
+    * Aplica <a href="/terminos-condiciones"><strong>Términos y condiciones *</strong></a>
+  </small>
+</ContainerSection>
