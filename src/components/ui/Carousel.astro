@@ -1,10 +1,11 @@
 ---
 interface Props {
-  data: any[];
+  data: readonly unknown[];
   visibleDesktop?: 1 | 2 | 3 | 4;
+  hasOverflow?: boolean;
 }
 
-const { data, visibleDesktop = 3 } = Astro.props;
+const { data, visibleDesktop = 3, hasOverflow = false } = Astro.props;
 
 const itemsCount = data?.length ?? 0;
 const isSliderDesktop = itemsCount > visibleDesktop;
@@ -15,6 +16,7 @@ const isSliderDesktop = itemsCount > visibleDesktop;
   data-carousel-container
   data-visible-desktop={visibleDesktop}
   data-is-slider-desktop={isSliderDesktop}
+  data-has-overflow={hasOverflow}
 >
   <button data-prev class="nav-btn left-0" aria-label="Anterior" type="button">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -54,12 +56,23 @@ const isSliderDesktop = itemsCount > visibleDesktop;
     padding-inline: var(--edge);
     scroll-padding-inline: var(--edge);
 
+    /* CORRECCIÓN: overflow-x solo, overflow-y visible */
     overflow-x: auto;
+    overflow-y: visible;
+    
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
 
-    /* Snap estable para evitar “cortes” */
+    /* Snap estable para evitar "cortes" */
     scroll-snap-type: x mandatory;
+    
+    /* Padding por defecto */
+    padding-bottom: 1rem;
+  }
+
+  /* Padding top solo cuando hasOverflow es true */
+  .carousel-container[data-has-overflow="true"] .carousel-track {
+    padding-top: 6rem;
   }
 
   .carousel-track::-webkit-scrollbar {
@@ -71,7 +84,7 @@ const isSliderDesktop = itemsCount > visibleDesktop;
     flex: 0 0 100%;
     box-sizing: border-box;
 
-    /* Start evita recortes; el padding del track da el “aire” lateral */
+    /* Start evita recortes; el padding del track da el "aire" lateral */
     scroll-snap-align: start;
     scroll-snap-stop: always;
   }
@@ -122,17 +135,23 @@ const isSliderDesktop = itemsCount > visibleDesktop;
 
 <script>
   const initCarousels = () => {
-    document.querySelectorAll('[data-carousel-container]').forEach((container) => {
-      // Evita doble inicialización si este script corre más de una vez
+    // 1. Especificamos que container es un HTMLElement
+    document.querySelectorAll('[data-carousel-container]').forEach((elem) => {
+      const container = elem as HTMLElement;
+
+      // Evita doble inicialización
       if (container.dataset.carouselInit === '1') return;
       container.dataset.carouselInit = '1';
 
-      const track = container.querySelector('[data-track]');
-      const prev = container.querySelector('[data-prev]');
-      const next = container.querySelector('[data-next]');
+      // 2. Especificamos los tipos exactos de los elementos hijos
+      const track = container.querySelector<HTMLElement>('[data-track]');
+      const prev = container.querySelector<HTMLButtonElement>('[data-prev]');
+      const next = container.querySelector<HTMLButtonElement>('[data-next]');
+      
       if (!track || !prev || !next) return;
 
-      const getItems = () => Array.from(track.children).filter(Boolean);
+      // 3. Afirmamos que los hijos son HTMLElements para acceder a offsetLeft
+      const getItems = () => Array.from(track.children) as HTMLElement[];
 
       const getPaddingLeft = () => {
         const cs = getComputedStyle(track);
@@ -169,6 +188,7 @@ const isSliderDesktop = itemsCount > visibleDesktop;
         let bestDist = Infinity;
 
         items.forEach((el, i) => {
+          // Ahora TypeScript sabe que 'el' es HTMLElement y tiene offsetLeft
           const dist = Math.abs(el.offsetLeft - target);
           if (dist < bestDist) {
             bestDist = dist;
@@ -179,7 +199,8 @@ const isSliderDesktop = itemsCount > visibleDesktop;
         return bestIndex;
       };
 
-      const scrollToIndex = (index) => {
+      // 4. Tipamos el argumento index
+      const scrollToIndex = (index: number) => {
         const items = getItems();
         if (!items.length) return;
 
@@ -190,7 +211,8 @@ const isSliderDesktop = itemsCount > visibleDesktop;
         track.scrollTo({ left, behavior: 'smooth' });
       };
 
-      const scrollOne = (dir) => {
+      // 5. Tipamos el argumento dir
+      const scrollOne = (dir: 'prev' | 'next') => {
         const current = getCurrentIndex();
         scrollToIndex(current + (dir === 'next' ? 1 : -1));
       };

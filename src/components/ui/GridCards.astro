@@ -1,0 +1,78 @@
+  ---
+  interface Props {
+    titulo?: string;
+    ariaLabel?: string;
+    // Configuración de columnas
+    colsMobile?: 1 | 2;
+    colsTablet?: 2 | 3;
+    colsDesktop?: 3 | 4 | 5 | 6;
+    // Espaciado y Layout
+    gap?: string;
+    class?: string;
+    // Lógica de "Ver más"
+    showMore?: boolean;
+  }
+
+  const {
+    titulo,
+    ariaLabel = "Grilla de contenido",
+    colsMobile = 1,
+    colsTablet = 2,
+    colsDesktop = 3,
+    gap = "gap-6",
+    class: className,
+    showMore = false,
+  } = Astro.props;
+
+  /**
+   * Mapeo estático de clases para que Tailwind las detecte correctamente.
+   * Si necesitas más números, agrégalos aquí.
+   */
+  const columnClasses = {
+    mobile: { 1: "grid-cols-1", 2: "grid-cols-2" },
+    tablet: { 2: "md:grid-cols-2", 3: "md:grid-cols-3" },
+    desktop: { 
+      3: "lg:grid-cols-3", 
+      4: "lg:grid-cols-4", 
+      5: "lg:grid-cols-5", 
+      6: "lg:grid-cols-6" 
+    },
+  };
+
+  const titleId = titulo ? `grid-title-${Math.random().toString(36).substr(2, 9)}` : undefined;
+  ---
+
+  <section
+    class:list={["w-full", className]}
+    role="region"
+    aria-labelledby={titleId}
+    aria-label={!titulo ? ariaLabel : undefined}
+  >
+    {titulo && (
+      <div class="mb-8 flex items-end justify-between">
+        <h2 id={titleId} class="text-2xl font-bold text-neutral-900 md:text-3xl">
+          {titulo}
+        </h2>
+      </div>
+    )}
+
+    <div
+      class:list={[
+        "grid auto-rows-max",
+        gap,
+        columnClasses.mobile[colsMobile],
+        columnClasses.tablet[colsTablet],
+        columnClasses.desktop[colsDesktop],
+      ]}
+      role="list"
+    >
+      {/* El slot principal permite inyectar cualquier Card desde el padre */}
+      <slot />
+    </div>
+
+    {showMore && (
+      <div class="mt-12 flex justify-center">
+        <slot name="footer" />
+      </div>
+    )}
+  </section>

@@ -1,0 +1,48 @@
+---
+import Icon from '@components/ui/Icon.astro';
+import { parseSimpleMarkdown } from '@/utils/markdown';
+
+interface Props {
+  title: string;
+  description?: string; // Opcional si prefieres usar el slot
+  iconName?: string;
+  href?: string; // Por si quieres que toda la card sea un link
+  class?: string; // Para permitir estilos extra desde fuera
+}
+
+const { 
+  title, 
+  description, 
+  iconName = "user", 
+  href, 
+  class: className, 
+  ...rest 
+} = Astro.props;
+
+// Decidimos si el contenedor es un 'div' o un 'a' (enlace)
+const Element = href ? 'a' : 'article';
+
+// Parseamos el contenido description
+const parsedDescription = description ? parseSimpleMarkdown(description) : '';
+---
+
+<Element 
+  href={href}
+  class:list={[
+    "max-w-75 p-4 bg-neutral-50 rounded-xl flex flex-col items-center gap-2 text-center border-b-6 border-secondary-300 transition-all duration-300 ease-in-out hover:scale-105",
+    className
+  ]}
+  {...rest}
+>
+  {iconName && (
+    <span class="size-14 bg-primary-500 text-neutral-50 rounded-full p-2">
+      <Icon name={iconName} class="size-full"/>
+    </span>
+  )}
+
+  <h3 class="text-xl lg:text-2xl text-primary-600">
+    {title}
+  </h3>
+
+  <p class="text-sm mb-0 text-neutral-600" set:html={parsedDescription} />
+</Element>
