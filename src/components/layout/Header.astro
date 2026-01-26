@@ -4,12 +4,13 @@ import { Image } from "astro:assets";
 
 import SignsButtons from "../ui/SignsButtons.astro";
 import SubHeader from "./SubHeader.astro";
+import NavMobile from "./NavMobile.astro";
 
 const { pathname } = Astro.url;
 
 // Estilos en constantes para evitar clases duplicadas y mejorar legibilidad
-const baseLinkStyles = "text-btn font-medium transition-all duration-300 hover:text-neutral-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary-600 rounded";
-const activeLinkStyles = "text-white font-bold relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-0.5 after:bg-secondary-400";
+const baseLinkStyles = "text-btn font-medium transition-all duration-300 hover:text-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary-600 rounded";
+const activeLinkStyles = "text-white font-bold relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-0.5 after:bg-secondary-200";
 
 // Usar función centralizada
 const isActive = (href: string) => checkActive(href, pathname);
@@ -19,7 +20,7 @@ const isActive = (href: string) => checkActive(href, pathname);
   class="bg-primary-500"
 >
   <div
-    class="max-w-350 mx-auto flex justify-between items-center py-4"
+    class="max-w-350 mx-auto flex justify-between items-center py-4 px-[5%]"
   >
     <img
       src="/logotipo.webp"
@@ -31,18 +32,86 @@ const isActive = (href: string) => checkActive(href, pathname);
     />
 
     <nav aria-label="Navegación principal" class="hidden xl:inline-block">
-      <ul class="nav-list flex gap-8">
+      <ul class="nav-list flex gap-8 items-center">
         {NAV_OPTIONS.map((option) => {
           const active = isActive(option.href);
+
           return (
-            <li>
-              <a 
-                href={option.href} 
-                class={`${baseLinkStyles} ${active ? activeLinkStyles : 'text-primary-100'}`}
-                aria-current={active ? 'page' : undefined}
+            <li class="relative group">
+              <!-- Link principal -->
+              <a
+                href={option.href}
+                class={`${baseLinkStyles} ${
+                  active ? activeLinkStyles : "text-primary-100"
+                } flex items-center gap-1`}
+                aria-current={active ? "page" : undefined}
+                aria-haspopup={option.children ? "true" : undefined}
               >
                 {option.name}
+                {option.children && (
+                  <svg
+                    class="w-4 h-4 transition-transform group-hover:rotate-180"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                )}
               </a>
+
+              <!-- Dropdown -->
+              {option.children && (
+                <div
+                  class="
+                    absolute left-0 top-full mt-3
+                    w-72
+                    rounded-2xl
+                    bg-white
+                    shadow-xl
+                    border border-neutral-200
+                    opacity-0 invisible
+                    group-hover:opacity-100 group-hover:visible
+                    group-focus-within:opacity-100 group-focus-within:visible
+                    transition-all duration-200
+                    z-50
+                  "
+                  role="menu"
+                >
+                  <ul class="py-3">
+                    {option.children.map((child) => {
+                      const childActive = isActive(child.href);
+
+                      return (
+                        <li>
+                          <a
+                            href={child.href}
+                            class={`
+                              block px-5 py-3
+                              text-sm
+                              ${
+                                childActive
+                                  ? "bg-primary-50 text-primary-600 font-semibold"
+                                  : "text-neutral-700 hover:bg-secondary-100"
+                              }
+                            `}
+                            role="menuitem"
+                            aria-current={childActive ? "page" : undefined}
+                          >
+                            <span class="block text-primary-600 font-semibold">{child.name}</span>
+                            {child.description && (
+                              <span class="block text-xs text-neutral-500">
+                                {child.description}
+                              </span>
+                            )}
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
             </li>
           );
         })}
@@ -50,5 +119,7 @@ const isActive = (href: string) => checkActive(href, pathname);
     </nav>
 
     <SignsButtons/>
+
+    <NavMobile options={NAV_OPTIONS} pathname={pathname}/>
   </div>
 </header>

@@ -7,6 +7,11 @@ export interface NavItem {
   name: string;
   href: string;
   iconName: string;
+  children?: {
+    name: string;
+    href: string;
+    description?: string;
+  }[];
 }
 
 export interface ClientTab {
@@ -23,10 +28,27 @@ export interface ClientTab {
 export const NAV_OPTIONS: NavItem[] = [
   { name: "Inicio", href: "/", iconName: "home" },
   { name: "Nosotros", href: "/nosotros", iconName: "users" },
-  { name: "Beneficios", href: "/beneficios", iconName: "check-circle" },
+  {
+    name: "Beneficios",
+    href: "/beneficios",
+    iconName: "check-circle",
+    children: [
+      {
+        name: "Cupón de bienvenida",
+        href: "/beneficios/cupones",
+        description: "Mejora tu tipo de cambio desde tu primera operación",
+      },
+      {
+        name: "Programa de referidos",
+        href: "/beneficios/referidos",
+        description: "Gana beneficios invitando a tus amigos",
+      },
+    ],
+  },
   { name: "Ayuda y Soporte", href: "/ayuda", iconName: "help-circle" },
   { name: "Blog", href: "/blog", iconName: "list" },
 ];
+
 
 /**
  * Configuración de URLs de la aplicación
