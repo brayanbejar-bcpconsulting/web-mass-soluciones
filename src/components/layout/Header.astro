@@ -1,9 +1,7 @@
 ---
 import { NAV_OPTIONS, APP_URLS, isActive as checkActive } from "@utils/navigation";
-import { Image } from "astro:assets";
 
 import SignsButtons from "../ui/SignsButtons.astro";
-import SubHeader from "./SubHeader.astro";
 import NavMobile from "./NavMobile.astro";
 
 const { pathname } = Astro.url;
@@ -17,10 +15,10 @@ const isActive = (href: string) => checkActive(href, pathname);
 ---
 
 <header
-  class="bg-primary-500"
+  class="bg-primary-500 px-[5%]"
 >
   <div
-    class="max-w-350 mx-auto flex justify-between items-center py-4 px-[5%]"
+    class="max-w-350 mx-auto flex justify-between items-center py-4"
   >
     <img
       src="/logotipo.webp"
