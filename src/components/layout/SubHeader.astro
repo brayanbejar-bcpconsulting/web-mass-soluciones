@@ -1,0 +1,69 @@
+---
+/**
+ * SubHeader - Navegación secundaria Personas/Empresas
+ * Muestra tabs de navegación y badges de confianza
+ * Solo visible en desktop (lg+)
+ */
+import Icon from "@components/ui/Icon.astro";
+import { getClientTabs, TRUST_BADGES } from "@utils/navigation";
+
+const { pathname } = Astro.url;
+
+// Usar función centralizada para tabs
+const tabs = getClientTabs(pathname);
+
+// Badges de confianza desde config centralizada
+const badges = TRUST_BADGES;
+
+// Estilos
+const tabBase = "flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary-600";
+const tabActive = "bg-white text-primary-700 shadow-sm";
+const tabInactive = "text-primary-100 hover:text-white hover:bg-primary-400/50";
+---
+
+<nav 
+  id="sub-header"
+  class="hidden lg:block bg-primary-500 border-t border-primary-500/20 relative z-40 transition-all duration-300 will-change-transform"
+  aria-label="Navegación por tipo de cliente"
+>
+  <div class="flex items-center justify-center lg:justify-between px-[5%] py-2">
+    
+    <!-- Tabs: Personas | Empresas -->
+    <div 
+      class="flex items-center gap-1 bg-primary-800/50 p-1 rounded-full"
+      role="group"
+      aria-label="Tipo de cliente"
+    >
+      {tabs.map((tab) => (
+        <a 
+          href={tab.href}
+          class:list={[tabBase, tab.active ? tabActive : tabInactive]}
+          aria-current={tab.active ? 'page' : undefined}
+          title={tab.description}
+        >
+          <Icon name={tab.icon} class="size-4" aria-hidden="true" />
+          <span>{tab.name}</span>
+        </a>
+      ))}
+    </div>
+
+    <!-- Badges de confianza -->
+    <aside 
+      class="hidden md:flex items-center gap-2 text-sm text-primary-100 font-semibold"
+      aria-label="Indicadores de confianza"
+    >
+      {badges.map((badge, index) => (
+        <>
+          {index > 0 && (
+            <span class="w-px h-4 bg-primary-500/30" aria-hidden="true"></span>
+          )}
+          <span class="flex items-center gap-2">
+            <Icon name={badge.icon} class="size-4 text-secondary-200" aria-hidden="true" />
+            <span>{badge.text}</span>
+          </span>
+        </>
+      ))}
+    </aside>
+
+  </div>
+</nav>

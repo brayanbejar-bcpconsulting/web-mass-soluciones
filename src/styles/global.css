@@ -59,6 +59,14 @@
   --color-neutral-cool-700: oklch(40% 0.05 255);
   --color-neutral-cool-800: oklch(28% 0.04 255);
   --color-neutral-cool-900: oklch(18% 0.03 255);
+
+  /* Success - Estados de éxito, WhatsApp (basado en green) */
+  --color-success-100: #dcfce7;
+  --color-success-200: #bbf7d0;
+  --color-success-400: #4ade80;
+  --color-success-500: #22c55e;
+  --color-success-600: #16a34a;
+  --color-success-700: #15803d;
 }
 
 @layer base {

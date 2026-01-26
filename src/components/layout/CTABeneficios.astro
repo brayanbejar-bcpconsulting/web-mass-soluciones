@@ -1,0 +1,97 @@
+---
+import Icon from "@components/ui/Icon.astro";
+import Button from "@components/ui/Button.astro";
+import SectionHeading from "@components/ui/SectionHeading.astro";
+import ContainerSection from "@components/ui/ContainerSection.astro";
+
+import { Image } from "astro:assets";
+import { APP_URLS } from "@/utils/navigation";
+import imgBeneficiosCTA from "@assets/shared/img-beneficios-cta.webp";
+
+const btnCTA = [
+  { text: "Regístrate Hoy", href: `${APP_URLS.register}`, variant: "primary", icon: "user" },
+  { text: "Iniciar Sesión", href: `${APP_URLS.login}`, variant: "outline", icon: "login" },
+] as const;
+---
+
+<ContainerSection
+  id="tools"
+  ariaLabelledby="tools-title"
+  bgColor="bg-none"
+  classContainer="flex flex-col lg:flex-row gap-16 lg:items-start"
+>
+  <article class="flex-1 space-y-12">
+    <SectionHeading
+      id="tools-title"
+      title="Herramientas inteligentes para "
+      subtitle="decisiones rentables."
+      description="No solo cambiamos dinero, te damos el poder de decidir basándote en datos reales."
+      align="left"
+    />
+
+    <ul class="grid gap-4" role="list">
+      <li class="flex gap-6 group">
+        <div class="size-14 bg-primary-50 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-primary-600 group-hover:text-white transition-colors duration-300">
+          <Icon name="whatsapp" class="size-7" aria-hidden="true" />
+        </div>
+        <div class="space-y-1">
+          <h3 class="text-lg font-bold text-neutral-900">Alertas de Tasa</h3>
+          <p class="text-sm text-neutral-600 leading-relaxed">
+            Te avisamos por <strong>WhatsApp</strong> cuando el dólar llegue al precio exacto que estás buscando.
+          </p>
+        </div>
+      </li>
+
+      <li class="flex gap-6 group">
+        <div class="size-14 bg-primary-50 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-primary-600 group-hover:text-white transition-colors duration-300">
+          <Icon name="list" class="size-7" aria-hidden="true" />
+        </div>
+        <div class="space-y-1">
+          <h3 class="text-lg font-bold text-neutral-900">Reportes Semanales</h3>
+          <p class="text-sm text-neutral-600 leading-relaxed">
+            Análisis simple del mercado para que sepas exactamente cuándo comprar o vender.
+          </p>
+        </div>
+      </li>
+
+      <li class="flex gap-6 group">
+        <div class="size-14 bg-primary-50 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-primary-600 group-hover:text-white transition-colors duration-300">
+          <Icon name="calculator" class="size-7" aria-hidden="true" />
+        </div>
+        <div class="space-y-1">
+          <h3 class="text-lg font-bold text-neutral-900">Calculadora de Ahorro Histórico</h3>
+          <p class="text-sm text-neutral-600 leading-relaxed">
+            Visualiza cuánto has acumulado de ahorro total desde tu primera operación con nosotros.
+          </p>
+        </div>
+      </li>
+    </ul>
+
+    <nav class="flex flex-col lg:flex-row gap-4" aria-label="Acciones principales">
+      {btnCTA.map((btn) => (
+        <Button href={btn.href} variant={btn.variant} class="flex gap-2">
+          <Icon name={btn.icon} aria-hidden="true" />
+          {btn.text}
+        </Button>
+      ))}
+    </nav>
+  </article>
+
+  <aside class="w-full lg:w-112.5">
+    <Image
+      src={imgBeneficiosCTA}
+      alt="Contando dólares obtenidos en Market Dollar gracias a un tipo de cambio barato"
+      class="rounded-2xl shadow-2xl"
+      loading="lazy"
+    />
+  </aside>
+</ContainerSection>
+
+<style>
+  @reference "../../styles/global.css";
+
+  input,
+  select {
+    @apply text-neutral-900 font-medium;
+  }
+</style>
