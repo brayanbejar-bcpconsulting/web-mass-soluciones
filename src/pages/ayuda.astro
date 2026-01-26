@@ -1,0 +1,42 @@
+---
+import HeroAyuda from "@components/sections/page-ayuda/HeroAyuda.astro";
+import MainLayout from "@/layouts/MainLayout.astro";
+import SoporteHumano from "@/components/sections/page-ayuda/SoporteHumano.astro";
+import AyudaReclamaciones from "@/components/sections/page-ayuda/AyudaReclamaciones.astro";
+import FAQAyuda from "@/components/sections/page-ayuda/FAQAyuda.astro";
+
+// Schema ContactPage para centro de ayuda
+const schemaContactPage = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "name": "Centro de Ayuda Market Dollar",
+  "description": "Soporte y preguntas frecuentes sobre cambio de dólares. Resuelve tus dudas sobre seguridad, tiempos de transferencia y más.",
+  "url": "https://market-dollar.com/ayuda",
+  "mainEntity": {
+    "@type": "Organization",
+    "name": "Market Dollar",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+51933214054",
+      "contactType": "Atención al Cliente",
+      "areaServed": "PE",
+      "availableLanguage": ["Spanish"],
+      "hoursAvailable": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "opens": "09:00",
+        "closes": "23:00"
+      }
+    }
+  }
+};
+---
+<MainLayout
+  title="Centro de Ayuda Market Dollar | Soporte y Preguntas Frecuentes"
+  description="¿Tienes dudas con tu cambio? Resuelve tus consultas sobre tiempos de abono, seguridad, bancos y más. Soporte humano 1:1 para tu tranquilidad.">
+  <script type="application/ld+json" set:html={JSON.stringify(schemaContactPage)} />
+  <HeroAyuda />
+  <SoporteHumano />
+  <AyudaReclamaciones />
+  <FAQAyuda />
+</MainLayout>

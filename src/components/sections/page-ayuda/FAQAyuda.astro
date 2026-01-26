@@ -1,0 +1,287 @@
+---
+import Icon from "@components/ui/Icon.astro";
+import ContainerSection from "@components/ui/ContainerSection.astro";
+import SectionHeading from "@components/ui/SectionHeading.astro";
+
+const faqs = [
+  {
+    category: "Seguridad y Respaldo",
+    questions: [
+      {
+        question: "¿Qué respaldo legal tiene Market Dollar?",
+        answer:
+          "Somos una casa de cambio formal, registrada en la **SBS (Resolución N° 04561-2023)** y supervisada por la **UIF**. Esto garantiza que operamos bajo estándares de **seguridad bancaria** y total transparencia legal.",
+      },
+      {
+        question: "¿Cómo sé que mi dinero llegará a mi cuenta?",
+        answer:
+          "Todas las operaciones son **bancarias y trazables**. Nunca manejamos efectivo. Además, recibes un **comprobante de operación** y notificaciones en tiempo real.",
+      },
+    ],
+  },
+  {
+    category: "Operaciones y Tiempo",
+    questions: [
+      {
+        question: "¿Cuánto tiempo demora cada operación?",
+        answer:
+          "Las transferencias inmediatas demoran entre **10 a 20 minutos**. Para transferencias interbancarias, el tiempo depende de los horarios de los bancos (usualmente el mismo día).",
+      },
+      {
+        question: "¿Puedo cambiar dinero fuera del horario de oficina?",
+        answer:
+          "¡Sí! Atendemos de Lunes a Viernes hasta las **11:00 PM**, un horario extendido único en el mercado.",
+      },
+    ],
+  },
+  {
+    category: "Cuentas y Comisiones",
+    questions: [
+      {
+        question: "¿Cobran comisiones por transferencias de provincia?",
+        answer:
+          "Market Dollar **no cobra comisiones**, pero algunos bancos aplican cargos por plazas. Te recomendamos **consultar por WhatsApp** antes de operar.",
+      },
+    ],
+  },
+  {
+    category: "Empresas",
+    questions: [
+      {
+        question: "¿Qué beneficios ofrecen para empresas (RUC 20)?",
+        answer:
+          'Ofrecemos **tipos de cambio preferenciales**, atención personalizada y **emisión de facturas**. [Ver beneficios corporativos](/empresas).',
+      },
+    ],
+  },
+];
+
+function parseMarkdown(text: string) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-neutral-900">$1</strong>')
+    .replace(
+      /\[(.*?)\]\((.*?)\)/g,
+      '<a href="$2" class="text-primary-600 font-semibold underline underline-offset-4 hover:text-primary-800 transition-colors">$1</a>',
+    );
+}
+
+const allCategories = [...new Set(faqs.map((f) => f.category))];
+---
+
+<ContainerSection
+  ariaLabelledby="faq-title"
+  bgColor="bg-neutral-50"
+  class="py-16 md:py-24"
+  maxWidth="max-w-212.5"
+  classContainer="px-6"
+>
+  <SectionHeading
+    id="faq-title"
+    shortText="Ayuda"
+    title="FAQ: Resolviendo tus dudas en segundos"
+    align="center"
+    barColor="bg-secondary-400"
+    class="mb-12"
+  />
+
+  <nav class="mb-12 space-y-6" aria-label="Búsqueda y filtrado de preguntas frecuentes">
+    <div class="relative max-w-md mx-auto">
+      <label for="faq-search" class="sr-only">Buscar preguntas</label>
+      <input
+        type="search"
+        id="faq-search"
+        placeholder="Busca por palabra clave (ej. SBS, RUC, Tiempo)..."
+        class="w-full px-6 py-4 rounded-2xl border border-neutral-200 shadow-sm focus:ring-2 focus:ring-primary-600 focus:border-transparent outline-none transition-all"
+      />
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-2" role="tablist" aria-label="Categorías de preguntas">
+      <button
+        class="cat-filter active px-4 py-2 rounded-full text-xs font-bold transition-all bg-white border border-neutral-200 text-neutral-500 hover:border-primary-300"
+        data-category="all"
+        role="tab"
+        aria-selected="true"
+        type="button"
+      >
+        Todas
+      </button>
+
+      {allCategories.map((cat) => (
+        <button
+          class="cat-filter px-4 py-2 rounded-full text-xs font-bold transition-all bg-white border border-neutral-200 text-neutral-500 hover:border-primary-300"
+          data-category={cat}
+          role="tab"
+          aria-selected="false"
+          type="button"
+        >
+          {cat}
+        </button>
+      ))}
+    </div>
+  </nav>
+
+  <div id="faq-container" class="grid gap-8">
+    {faqs.map((faq) => (
+      <article class="category-group grid gap-4" data-cat-name={faq.category}>
+        <h3 class="text-xl text-neutral-600 font-bold ml-2">{faq.category}</h3>
+
+        <div role="list" class="grid gap-3">
+          {faq.questions.map((item) => (
+            <details
+              class="faq-item group bg-white border border-neutral-200 rounded-2xl transition-all duration-300 hover:shadow-md overflow-hidden"
+              role="listitem"
+              data-question={item.question.toLowerCase()}
+            >
+              <summary
+                class="flex items-center justify-between p-6 cursor-pointer list-none focus:bg-neutral-50 outline-none"
+                aria-expanded="false"
+              >
+                <h4 class="text-base font-semibold text-neutral-800 pr-4 leading-tight">{item.question}</h4>
+                <span
+                  class="text-primary-600 transition-transform duration-300 group-open:rotate-180 shrink-0"
+                  aria-hidden="true"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="22"
+                    height="22"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </span>
+              </summary>
+
+              <div
+                class="text-sm px-6 pb-6 pt-2 text-neutral-600 leading-relaxed border-t border-neutral-50 animate-fade-in"
+                role="region"
+              >
+                <p set:html={parseMarkdown(item.answer)} />
+              </div>
+            </details>
+          ))}
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <div id="faq-empty" class="hidden text-center py-12 text-neutral-500 italic">
+    No encontramos preguntas que coincidan con tu búsqueda.
+  </div>
+</ContainerSection>
+
+<style>
+  @reference "../../../styles/global.css";
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  details[open] {
+    @apply border-primary-200 shadow-lg ring-1 ring-primary-50;
+  }
+  .cat-filter.active {
+    @apply bg-primary-600 border-primary-600 text-white shadow-md shadow-primary-200;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-fade-in {
+    animation: fade-in 0.4s ease-out;
+  }
+</style>
+
+<script>
+  const initFaqLogic = () => {
+    const searchInput = document.getElementById('faq-search') as HTMLInputElement;
+    const filters = document.querySelectorAll('.cat-filter');
+    const groups = document.querySelectorAll('.category-group');
+    const items = document.querySelectorAll('.faq-item');
+    const emptyState = document.getElementById('faq-empty');
+
+    let currentFilter = 'all';
+    let currentSearch = '';
+
+    const filterItems = () => {
+      let visibleCount = 0;
+
+      groups.forEach((group) => {
+        const catName = group.getAttribute('data-cat-name');
+        const groupItems = group.querySelectorAll('.faq-item');
+        let groupHasVisible = false;
+
+        groupItems.forEach((item) => {
+          const questionText = item.getAttribute('data-question') || '';
+          const matchesSearch = questionText.includes(currentSearch);
+          const matchesCat = currentFilter === 'all' || currentFilter === catName;
+
+          if (matchesSearch && matchesCat) {
+            (item as HTMLElement).classList.remove('hidden');
+            groupHasVisible = true;
+            visibleCount++;
+          } else {
+            (item as HTMLElement).classList.add('hidden');
+          }
+        });
+
+        if (groupHasVisible) {
+          (group as HTMLElement).classList.remove('hidden');
+        } else {
+          (group as HTMLElement).classList.add('hidden');
+        }
+      });
+
+      if (emptyState) {
+        emptyState.classList.toggle('hidden', visibleCount > 0);
+      }
+    };
+
+    // Buscador
+    searchInput?.addEventListener('input', (e) => {
+      currentSearch = (e.target as HTMLInputElement).value.toLowerCase();
+      filterItems();
+    });
+
+    // Filtros por Categoría
+    filters.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        filters.forEach((b) => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        currentFilter = btn.getAttribute('data-category') || 'all';
+        filterItems();
+      });
+    });
+
+    // Lógica de Acordeón (ARIA & un solo abierto)
+    const accordions = document.querySelectorAll('details');
+    accordions.forEach((el) => {
+      el.addEventListener('toggle', () => {
+        const summary = el.querySelector('summary');
+        if (summary) summary.setAttribute('aria-expanded', el.open ? 'true' : 'false');
+        if (el.open) {
+          accordions.forEach((other) => {
+            if (other !== el && other.open) other.open = false;
+          });
+        }
+      });
+    });
+  };
+
+  initFaqLogic();
+  document.addEventListener('astro:after-swap', initFaqLogic);
+</script>

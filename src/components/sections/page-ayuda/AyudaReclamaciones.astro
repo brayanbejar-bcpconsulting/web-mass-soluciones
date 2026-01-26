@@ -1,0 +1,51 @@
+---
+import ContainerSection from "@components/ui/ContainerSection.astro";
+import SectionHeading from "@components/ui/SectionHeading.astro";
+import Carousel from "@components/ui/Carousel.astro";
+
+import Button from "@components/ui/Button.astro";
+import Card from "@components/ui/Card.astro";
+import Icon from "@components/ui/Icon.astro";
+import { APP_URLS } from "@/utils/navigation";
+
+const cardContent = [
+  { icon: "user", title: "Paso", description: "Inicia sesión con tu cuenta de Market Dollar" },
+  { icon: "link-diagonal", title: "Paso", description: 'Dirígete al apartado "Libro de Reclamaciones"' },
+  { icon: "list", title: "Paso", description: "Rellena el formulario con los datos requeridos y envía" },
+  { icon: "users", title: "Paso", description: "Dentro de 1-2 días hábiles nuestro equipo se contactará contigo" },
+] as const;
+---
+
+<ContainerSection
+  ariaLabelledby="header-reclamation"
+  bgColor="bg-none"
+  classContainer="bg-linear-to-r from-primary-400 to-primary-600 px-6 py-6 lg:px-12 rounded-2xl flex flex-col items-center"
+>
+  <SectionHeading
+    id="header-reclamation"
+    title="¿Buscas nuestro Libro de Reclamaciones?"
+    align="center"
+    class="text-neutral-100"
+    textColor="text-neutral-100"
+    description="En Market Dollar, entendemos tu preocupación, por ello te brindamos un paso a paso de cómo agendar tu reclamo ante nuestro servicio."
+  />
+
+  <div class="mt-6" role="region" aria-label="Pasos para el libro de reclamaciones">
+    <Carousel data={cardContent} visibleDesktop={4} hasOverflow={false}>
+      {cardContent.map((card, index) => (
+        <div class="h-full">
+          <Card
+            iconName={card.icon}
+            title={`${card.title} ${index + 1}`}
+            description={card.description}
+          />
+        </div>
+      ))}
+    </Carousel>
+  </div>
+
+  <Button variant="outline" class="mt-8 w-fit" href={APP_URLS.login}>
+    <Icon name="login" aria-hidden="true" />
+    Iniciar Sesión
+  </Button>
+</ContainerSection>

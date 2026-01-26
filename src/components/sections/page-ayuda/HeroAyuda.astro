@@ -1,0 +1,95 @@
+---
+import Button from "@components/ui/Button.astro";
+import Icon from "@components/ui/Icon.astro";
+import ContainerSection from "@components/ui/ContainerSection.astro";
+import { Image } from "astro:assets";
+import imgHeroAyuda from "@assets/ayuda/hero-ayuda-soporte.webp";
+import { APP_URLS } from "@/utils/navigation";  
+---
+
+<ContainerSection
+  ariaLabelledby="hero-title"
+  bgColor="bg-linear-to-b from-white to-neutral-200"
+  classContainer="flex items-center gap-16 justify-between"
+>
+  <article class="lg:w-[55%] flex flex-col items-center lg:items-start text-center lg:text-left gap-8 lg:order-2">
+    <header class="grid gap-4">
+      <h1 id="hero-title" class="text-3xl md:text-5xl text-neutral-900 leading-[1.2]">
+        ¿Cómo podemos ayudarte hoy?
+      </h1>
+      <p class="text-base md:text-lg text-neutral-600 max-w-2xl mx-auto lg:mx-0 mb-0">
+        Encuentra respuestas rápidas o contacta con nuestro equipo de soporte humano. Estamos contigo en cada paso.
+      </p>
+    </header>
+
+    <nav aria-label="Acciones de soporte">
+      <Button class="flex gap-4" href={APP_URLS.login}>
+        <Icon name="list" aria-hidden="true" />
+        Libro de Reclamaciones
+      </Button>
+    </nav>
+
+    <ul class="grid gap-2 max-w-md text-start" role="list">
+      <li class="flex items-start gap-4 text-sm text-neutral-500">
+        <Icon name="check-circle" class="size-6 text-primary-600 shrink-0" aria-hidden="true" />
+        <span>
+          Te brindamos un trato 1:1, cero chatbots. <strong class="text-neutral-700">100% trato humano</strong>
+        </span>
+      </li>
+      <li class="flex items-start gap-4 text-sm text-neutral-500 border-t border-neutral-200 pt-3 lg:pt-0">
+        <Icon name="check-circle" class="size-6 text-primary-600 shrink-0" aria-hidden="true" />
+        <span>
+          Contamos con un <strong class="text-neutral-700">equipo totalmente especializado</strong> en cualquier incidente
+        </span>
+      </li>
+    </ul>
+  </article>
+
+  <aside class="lg:w-[45%] relative group w-full max-w-125 lg:max-w-none">
+    <div class="aspect-square bg-linear-to-tr from-secondary-400 to-secondary-200 shadow-2xl shadow-secondary-500/20 rounded-[3rem] lg:rounded-full flex items-center justify-center p-4">
+      <Image
+        src={imgHeroAyuda}
+        alt="Dashboard de recompensas y cupones de Market Dollar"
+        width={700}
+        height={700}
+        loading="eager"
+        class="-mt-10 w-full h-auto object-contain transform group-hover:scale-105 transition-transform duration-500 mask-b-from-75% mask-b-to-100%"
+      />
+    </div>
+
+    <div class="absolute -bottom-4 -left-4 bg-primary-600 p-4 rounded-2xl shadow-xl hidden md:flex items-center gap-3 animate-bounce-slow">
+      <div class="size-10 bg-primary-100 rounded-full flex items-center justify-center">
+        <Icon name="piggy-bank" class="text-primary-600 size-6" aria-hidden="true" />
+      </div>
+      <div class="text-left">
+        <p class="text-[10px] uppercase font-bold text-neutral-300 mb-0">Ahorro Promedio</p>
+        <p class="text-sm font-bold text-neutral-100 mb-0">+S/ 150 por operación</p>
+      </div>
+    </div>
+
+    <div class="bg-secondary-100 absolute -top-4 -right-4 bg-success-200 p-4 rounded-2xl shadow-xl hidden md:flex items-center gap-3 animate-bounce-slow z-20">
+      <div class="size-10 bg-success-100 bg-neutral-50 rounded-full flex items-center justify-center">
+        <Icon name="icon-hand-coin" class="text-success-600 size-6" aria-hidden="true" />
+      </div>
+      <div class="text-left">
+        <p class="text-[10px] uppercase font-bold text-neutral-600 mb-0">Ahorro Promedio</p>
+        <p class="text-sm font-bold text-neutral-800 mb-0">+S/ 150 por operación</p>
+      </div>
+    </div>
+  </aside>
+</ContainerSection>
+
+<style>
+  .animate-bounce-slow {
+    animation: bounce 3s infinite;
+  }
+  @keyframes bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+</style>
