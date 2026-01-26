@@ -1,0 +1,65 @@
+---
+import { APP_URLS } from "@/utils/navigation";
+import Calculadora from "@components/Calculadora.astro";
+import Button from "@components/ui/Button.astro";
+import Icon from "@components/ui/Icon.astro";
+import ContainerSection from "@components/ui/ContainerSection.astro";
+---
+
+<ContainerSection
+  ariaLabelledby="hero-empresas"
+  bgColor="bg-linear-to-b from-primary-500 to-primary-950"
+  classContainer="flex flex-col lg:flex-row justify-between items-center gap-8"
+>
+  <article class="lg:w-1/2 flex flex-col items-center lg:items-start gap-6 text-center lg:text-start">
+    <header class="flex flex-col items-center lg:items-start gap-4">
+      <h2 class="text-sm text-primary-600 bg-neutral-100 px-4 py-2 border border-primary-200 rounded-full font-semibold uppercase tracking-wide">
+        Bajo supervisión de la SBS y UIF
+      </h2>
+
+      <h1 id="hero-empresas" class="text-3xl lg:text-4xl font-bold text-primary-100 leading-tight">
+        Tipo de cambio corporativo en Perú:
+        <strong class="text-secondary-300 block lg:inline">Optimiza la rentabilidad de tu empresa</strong>
+      </h1>
+
+      <p class="text-neutral-200">
+        Cambia dólares y soles con la tasa más competitiva del mercado. Obtén <strong>factura inmediata, atención personalizada y seguridad bancaria</strong> registrada en la SBS para todas tus operaciones RUC 20.
+      </p>
+    </header>
+
+    <nav class="flex flex-col sm:flex-row gap-4 items-center" aria-label="Acciones principales">
+      <Button
+        variant="outline"
+        href={APP_URLS.register}
+        class="flex gap-2 justify-center items-center"
+        target="_self"
+      >
+        <Icon name="user" aria-hidden="true" /> Regístrate Ahora
+      </Button>
+
+      <Button
+        variant="whatsapp"
+        target="_blank"
+        href={APP_URLS.whatsappContact}
+        class="flex gap-2 justify-center items-center"
+      >
+        <Icon name="whatsapp" aria-hidden="true" /> Asesórate Hoy
+      </Button>
+    </nav>
+
+    <ul class="flex flex-col gap-2 text-sm text-neutral-200" role="list">
+      <li class="flex gap-2 items-center justify-center lg:justify-start text-start">
+        <Icon name="check-circle" class="size-6 text-primary-200 shrink-0" aria-hidden="true" />
+        <span>Transferencias inmediatas a BCP e Interbank</span>
+      </li>
+      <li class="flex gap-2 items-center justify-center lg:justify-start text-start font-bold">
+        <Icon name="check-circle" class="size-6 text-primary-200 shrink-0" aria-hidden="true" />
+        <span>Operaciones 100% bancarizadas.</span>
+      </li>
+    </ul>
+  </article>
+
+  <article class="bg-primary-600 py-6 px-4 text-neutral-100 rounded-2xl shadow-2xl lg:w-[50%] max-w-md" aria-label="Calculadora de divisas">
+    <Calculadora compra={3.4} venta={3.8} />
+  </article>
+</ContainerSection>

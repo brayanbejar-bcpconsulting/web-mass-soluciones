@@ -1,0 +1,73 @@
+---
+import { Image } from "astro:assets";
+import ContainerSection from "@components/ui/ContainerSection.astro";
+import SectionHeading from "@components/ui/SectionHeading.astro";
+
+// Iconos
+import iconHorario from "@assets/icons/icon-horario.webp";
+import iconSoporte from "@assets/icons/icon-soporte.webp";
+import iconAhorro from "@assets/icons/icon-ahorro.webp";
+import iconSeguridad from "@assets/icons/icon-seguridad.webp";
+
+const cardsCasos = [
+  {
+    title: "Pago a proveedores y comercio exterior",
+    description:
+      "Cambia soles a dólares al mejor tipo de cambio y cumple con tus pagos internacionales sin perder rentabilidad.",
+    image: iconHorario,
+  },
+  {
+    title: "Pago de planillas y servicios en dólares",
+    description:
+      "Paga sueldos y honorarios en dólares de forma rápida, segura y con comprobantes para tu control interno.",
+    image: iconSoporte,
+  },
+  {
+    title: "Préstamos y deudas bancarias",
+    description:
+      "Si ganas en soles y pagas en dólares, ahorra cambiando solo lo necesario a una mejor tasa que el banco.",
+    image: iconAhorro,
+  },
+  {
+    title: "Cierre de caja e impuestos",
+    description:
+      "Realiza cambios de última hora hasta las 11:00 PM y llega tranquilo a tus cierres contables y pagos a SUNAT.",
+    image: iconSeguridad,
+  },
+] as const;
+---
+
+<ContainerSection ariaLabelledby="casos-uso-title">
+  <SectionHeading
+    id="casos-uso-title"
+    title="¿Cómo ayuda Market Dollar a la"
+    subtitle="operatividad de tu empresa?"
+    shortText="Casos de Uso"
+    align="center"
+    description="Cubrimos todas las necesidades de divisas de tu negocio con rapidez y transparencia."
+  />
+
+  <div class="grid md:grid-cols-2 gap-8 mx-auto mt-6" role="list" aria-label="Casos de uso para empresas">
+    {cardsCasos.map((card) => (
+      <article
+        class="flex items-center gap-5 p-4 rounded-2xl hover:bg-neutral-50 border border-transparent hover:border-primary-300 transition-colors duration-300"
+        role="listitem"
+      >
+        <Image
+          src={card.image}
+          alt={`Ícono de ${card.title}`}
+          aria-hidden="true"
+          width={80}
+          height={80}
+          class="shrink-0 w-16 h-16 lg:w-20 lg:h-20 object-contain"
+          loading="lazy"
+        />
+
+        <div class="grid gap-2 text-start">
+          <h3 class="text-lg lg:text-xl font-bold text-primary-900 flex items-center gap-3">{card.title}</h3>
+          <p class="text-sm lg:text-base text-neutral-500 leading-relaxed mb-0">{card.description}</p>
+        </div>
+      </article>
+    ))}
+  </div>
+</ContainerSection>

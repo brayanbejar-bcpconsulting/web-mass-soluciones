@@ -1,0 +1,48 @@
+---
+import CTABeneficios from "@/components/layout/CTABeneficios.astro";
+import CasosDeUso from "@/components/sections/page-empresas/CasosDeUso.astro";
+import HeroEmpresas from "@/components/sections/page-empresas/HeroEmpresas.astro";
+import QueTeOfrecemos from "@/components/sections/page-empresas/QueTeOfrecemos.astro";
+import TendenciaDolar from "@/components/TendenciaDolar.astro";
+import MainLayout from "src/layouts/MainLayout.astro";
+
+// Schema Service para empresas
+const schemaService = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "serviceType": "Cambio de Divisas Corporativo",
+  "name": "Servicio de Cambio de Dólares para Empresas",
+  "description": "Tipo de cambio preferencial para empresas con RUC 20. Tasas corporativas exclusivas, facturación electrónica y atención prioritaria para operaciones de alto volumen.",
+  "provider": {
+    "@type": "FinancialService",
+    "name": "Market Dollar",
+    "url": "https://market-dollar.com",
+    "telephone": "+51933214054",
+    "email": "marketdollar@gmail.com"
+  },
+  "areaServed": {
+    "@type": "Country",
+    "name": "Perú"
+  },
+  "offers": {
+    "@type": "Offer",
+    "description": "Tasas preferenciales para empresas con volúmenes superiores a $5,000 USD",
+    "priceCurrency": "PEN",
+    "availability": "https://schema.org/InStock"
+  },
+  "url": "https://market-dollar.com/empresas"
+};
+---
+
+<MainLayout
+  title="Cambia tus dólares a una tasa preferencial | Market Dollar Empresas"
+  description="Tipo de cambio preferencial para empresas con RUC 20. Tasas corporativas exclusivas, facturación electrónica y atención prioritaria. ¡Optimiza tus operaciones de cambio!"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(schemaService)} />
+
+  <HeroEmpresas />
+  <QueTeOfrecemos />
+  <TendenciaDolar />
+  <CasosDeUso />
+  <CTABeneficios />
+</MainLayout>

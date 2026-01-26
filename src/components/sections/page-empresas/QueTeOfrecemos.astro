@@ -1,0 +1,72 @@
+---
+import { Image } from "astro:assets";
+import ContainerSection from "@components/ui/ContainerSection.astro";
+import SectionHeading from "@components/ui/SectionHeading.astro";
+import Carousel from "@components/ui/Carousel.astro";
+import { parseSimpleMarkdown } from "@/utils/markdown";
+
+// Iconos
+import iconFactura from "@assets/icons/icon-factura.webp";
+import iconAhorro from "@assets/icons/icon-ahorro.webp";
+import iconSeguridad from "@assets/icons/icon-seguridad.webp";
+import iconSoporte from "@assets/icons/icon-soporte.webp";
+
+const cardsBeneficios = [
+  {
+    title: "Tipo de cambio preferencial",
+    description:
+      "Accede a una ##tasa mejorada frente a la banca tradicional## y otras casas de cambio online. A mayor monto, mayor rentabilidad para tu flujo de caja.",
+    image: iconAhorro,
+  },
+  {
+    title: "Facturación inmediata",
+    description:
+      "Emitimos facturas electrónicas al instante ##por cada operación##. Cumple con los requisitos de la SUNAT y utiliza el gasto como escudo fiscal sin demoras",
+    image: iconFactura,
+  },
+  {
+    title: "Ejecutivo de cuenta personalizado",
+    description:
+      "Olvida los chatbots. ##Tendrás un especialista asignado vía WhatsApp## para coordinar tus operaciones de alto valor y asegurar la liquidez de tus fondos.",
+    image: iconSoporte,
+  },
+  {
+    title: "Seguridad Jurídica y Cumplimiento",
+    description:
+      "##Operamos bajo la regulación de la SBS y UIF##. Garantizamos la trazabilidad total de tu dinero, de banco a banco, eliminando riesgos de fraude.",
+    image: iconSeguridad,
+  },
+] as const;
+---
+
+<ContainerSection ariaLabelledby="title-beneficios" bgColor="bg-neutral-100">
+  <SectionHeading
+    id="title-beneficios"
+    shortText="¿Qué te ofrecemos?"
+    title="Beneficios exclusivos para la"
+    subtitle="gestión financiera de tu negocio"
+    align="center"
+    description="Una plataforma diseñada para tesoreros, contadores y dueños de empresas."
+  />
+
+  <div class="relative max-w-350 mx-auto mt-10" aria-label="Beneficios para empresas">
+    <Carousel data={cardsBeneficios} visibleDesktop={4} hasOverflow={true}>
+      {cardsBeneficios.map((card) => (
+        <article class="h-full group/card">
+          <div class="flex flex-col gap-4 items-center justify-center border-2 border-neutral-100 rounded-2xl bg-white p-8 h-full transition-all duration-300 hover:border-primary-200 hover:shadow-xl hover:shadow-primary-900/5">
+            <Image
+              src={card.image}
+              alt={card.title}
+              width={250}
+              height={250}
+              loading="lazy"
+              class="w-32 h-32 md:w-40 md:h-40 -mt-20 drop-shadow-2xl object-contain transition-transform duration-500 group-hover/card:scale-110"
+            />
+            <h3 class="text-xl font-bold text-neutral-900 mt-2">{card.title}</h3>
+            <p set:html={parseSimpleMarkdown(card.description)} class="text-neutral-600 leading-relaxed text-sm" />
+          </div>
+        </article>
+      ))}
+    </Carousel>
+  </div>
+</ContainerSection>
