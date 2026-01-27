@@ -1,0 +1,267 @@
+---
+/**
+ * Blog Index - Página principal del blog
+ * Layout 70/30 con búsqueda, filtros y ordenamiento client-side
+ */
+import MainLayout from "src/layouts/MainLayout.astro";
+import { getCollection } from "astro:content";
+import PostCard from "@components/blog/PostCard.astro";
+import BlogSideBar from "@/components/blog/BlogSideBar.astro";
+import defaultImage from "@assets/shared/campaña-referidos.webp";
+import { getPostImage, getReadingTime, getSlug, loadBlogImages } from "@/utils/blog";
+import "@styles/blog.css";
+
+// Cargar imágenes de portadas
+const images = loadBlogImages();
+
+// Obtener posts ordenados por fecha (más reciente primero)
+const allPosts = await getCollection("blog");
+const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// Extraer todos los tags únicos
+const allTags = [...new Set(posts.flatMap(post => post.data.tags))].sort();
+
+// Posts destacados para el sidebar
+const featuredPosts = posts
+  .filter(post => post.data.featured)
+  .slice(0, 3)
+  .map(post => ({
+    id: post.id,
+    title: post.data.title,
+    pubDate: post.data.pubDate,
+    image: getPostImage(post.data.image, images, defaultImage)
+  }));
+---
+
+<MainLayout 
+  title="Blog de Finanzas y Tipo de Cambio | Market Dollar" 
+  description="Artículos sobre tipo de cambio, ahorro en dólares, fintech en Perú y consejos financieros. Aprende a optimizar tus cambios de divisas."
+>
+  <section class="blog-hero">
+    <div class="blog-container">
+      
+      <!-- Hero del Blog -->
+      <header class="blog-header">
+        <h1 class="blog-title">
+          Blog de Finanzas y Tipo de Cambio
+        </h1>
+        <p class="blog-subtitle">
+          Guías, noticias y consejos para optimizar tus operaciones de cambio de divisas en Perú.
+        </p>
+      </header>
+
+      <!-- Layout Principal -->
+      <div class="blog-layout">
+        
+        <!-- Columna Principal (70%) -->
+        <main class="blog-main" role="main">
+          
+          <!-- Buscador -->
+          <div class="blog-search-container">
+            <label for="blog-search" class="sr-only">Buscar artículos</label>
+            <div class="relative">
+              <input 
+                type="search"
+                id="blog-search"
+                name="search"
+                placeholder="Buscar artículos por título, tema o palabra clave..."
+                autocomplete="off"
+                class="blog-search-input"
+              />
+              <svg class="blog-search-icon" aria-hidden="true">
+                <use href="/icons.svg#search"></use>
+              </svg>
+            </div>
+            <p id="search-results-count" class="mt-2 text-sm text-neutral-500 hidden" aria-live="polite"></p>
+          </div>
+
+          <!-- Mensaje sin resultados -->
+          <div id="no-results" class="blog-no-results hidden">
+            <svg class="blog-no-results-icon" aria-hidden="true">
+              <use href="/icons.svg#empty-face"></use>
+            </svg>
+            <p class="blog-no-results-text">No se encontraron artículos</p>
+            <p class="blog-no-results-hint">Intenta con otros términos de búsqueda</p>
+          </div>
+
+          <!-- Grid de Posts -->
+          <div 
+            id="posts-grid"
+            class="blog-posts-grid"
+            role="feed"
+            aria-label="Lista de artículos del blog"
+          >
+            {posts.map((post) => {
+              const slug = getSlug(post.id);
+              const image = getPostImage(post.data.image, images, defaultImage);
+              const readingTime = getReadingTime(post.body || '');
+              
+              return (
+                <div 
+                  class="post-item"
+                  data-title={post.data.title.toLowerCase()}
+                  data-description={post.data.description.toLowerCase()}
+                  data-tags={post.data.tags.join(',').toLowerCase()}
+                  data-date={post.data.pubDate.valueOf()}
+                >
+                  <PostCard
+                    href={`/blog/${slug}`}
+                    title={post.data.title}
+                    description={post.data.description}
+                    image={image}
+                    pubDate={post.data.pubDate}
+                    tags={post.data.tags}
+                    readingTime={readingTime}
+                    featured={post.data.featured}
+                  />
+                </div>
+              );
+            })}
+          </div>
+
+        </main>
+
+        <!-- Sidebar (30%) -->
+        <BlogSideBar 
+          featuredPosts={featuredPosts}
+          allTags={allTags}
+          tagMode="button"
+          showSort={true}
+          currentSort="recent"
+          class="blog-sidebar"
+        />
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('blog-search') as HTMLInputElement;
+    const postsGrid = document.getElementById('posts-grid');
+    const noResults = document.getElementById('no-results');
+    const resultsCount = document.getElementById('search-results-count');
+    const sortButtons = document.querySelectorAll('#sort-recent, #sort-oldest');
+    const tagFilters = document.querySelectorAll('[data-tag]');
+    
+    if (!postsGrid) return;
+    
+    const postItems = Array.from(postsGrid.querySelectorAll('.post-item')) as HTMLElement[];
+    
+    let currentSort = 'recent';
+    let currentTag = '';
+    let currentSearch = '';
+
+    // Función para filtrar y ordenar posts
+    function filterAndSortPosts() {
+      let visibleCount = 0;
+      
+      postItems.forEach(item => {
+        const title = item.dataset.title || '';
+        const description = item.dataset.description || '';
+        const tags = item.dataset.tags || '';
+        
+        // Filtrar por búsqueda
+        const matchesSearch = currentSearch === '' || 
+          title.includes(currentSearch) || 
+          description.includes(currentSearch) || 
+          tags.includes(currentSearch);
+        
+        // Filtrar por tag
+        const matchesTag = currentTag === '' || tags.includes(currentTag);
+        
+        if (matchesSearch && matchesTag) {
+          item.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+
+      // Ordenar posts visibles
+      const visibleItems = postItems.filter(item => !item.classList.contains('hidden'));
+      visibleItems.sort((a, b) => {
+        const dateA = parseInt(a.dataset.date || '0');
+        const dateB = parseInt(b.dataset.date || '0');
+        return currentSort === 'recent' ? dateB - dateA : dateA - dateB;
+      });
+
+      // Reordenar en el DOM
+      if (postsGrid) {
+        visibleItems.forEach(item => postsGrid.appendChild(item));
+      }
+
+      // Mostrar/ocultar mensaje de sin resultados
+      if (noResults) {
+        noResults.classList.toggle('hidden', visibleCount > 0);
+      }
+
+      // Actualizar contador de resultados
+      if (resultsCount) {
+        if (currentSearch || currentTag !== '') {
+          resultsCount.textContent = `${visibleCount} artículo${visibleCount !== 1 ? 's' : ''} encontrado${visibleCount !== 1 ? 's' : ''}`;
+          resultsCount.classList.remove('hidden');
+        } else {
+          resultsCount.classList.add('hidden');
+        }
+      }
+    }
+
+    // Evento de búsqueda con debounce
+    let searchTimeout: number;
+    searchInput?.addEventListener('input', (e) => {
+      clearTimeout(searchTimeout);
+      searchTimeout = window.setTimeout(() => {
+        currentSearch = (e.target as HTMLInputElement).value.toLowerCase().trim();
+        filterAndSortPosts();
+      }, 300);
+    });
+
+    // Eventos de ordenamiento
+    sortButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const sortType = btn.id === 'sort-recent' ? 'recent' : 'oldest';
+        if (currentSort === sortType) return;
+        
+        currentSort = sortType;
+        
+        // Actualizar estilos de botones
+        sortButtons.forEach(b => {
+          const isActive = b === btn;
+          b.classList.toggle('bg-primary-600', isActive);
+          b.classList.toggle('text-white', isActive);
+          b.classList.toggle('shadow', isActive);
+          b.classList.toggle('bg-neutral-100', !isActive);
+          b.classList.toggle('text-neutral-700', !isActive);
+          b.setAttribute('aria-pressed', isActive.toString());
+        });
+        
+        filterAndSortPosts();
+      });
+    });
+
+    // Eventos de filtro por tag
+    tagFilters.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tag = (btn as HTMLElement).dataset.tag || '';
+        if (currentTag === tag) return;
+        
+        currentTag = tag;
+        
+        // Actualizar estilos de botones
+        tagFilters.forEach(b => {
+          const btnTag = (b as HTMLElement).dataset.tag || '';
+          const isActive = btnTag === tag;
+          b.classList.toggle('bg-primary-600', isActive);
+          b.classList.toggle('text-white', isActive);
+          b.classList.toggle('shadow-md', isActive);
+          b.classList.toggle('bg-neutral-100', !isActive);
+          b.classList.toggle('text-neutral-700', !isActive);
+          b.setAttribute('aria-pressed', isActive.toString());
+        });
+        
+        filterAndSortPosts();
+      });
+    });
+  });
+</script>
