@@ -9,34 +9,38 @@ import CTABeneficios from "@/components/layout/CTABeneficios.astro";
 const schemaBeneficios = {
   "@context": "https://schema.org",
   "@type": "OfferCatalog",
-  "name": "Beneficios y Cupones Mass Soluciones",
-  "description": "Programa de beneficios con cupones de descuento, referidos y ventajas exclusivas para clientes frecuentes.",
-  "url": "https://market-dollar.com/beneficios",
-  "provider": {
+  name: "Beneficios y Cupones Mass Soluciones",
+  description:
+    "Programa de beneficios con cupones de descuento, referidos y ventajas exclusivas para clientes frecuentes.",
+  url: "https://cambiosmass.com/beneficios",
+  provider: {
     "@type": "FinancialService",
-    "name": "Mass Soluciones",
-    "url": "https://market-dollar.com"
+    name: "Mass Soluciones",
+    url: "https://cambiosmass.com",
   },
-  "itemListElement": [
+  itemListElement: [
     {
       "@type": "Offer",
-      "name": "Cupones de Descuento",
-      "description": "Obtén mejores tasas con cupones exclusivos en tu primer cambio",
-      "url": "https://market-dollar.com/beneficios#cupones"
+      name: "Cupones de Descuento",
+      description:
+        "Obtén mejores tasas con cupones exclusivos en tu primer cambio",
+      url: "https://cambiosmass.com/beneficios#cupones",
     },
     {
       "@type": "Offer",
-      "name": "Programa de Referidos",
-      "description": "Gana bonos por cada amigo que refiereas y cambie con nosotros",
-      "url": "https://market-dollar.com/beneficios#referidos"
+      name: "Programa de Referidos",
+      description:
+        "Gana bonos por cada amigo que refiereas y cambie con nosotros",
+      url: "https://cambiosmass.com/beneficios#referidos",
     },
     {
       "@type": "Offer",
-      "name": "Beneficios Corporativos",
-      "description": "Tasas preferenciales para empresas con alto volumen de operaciones",
-      "url": "https://market-dollar.com/beneficios#corporativos"
-    }
-  ]
+      name: "Beneficios Corporativos",
+      description:
+        "Tasas preferenciales para empresas con alto volumen de operaciones",
+      url: "https://cambiosmass.com/beneficios#corporativos",
+    },
+  ],
 };
 ---
 
@@ -44,7 +48,10 @@ const schemaBeneficios = {
   title="Beneficios y Cupones Mass Soluciones | Ahorra más en cada Cambio"
   description="Descubre cómo obtener un tipo de cambio preferencial con nuestros cupones, programa de referidos y beneficios para empresas. ¡Maximiza tu dinero hoy con Mass Soluciones!"
 >
-  <script type="application/ld+json" set:html={JSON.stringify(schemaBeneficios)} />
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(schemaBeneficios)}
+  />
 
   <HeroBeneficios />
   <ProgramaReferidos />

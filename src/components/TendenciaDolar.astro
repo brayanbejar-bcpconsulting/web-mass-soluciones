@@ -4,13 +4,13 @@ import Icon from "@components/ui/Icon.astro";
 import SectionHeading from "@/components/ui/SectionHeading.astro";
 ---
 
-<section class="py-16 bg-neutral-50" aria-labelledby="section-market-title">
+<section class="py-16 bg-neutral-50" aria-labelledby="section-mass-title">
   <div class="mx-auto px-[5%] flex flex-col lg:row items-center gap-12">
     <article
       class="w-full flex flex-col gap-6 text-center lg:text-left items-center lg:items-start"
     >
       <SectionHeading
-        id="section-market-title"
+        id="section-mass-title"
         shortText="Mercado en tiempo real"
         title="Toma el control de tus cambios con datos reales"
         description="Visualiza la tendencia del mercado y aprovecha el mejor momento para tu empresa."
@@ -238,7 +238,7 @@ import SectionHeading from "@/components/ui/SectionHeading.astro";
   // OPTIMIZACIÓN: Solo un listener centralizado
   document.addEventListener("DOMContentLoaded", () => {
     const section = document.querySelector(
-      'section[aria-labelledby="section-market-title"]',
+      'section[aria-labelledby="section-mass-title"]',
     );
 
     // Si la sección existe, usamos el Observer para cargar solo cuando sea visible

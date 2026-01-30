@@ -1,0 +1,140 @@
+---
+import Calculadora from "@/components/Calculadora.astro";
+import CuponesEnHero from "./CuponesEnHero.astro";
+import { Image } from "astro:assets";
+
+// Imágenes
+import logoSBS from "@assets/home/sbs-logo.webp";
+---
+
+<section
+  id="hero-home"
+  class="relative bg-linear-to-b from-primary-600 via-primary-700 to-primary-950 text-white px-[5%] flex flex-col lg:flex-row justify-center lg:items-center py-12 lg:py-16 lg:min-h-[85vh] overflow-hidden gap-10 lg:gap-0"
+>
+  <!-- Contenido izquierdo -->
+  <article
+    class="lg:w-[45%] flex flex-col items-center lg:items-start gap-6 lg:gap-4 text-center lg:text-left"
+  >
+    <!-- Badge superior mejorado -->
+    <div
+      class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm"
+    >
+      <span class="relative flex h-2 w-2">
+        <span
+          class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary-400 opacity-75"
+        ></span>
+        <span class="relative inline-flex rounded-full h-2 w-2 bg-secondary-400"
+        ></span>
+      </span>
+      <span class="text-sm font-semibold">Compra y Vende tus Dólares</span>
+    </div>
+
+    <!-- Título principal mejorado -->
+    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
+      La Tasa
+      <span
+        class="block mt-2 bg-linear-to-r from-secondary-300 via-secondary-400 to-secondary-500 bg-clip-text text-transparent"
+      >
+        más baja del mercado,
+      </span>
+      <span class="block mt-2">opera en minutos</span>
+    </h1>
+
+    <!-- Descripción mejorada -->
+    <p class="text-lg lg:text-xl text-primary-50/90 leading-relaxed max-w-xl">
+      <strong class="text-white">Ahorra frente a los bancos</strong>, recibe tu
+      dinero en minutos y opera desde una plataforma
+      <strong class="text-white">100% digital, clara y segura</strong>.
+    </p>
+
+    <!-- Trust badges inline -->
+    <div
+      class="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-sm text-primary-100/90"
+    >
+      <span class="flex items-center gap-2">
+        <svg
+          class="size-5 text-success-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M5 13l4 4L19 7"></path>
+        </svg>
+        Transferencias rápidas
+      </span>
+      <span class="hidden sm:inline text-primary-300/50">•</span>
+      <span class="flex items-center gap-2">
+        <svg
+          class="size-5 text-success-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+          ></path>
+        </svg>
+        100% Seguro
+      </span>
+      <span class="hidden sm:inline text-primary-300/50">•</span>
+      <span class="flex items-center gap-2">
+        <svg
+          class="size-5 text-success-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        Sin costos ocultos
+      </span>
+    </div>
+
+    <!-- Logo SBS mejorado -->
+    <div class="mt-4 lg:mt-6">
+      <p class="text-sm text-primary-200/80 mb-3 font-medium">
+        Registrados y supervisados por:
+      </p>
+      <div class="inline-block p-3 bg-white/95 rounded-2xl shadow-lg">
+        <Image
+          src={logoSBS}
+          alt="Mass Soluciones está registrado en la SBS - Superintendencia de Banca, Seguros y AFP"
+          class="w-40 lg:w-48"
+          loading="eager"
+        />
+      </div>
+    </div>
+  </article>
+
+  <!-- Contenido derecho (Conversor y Cupones) -->
+  <article
+    class="lg:w-[50%] xl:w-[55%] flex flex-col-reverse md:flex-row gap-12 lg:gap-8 xl:justify-end justify-center items-stretch lg:items-center"
+  >
+    <div class="flex-1 max-w-md mx-auto md:mx-0">
+      <Calculadora />
+    </div>
+    <div class="flex-1 max-w-md mx-auto md:mx-0">
+      <CuponesEnHero />
+    </div>
+  </article>
+</section>
+
+<style>
+  /* Optimización para reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-ping {
+      animation: none;
+    }
+  }
+</style>

@@ -1,0 +1,49 @@
+---
+import CTAPageCupones from "@/components/sections/page-beneficios/page-cupon-bienvenida/CTAPageCupones.astro";
+import HeroCupon from "@/components/sections/page-beneficios/page-cupon-bienvenida/HeroCupon.astro";
+import PasosCupon from "@/components/sections/page-beneficios/page-cupon-bienvenida/PasosCupon.astro";
+import MainLayout from "@layouts/MainLayout.astro";
+
+// Schema OfferCatalog para beneficios y promociones
+const schemaCuponBienvenida = {
+  "@context": "https://schema.org",
+  "@type": "LandingPage",
+  "@id": "https://cambiosmass.com/beneficios/cupones",
+  url: "https://cambiosmass.com/beneficios/cupones",
+  name: "Cupón de Bienvenida Mass Soluciones",
+  description:
+    "Obtén un cupón de bienvenida y mejora tu tipo de cambio en tu primera operación con Mass Soluciones.",
+  inLanguage: "es-PE",
+  isPartOf: {
+    "@type": "WebSite",
+    name: "Mass Soluciones",
+    url: "https://cambiosmass.com",
+  },
+  about: {
+    "@type": "Offer",
+    name: "Cupón de bienvenida",
+    description:
+      "Cupón exclusivo para nuevos usuarios que permite acceder a un tipo de cambio preferencial en la primera operación.",
+    availability: "https://schema.org/InStock",
+    eligibleCustomerType: "https://schema.org/NewCustomer",
+    provider: {
+      "@type": "FinancialService",
+      name: "Mass Soluciones",
+      url: "https://cambiosmass.com",
+    },
+  },
+};
+---
+
+<MainLayout
+  title="Cupón de Bienvenida Mass Soluciones | Mejora tu Tipo de Cambio"
+  description="Obtén un cupón de bienvenida y accede a una tasa preferencial en tu primera operación. Seguro, rápido y 100% online."
+>
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(schemaCuponBienvenida)}
+  />
+  <HeroCupon />
+  <PasosCupon />
+  <CTAPageCupones />
+</MainLayout>

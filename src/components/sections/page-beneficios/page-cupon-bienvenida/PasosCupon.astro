@@ -1,0 +1,175 @@
+---
+import Button from "@/components/ui/Button.astro";
+import Icon from "@/components/ui/Icon.astro";
+import ContainerSection from "@/components/ui/ContainerSection.astro";
+import { APP_URLS } from "@/utils/navigation";
+import Carousel from "@components/ui/Carousel.astro";
+
+const steps = [
+  {
+    step: 1,
+    title: "Regístrate en minutos",
+    description:
+      "Crea tu cuenta de forma rápida y segura con tus datos básicos.",
+    icon: "user",
+    linear: "from-primary-500/10 to-primary-600/5",
+  },
+  {
+    step: 2,
+    title: "Elige el monto a cambiar",
+    description:
+      "Selecciona la cantidad y visualiza el tipo de cambio en tiempo real.",
+    icon: "calculator",
+    linear: "from-secondary-400/10 to-secondary-500/5",
+  },
+  {
+    step: 3,
+    title: "Realiza la transferencia",
+    description:
+      "Envía los fondos desde tu banco y confirma la operación.",
+    icon: "icon-hand-coin",
+    linear: "from-success-500/10 to-success-600/5",
+  },
+  {
+    step: 4,
+    title: "Recibe tu dinero",
+    description:
+      "Recibe los fondos en tu cuenta de forma rápida y sin complicaciones.",
+    icon: "check-circle",
+    linear: "from-primary-600/10 to-primary-700/5",
+  },
+];
+---
+
+<ContainerSection
+  aria-labelledby="titulo-como-funciona"
+  class="relative py-20 lg:py-28"
+>
+  <!-- Fondo decorativo SOLO DESKTOP -->
+  <div class="absolute inset-0 -z-10 hidden lg:block" aria-hidden="true">
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-primary-500/5 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary-400/5 rounded-full blur-3xl"></div>
+  </div>
+
+  <!-- Encabezado -->
+  <header class="max-w-3xl mx-auto text-center mb-16 lg:mb-20 space-y-4 px-4">
+    <!-- Badge superior -->
+    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-50 border border-primary-100">
+      <span class="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></span>
+      <span class="text-sm font-medium text-primary-700">Proceso simplificado</span>
+    </div>
+
+    <h2
+      id="titulo-como-funciona"
+      class="text-3xl lg:text-5xl font-bold tracking-tight text-neutral-900"
+    >
+      Cómo funciona Mass Soluciones
+    </h2>
+
+    <p class="text-neutral-600 text-lg leading-relaxed max-w-2xl mx-auto">
+      Cambia dólares de forma segura en <span class="font-semibold text-neutral-900">4 pasos simples</span>, 
+      con una experiencia diseñada para ti.
+    </p>
+  </header>
+
+  <!-- Carousel optimizado -->
+  <Carousel data={steps} visibleDesktop={3}>
+    {steps.map((item) => (
+      <article class="relative h-full group">
+        <!-- Card SIN backdrop-blur y animaciones reducidas -->
+        <div
+          class={`
+            relative h-full
+            rounded-2xl lg:rounded-3xl p-6 lg:p-8 my-6
+            bg-linear-to-br ${item.linear}
+            border border-neutral-200/80
+            shadow-lg
+            flex flex-col gap-5
+            transition-all duration-300
+            hover:shadow-xl
+            hover:-translate-y-1
+            hover:border-primary-200
+          `}
+        >
+          <!-- Número de paso -->
+          <div class="flex items-center justify-between">
+            <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-neutral-200 shadow-sm">
+              <span class="text-xs font-bold text-primary-600">PASO</span>
+              <span class="text-sm font-bold text-neutral-900">{String(item.step).padStart(2, "0")}</span>
+            </span>
+            
+            <!-- Conector SOLO DESKTOP -->
+            {item.step < steps.length && (
+              <div class="hidden lg:block absolute -right-4 top-1/2 -translate-y-1/2 z-10">
+                <div class="w-8 h-0.5 bg-linear-to-r from-primary-300 to-transparent"></div>
+              </div>
+            )}
+          </div>
+
+          <!-- Ícono SIMPLIFICADO -->
+          <div
+            class="
+              w-14 h-14 lg:w-16 lg:h-16
+              flex items-center justify-center
+              rounded-2xl
+              bg-linear-to-br from-white to-primary-50/50
+              border border-primary-100
+              text-primary-600
+              shadow-md
+              transition-transform duration-300
+              group-hover:scale-105
+            "
+            aria-hidden="true"
+          >
+            <Icon name={item.icon} class="size-7 lg:size-8"/>
+          </div>
+
+          <!-- Contenido -->
+          <div class="flex-1 space-y-3">
+            <h3 class="text-xl lg:text-2xl font-bold text-neutral-900 leading-tight">
+              {item.title}
+            </h3>
+
+            <p class="text-sm lg:text-base leading-relaxed text-neutral-700 font-medium">
+              {item.description}
+            </p>
+          </div>
+
+          <!-- Línea de progreso SIMPLIFICADA -->
+          <div class="pt-4 border-t border-neutral-200/50">
+            <div class="w-full h-1.5 bg-neutral-100 rounded-full overflow-hidden">
+              <div 
+                class="h-full bg-linear-to-r from-primary-500 to-primary-600 rounded-full"
+                style={`width: ${(item.step / steps.length) * 100}%`}
+              ></div>
+            </div>
+          </div>
+        </div>
+      </article>
+    ))}
+  </Carousel>
+
+  <!-- CTA final -->
+  <div class="mt-12 lg:mt-16 text-center">
+    <p class="text-neutral-600 mb-4">¿Listo para comenzar?</p>
+    <Button href={APP_URLS.register}>
+      Empezar ahora
+      <Icon name="arrow-right" class="size-5" />
+    </Button>
+  </div>
+</SectionContainer>
+
+<style>
+  /* Optimización: usar will-change solo en hover */
+  .group:hover > div {
+    will-change: transform;
+  }
+
+  /* Reducir motion para usuarios que lo prefieren */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>

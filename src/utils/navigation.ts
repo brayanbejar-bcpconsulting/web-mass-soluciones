@@ -35,7 +35,7 @@ export const NAV_OPTIONS: NavItem[] = [
     children: [
       {
         name: "Cupón de bienvenida",
-        href: "/beneficios/cupones",
+        href: "/beneficios/cupon-bienvenida",
         description: "Mejora tu tipo de cambio desde tu primera operación",
       },
       {
@@ -59,9 +59,9 @@ export const APP_URLS = {
   login: `${URL_APP_MD}login`,
   register: `${URL_APP_MD}register`,
   whatsappSupport:
-    "https://wa.me/51981236260?text=Hola%2C%20buen%20d%C3%ADa.%20Me%20contacto%20con%20el%20equipo%20de%20Market%20Dollar%20porque%20he%20tenido%20un%20inconveniente%20durante%20mi%20experiencia%20y%20requiero%20de%20su%20asistencia.%20Agradecer%C3%ADa%20mucho%20que%20pudieran%20ayudarme%20a%20resolverlo%20lo%20antes%20posible.%20Quedo%20a%20la%20espera%20de%20su%20respuesta.",
+    "https://wa.me/51981236260?text=Hola%2C%20buen%20d%C3%ADa.%20Me%20contacto%20con%20el%20equipo%20de%20Mass%20Soluciones%20porque%20he%20tenido%20un%20inconveniente%20durante%20mi%20experiencia%20y%20requiero%20de%20su%20asistencia.%20Agradecer%C3%ADa%20mucho%20que%20pudieran%20ayudarme%20a%20resolverlo%20lo%20antes%20posible.%20Quedo%20a%20la%20espera%20de%20su%20respuesta.",
   whatsappContact:
-    "https://wa.me/51981236260?text=Hola%2C%20buen%20d%C3%ADa.%20Me%20comunico%20con%20el%20equipo%20de%20Market%20Dollar%20para%20solicitar%20asesor%C3%ADa%20sobre%20el%20sistema.%20Quedo%20atento(a).%20%C2%A1Gracias!",
+    "https://wa.me/51981236260?text=Hola%2C%20buen%20d%C3%ADa.%20Me%20comunico%20con%20el%20equipo%20de%20Mass%20Soluciones%20para%20solicitar%20asesor%C3%ADa%20sobre%20el%20sistema.%20Quedo%20atento(a).%20%C2%A1Gracias!",
 } as const;
 
 /**
