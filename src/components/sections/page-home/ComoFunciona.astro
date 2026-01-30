@@ -48,10 +48,9 @@ const cardPasos = [
     title="Cambia tus dólares en 3 pasos simples"
     description="Sin trámites complejos, sin moverte de casa y con total transparencia."
     align="center"
-    class="mb-20"
   />
 
-  <Carousel data={cardPasos} visibleDesktop={3}>
+  <Carousel data={cardPasos} visibleDesktop={3} hasOverflow={true}>
     {
       cardPasos.map((card, index) => (
         <article class="step-card group/card px-4 text-center">

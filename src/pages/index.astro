@@ -1,5 +1,5 @@
 ---
-import Testimonios from "@components/Testimonios.astro"
+import Testimonios from "@components/Testimonios.astro";
 import TendenciaDolar from "@/components/TendenciaDolar.astro";
 import BannerBancos from "@/components/sections/page-home/BannerBancos.astro";
 import ComoFunciona from "@/components/sections/page-home/ComoFunciona.astro";
@@ -12,79 +12,81 @@ import FAQSection from "@/components/sections/page-home/FAQSection.astro";
 const schemaWebSite = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  "name": "Mass Soluciones",
-  "url": "https://market-dollar.com",
-  "description": "Casa de cambio online en Perú. Cambia dólares a soles con las mejores tasas, seguridad bancaria y soporte 24/7.",
-  "potentialAction": {
+  name: "Mass Soluciones",
+  url: "https://cambiosmass.com",
+  description:
+    "Casa de cambio online en Perú. Cambia dólares a soles con las mejores tasas, seguridad bancaria y soporte 24/7.",
+  potentialAction: {
     "@type": "SearchAction",
-    "target": {
+    target: {
       "@type": "EntryPoint",
-      "urlTemplate": "https://market-dollar.com/blog?q={search_term_string}"
+      urlTemplate: "https://cambiosmass.com/blog?q={search_term_string}",
     },
-    "query-input": "required name=search_term_string"
-  }
+    "query-input": "required name=search_term_string",
+  },
 };
 
 // Schema Organization/LocalBusiness
 const schemaOrganization = {
   "@context": "https://schema.org",
   "@type": ["FinancialService", "LocalBusiness"],
-  "name": "Mass Soluciones",
-  "legalName": "Mass Soluciones E.I.R.L.",
-  "description": "Casa de cambio online regulada por la SBS. Cambiamos dólares a soles con las mejores tasas del mercado peruano. Cobertura nacional con local en Huaral, Lima.",
-  "foundingDate": "1993",
-  "url": "https://market-dollar.com",
-  "logo": "https://market-dollar.com/logotipo.webp",
-  "image": "https://market-dollar.com/og-market-dollar.jpg",
-  "telephone": "+51933214054",
-  "email": "marketdollar@gmail.com",
-  "address": {
+  name: "Mass Soluciones",
+  legalName: "Mass Soluciones E.I.R.L.",
+  description:
+    "Casa de cambio online regulada por la SBS. Cambiamos dólares a soles con las mejores tasas del mercado peruano. Cobertura nacional con local en Huaral, Lima.",
+  foundingDate: "1993",
+  url: "https://cambiosmass.com",
+  logo: "https://cambiosmass.com/logotipo.webp",
+  image: "https://cambiosmass.com/og-mass-soluciones.jpg",
+  telephone: "+51981236260",
+  email: "mass.soluciones.e@gmail.com.com",
+  address: {
     "@type": "PostalAddress",
-    "streetAddress": "Av. Cahuas 595",
-    "addressLocality": "Huaral",
-    "addressRegion": "Lima",
-    "postalCode": "15201",
-    "addressCountry": "PE"
+    streetAddress: "Av. Cahuas 595",
+    addressLocality: "Huaral",
+    addressRegion: "Lima",
+    postalCode: "15201",
+    addressCountry: "PE",
   },
-  "geo": {
+  geo: {
     "@type": "GeoCoordinates",
-    "latitude": "-11.493334788721851",
-    "longitude": "-77.20558442153708"
+    latitude: "-11.493334788721851",
+    longitude: "-77.20558442153708",
   },
-  "areaServed": {
+  areaServed: {
     "@type": "Country",
-    "name": "Perú"
+    name: "Perú",
   },
-  "currenciesAccepted": "USD, PEN",
-  "priceRange": "$$",
-  "openingHoursSpecification": [
+  currenciesAccepted: "USD, PEN",
+  priceRange: "$$",
+  openingHoursSpecification: [
     {
       "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      "opens": "09:00",
-      "closes": "23:00"
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "09:00",
+      closes: "23:00",
     },
     {
       "@type": "OpeningHoursSpecification",
-      "dayOfWeek": "Saturday",
-      "opens": "09:00",
-      "closes": "18:00"
-    }
+      dayOfWeek: "Saturday",
+      opens: "09:00",
+      closes: "18:00",
+    },
   ],
-  "sameAs": [
-    "https://www.facebook.com/marketdollar",
-    "https://www.instagram.com/marketdollar",
-    "https://www.linkedin.com/company/marketdollar",
-    "https://www.tiktok.com/@marketdollar"
+  sameAs: [
+    "https://www.facebook.com/cambiomass",
+    "https://www.instagram.com/cambiomass",
+    "https://www.linkedin.com/company/cambiomass",
+    "https://www.tiktok.com/@cambiomass",
   ],
-  "contactPoint": {
+  contactPoint: {
     "@type": "ContactPoint",
-    "telephone": "+51933214054",
-    "contactType": "Atención al Cliente",
-    "areaServed": "PE",
-    "availableLanguage": ["Spanish"],
-    "contactOption": "TollFree"
-  }
+    telephone: "+51981236260",
+    contactType: "Atención al Cliente",
+    areaServed: "PE",
+    availableLanguage: ["Spanish"],
+    contactOption: "TollFree",
+  },
 };
 ---
 

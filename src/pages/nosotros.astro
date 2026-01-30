@@ -3,58 +3,56 @@ import HeroNosotros from "@/components/sections/page-nosotros/HeroNosotros.astro
 import NuestraHistoria from "@/components/sections/page-nosotros/NuestraHistoria.astro";
 import CifrasExcelencia from "@/components/sections/page-nosotros/CifrasExcelencia.astro";
 import CTABeneficios from "@/components/layout/CTABeneficios.astro";
-import MainLayout from "@layouts/MainLayout.astro"
+import MainLayout from "@layouts/MainLayout.astro";
 import QueNosDiferencia from "@/components/sections/page-nosotros/QueNosDiferencia.astro";
 
-const breadcrumbItems = [
-  { label: "Inicio", href: "/" },
-  { label: "Nosotros" }
-];
+const breadcrumbItems = [{ label: "Inicio", href: "/" }, { label: "Nosotros" }];
 
 const schemaOrganization = {
   "@context": "https://schema.org",
   "@type": ["FinancialService", "LocalBusiness"],
-  "name": "Mass Soluciones",
-  "legalName": "Mass Soluciones E.I.R.L.",
-  "description": "Casa de cambio online con 30 años de experiencia en cambio de divisas en Perú. Plataforma 100% digital, regulada por la SBS con cobertura nacional.",
-  "foundingDate": "1993",
-  "url": "https://market-dollar.com/nosotros",
-  "logo": "https://market-dollar.com/logo.webp",
-  "image": "https://market-dollar.com/og-market-dollar.jpg",
-  "telephone": "+51933214054",
-  "email": "marketdollar@gmail.com",
-  "address": {
+  name: "Mass Soluciones",
+  legalName: "Mass Soluciones E.I.R.L.",
+  description:
+    "Casa de cambio online con 30 años de experiencia en cambio de divisas en Perú. Plataforma 100% digital, regulada por la SBS con cobertura nacional.",
+  foundingDate: "1993",
+  url: "https://cambiosmass.com/nosotros",
+  logo: "https://cambiosmass.com/logotipo.webp",
+  image: "https://cambiosmass.com/og-mass-soluciones.jpg",
+  telephone: "+51981236260",
+  email: "mass.soluciones.e@gmail.com.com",
+  address: {
     "@type": "PostalAddress",
-    "streetAddress": "Av. Cahuas 595",
-    "addressLocality": "Huaral",
-    "addressRegion": "Lima",
-    "postalCode": "15201",
-    "addressCountry": "PE"
+    streetAddress: "Av. Cahuas 595",
+    addressLocality: "Huaral",
+    addressRegion: "Lima",
+    postalCode: "15201",
+    addressCountry: "PE",
   },
-  "geo": {
+  geo: {
     "@type": "GeoCoordinates",
-    "latitude": "-11.493334788721851",
-    "longitude": "-77.20558442153708"
+    latitude: "-11.493334788721851",
+    longitude: "-77.20558442153708",
   },
-  "areaServed": {
+  areaServed: {
     "@type": "Country",
-    "name": "Perú"
+    name: "Perú",
   },
-  "currenciesAccepted": "USD, PEN",
-  "priceRange": "$$",
-  "sameAs": [
-    "https://www.facebook.com/marketdollar",
-    "https://www.instagram.com/marketdollar",
-    "https://www.linkedin.com/company/marketdollar",
-    "https://www.tiktok.com/@marketdollar"
+  currenciesAccepted: "USD, PEN",
+  priceRange: "$$",
+  sameAs: [
+    "https://www.facebook.com/cambiomass",
+    "https://www.instagram.com/cambiomass",
+    "https://www.linkedin.com/company/cambiomass",
+    "https://www.tiktok.com/@cambiomass",
   ],
-  "contactPoint": {
+  contactPoint: {
     "@type": "ContactPoint",
-    "telephone": "+51933214054",
-    "contactType": "Atención al Cliente",
-    "areaServed": "PE",
-    "availableLanguage": ["Spanish"]
-  }
+    telephone: "+51981236260",
+    contactType: "Atención al Cliente",
+    areaServed: "PE",
+    availableLanguage: ["Spanish"],
+  },
 };
 ---
 
@@ -62,8 +60,11 @@ const schemaOrganization = {
   title="Mass Soluciones | 30 años cambiando divisas en Perú"
   description="30 años de confianza en cambio de dólares. Plataforma digital regulada por SBS con mejores tasas para personas y empresas. ¡Cambia seguro!"
 >
-  <script type="application/ld+json" set:html={JSON.stringify(schemaOrganization)} />
-  
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(schemaOrganization)}
+  />
+
   <HeroNosotros />
   <NuestraHistoria />
   <CifrasExcelencia />

@@ -5,37 +5,52 @@ import { APP_URLS } from "@/utils/navigation";
 const currentYear = new Date().getFullYear();
 
 // Image
-import logo from "@assets/shared/logotipo.png"
+import logo from "@assets/shared/logotipo.png";
 ---
 
-<footer class="bg-primary-800 text-neutral-200 px-[5%] antialiased" aria-labelledby="footer-heading">
+<footer
+  class="bg-primary-800 text-neutral-200 px-[5%] antialiased"
+  aria-labelledby="footer-heading"
+>
   <h2 id="footer-heading" class="sr-only">Pie de página</h2>
-  
-  <div class="mx-auto flex flex-col justify-between items-center text-center pt-10 pb-10 gap-10 xl:w-[90%] lg:flex-row lg:text-start lg:items-start">
-    
-    <section class="w-full sm:w-[70%] lg:w-[25%] flex flex-col items-center lg:items-start gap-4 text-center lg:text-start">
+
+  <div
+    class="mx-auto flex flex-col justify-between items-center text-center pt-10 pb-10 gap-10 xl:w-[90%] lg:flex-row lg:text-start lg:items-start"
+  >
+    <section
+      class="w-full sm:w-[70%] lg:w-[25%] flex flex-col items-center lg:items-start gap-4 text-center lg:text-start"
+    >
       <a href="/" aria-label="Ir al inicio de Mass Soluciones">
         <img
           loading="lazy"
           src="/logotipo.webp"
           alt="Mass Soluciones - Casa de cambio digital"
           class="w-48 lg:w-64"
-          width={256}>
+          width={256}
+        />
       </a>
-      <p class="inline-block rounded-full bg-secondary-300 text-primary-900 py-1 px-4 font-bold text-sm">
+      <p
+        class="inline-block rounded-full bg-secondary-300 text-primary-900 py-1 px-4 font-bold text-sm"
+      >
         RUC: 20614431475
       </p>
-      <p class=" text-sm leading-relaxed">
-        Transacciones seguras, rápidas y al mejor <strong>tipo de cambio</strong>. Somos la plataforma digital creada para potenciar tus ahorros financieros en Perú.
+      <p class="text-sm leading-relaxed">
+        Transacciones seguras, rápidas y al mejor <strong>tipo de cambio</strong
+        >. Somos la plataforma digital creada para potenciar tus ahorros
+        financieros en Perú.
       </p>
     </section>
 
     <section class="flex flex-col gap-8">
       <div itemscope itemtype="https://schema.org/LocalBusiness">
-        <h3 class="font-bold text-btn mb-3 text-secondary-300">Horario de atención</h3>
+        <h3 class="font-bold text-btn mb-3 text-secondary-300">
+          Horario de atención
+        </h3>
         <p class="text-sm">
-          Lunes a Viernes: <br>
-          <time itemprop="openingHours" datetime="Mo-Fr 07:00-23:00"><strong>7:00 AM - 11:00 PM</strong></time>
+          Lunes a Viernes: <br />
+          <time itemprop="openingHours" datetime="Mo-Fr 08:00-20:00"
+            ><strong>8:00 AM - 8:00 PM</strong></time
+          >
         </p>
       </div>
 
@@ -44,8 +59,11 @@ import logo from "@assets/shared/logotipo.png"
         <nav aria-label="Enlaces de contacto">
           <ul class="flex flex-col gap-2 text-sm">
             <li>
-              <a href="mailto:soporte@market-dollar.com" class="hover:text-secondary-300 transition-colors">
-                <strong>Correo:</strong> 
+              <a
+                href="mailto:soporte@cambiosmass.com"
+                class="hover:text-secondary-300 transition-colors"
+              >
+                <strong>Correo:</strong>
               </a>
             </li>
             <li>
@@ -54,8 +72,13 @@ import logo from "@assets/shared/logotipo.png"
               </address>
             </li>
             <li>
-              <a href="https://wa.me/51933214054" target="_blank" rel="noopener noreferrer" class="hover:text-secondary-300 transition-colors">
-                <strong>WhatsApp:</strong> +51 933 214 054
+              <a
+                href="https://wa.me/51981236260"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="hover:text-secondary-300 transition-colors"
+              >
+                <strong>WhatsApp:</strong> +51 981 236 260
               </a>
             </li>
           </ul>
@@ -65,16 +88,30 @@ import logo from "@assets/shared/logotipo.png"
 
     <section class="flex flex-col gap-8">
       <div>
-        <h3 class="font-bold mb-3 text-btn text-secondary-300 text-center lg:text-start">Síguenos</h3>
+        <h3
+          class="font-bold mb-3 text-btn text-secondary-300 text-center lg:text-start"
+        >
+          Síguenos
+        </h3>
         <SocialMedia />
       </div>
 
       <div>
-        <h3 class="font-bold mb-3 text-btn text-secondary-300">Más información</h3>
+        <h3 class="font-bold mb-3 text-btn text-secondary-300">
+          Más información
+        </h3>
         <nav aria-label="Enlaces secundarios">
           <ul class="flex flex-col gap-2 text-sm italic">
-            <li><a href="/ayuda" class="hover:underline">Preguntas Frecuentes</a></li>
-            <li><a href="/tipo-de-cambio" class="hover:underline font-bold text-secondary-400">Precio del Dólar Hoy</a></li>
+            <li>
+              <a href="/ayuda" class="hover:underline">Preguntas Frecuentes</a>
+            </li>
+            <li>
+              <a
+                href="/tipo-de-cambio"
+                class="hover:underline font-bold text-secondary-400"
+                >Precio del Dólar Hoy</a
+              >
+            </li>
           </ul>
         </nav>
       </div>
@@ -82,24 +119,53 @@ import logo from "@assets/shared/logotipo.png"
 
     <section class="flex flex-col gap-8 items-center lg:items-start">
       <div>
-        <h3 class="font-bold mb-3 text-btn text-secondary-300 text-center lg:text-start">Legal</h3>
+        <h3
+          class="font-bold mb-3 text-btn text-secondary-300 text-center lg:text-start"
+        >
+          Legal
+        </h3>
         <nav aria-label="Enlaces legales">
           <ul class="flex flex-col gap-2 text-sm text-center lg:text-start">
-            <li><a href="/terminos-condiciones" class="hover:underline">Términos y Condiciones</a></li>
-            <li><a href="/politicas-privacidad" class="hover:underline">Políticas de Privacidad</a></li>
+            <li>
+              <a href="/terminos-condiciones" class="hover:underline"
+                >Términos y Condiciones</a
+              >
+            </li>
+            <li>
+              <a href="/politicas-privacidad" class="hover:underline"
+                >Políticas de Privacidad</a
+              >
+            </li>
           </ul>
         </nav>
       </div>
-      <a href="/ayuda/#form-reclamation" aria-label="Acceder al libro de reclamaciones virtual">
-        <img loading="lazy" src="/libro-reclamaciones.webp" alt="Libro de Reclamaciones Virtual" class="w-40 hover:opacity-80 transition-opacity" width="160" height="auto">
+      <a
+        href="/ayuda/#form-reclamation"
+        aria-label="Acceder al libro de reclamaciones virtual"
+      >
+        <img
+          loading="lazy"
+          src="/libro-reclamaciones.webp"
+          alt="Libro de Reclamaciones Virtual"
+          class="w-40 hover:opacity-80 transition-opacity"
+          width="160"
+          height="auto"
+        />
       </a>
     </section>
   </div>
 
-  <section class="w-full lg:w-[80%] border-t border-primary-400/30 mx-auto py-6 mt-4">
+  <section
+    class="w-full lg:w-[80%] border-t border-primary-400/30 mx-auto py-6 mt-4"
+  >
     <p class="text-xs font-light text-neutral-300 text-center">
-      Copyright © {currentYear} <strong>Mass Soluciones</strong> | RUC: 20614431475. Todos los derechos reservados. <br class="sm:hidden">
-      Desarrollado por <a href="https://bcpconsulting.pe/" class="hover:text-white">BCP Consulting E.I.R.L.</a>
+      Copyright © {currentYear}
+      <strong>Mass Soluciones</strong> | RUC: 20614431475. Todos los derechos reservados.
+      <br class="sm:hidden" />
+      Desarrollado por <a
+        href="https://bcpconsulting.pe/"
+        class="hover:text-white">BCP Consulting E.I.R.L.</a
+      >
     </p>
   </section>
 </footer>

@@ -1,6 +1,6 @@
 /**
  * Utilidades para manejar parámetros UTM y query strings
- * Propaga UTMs desde la landing hacia app.market-dollar.com
+ * Propaga UTMs desde la landing hacia app.cambiosmass.com
  */
 
 /**

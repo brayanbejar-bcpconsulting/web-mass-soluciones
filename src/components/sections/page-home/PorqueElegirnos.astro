@@ -43,12 +43,13 @@ const cardsVentajas = [
     title="Mucho más que un tipo de cambio"
     description="Diseñamos una experiencia pensando en lo que realmente te importa: tu tiempo, tu seguridad y tu dinero."
     align="center"
-    class="mb-30"
+    class="mb-10"
   />
 
   <Carousel
     data={cardsVentajas}
     visibleDesktop={4}
+    hasOverflow={true}
   >
     {cardsVentajas.map((card, index) => (
         <article class="ventaja-card group/card">

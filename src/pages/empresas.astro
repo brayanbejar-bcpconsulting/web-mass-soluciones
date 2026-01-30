@@ -10,27 +10,29 @@ import MainLayout from "src/layouts/MainLayout.astro";
 const schemaService = {
   "@context": "https://schema.org",
   "@type": "Service",
-  "serviceType": "Cambio de Divisas Corporativo",
-  "name": "Servicio de Cambio de Dólares para Empresas",
-  "description": "Tipo de cambio preferencial para empresas con RUC 20. Tasas corporativas exclusivas, facturación electrónica y atención prioritaria para operaciones de alto volumen.",
-  "provider": {
+  serviceType: "Cambio de Divisas Corporativo",
+  name: "Servicio de Cambio de Dólares para Empresas",
+  description:
+    "Tipo de cambio preferencial para empresas con RUC 20. Tasas corporativas exclusivas, facturación electrónica y atención prioritaria para operaciones de alto volumen.",
+  provider: {
     "@type": "FinancialService",
-    "name": "Mass Soluciones",
-    "url": "https://market-dollar.com",
-    "telephone": "+51933214054",
-    "email": "marketdollar@gmail.com"
+    name: "Mass Soluciones",
+    url: "https://cambiosmass.com",
+    telephone: "+51981236260",
+    email: "mass.soluciones.e@gmail.com.com",
   },
-  "areaServed": {
+  areaServed: {
     "@type": "Country",
-    "name": "Perú"
+    name: "Perú",
   },
-  "offers": {
+  offers: {
     "@type": "Offer",
-    "description": "Tasas preferenciales para empresas con volúmenes superiores a $5,000 USD",
-    "priceCurrency": "PEN",
-    "availability": "https://schema.org/InStock"
+    description:
+      "Tasas preferenciales para empresas con volúmenes superiores a $5,000 USD",
+    priceCurrency: "PEN",
+    availability: "https://schema.org/InStock",
   },
-  "url": "https://market-dollar.com/empresas"
+  url: "https://cambiosmass.com/empresas",
 };
 ---
 
