@@ -4,6 +4,7 @@ import Icon from "@/components/ui/Icon.astro";
 import ContainerSection from "@/components/ui/ContainerSection.astro";
 import { APP_URLS } from "@/utils/navigation";
 import Carousel from "@components/ui/Carousel.astro";
+import SectionHeading from "@/components/ui/SectionHeading.astro";
 
 const steps = [
   {
@@ -51,26 +52,13 @@ const steps = [
     <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary-400/5 rounded-full blur-3xl"></div>
   </div>
 
-  <!-- Encabezado -->
-  <header class="max-w-3xl mx-auto text-center mb-16 lg:mb-20 space-y-4 px-4">
-    <!-- Badge superior -->
-    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-50 border border-primary-100">
-      <span class="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></span>
-      <span class="text-sm font-medium text-primary-700">Proceso simplificado</span>
-    </div>
-
-    <h2
-      id="titulo-como-funciona"
-      class="text-3xl lg:text-5xl font-bold tracking-tight text-neutral-900"
-    >
-      Cómo funciona Mass Soluciones
-    </h2>
-
-    <p class="text-neutral-600 text-lg leading-relaxed max-w-2xl mx-auto">
-      Cambia dólares de forma segura en <span class="font-semibold text-neutral-900">4 pasos simples</span>, 
-      con una experiencia diseñada para ti.
-    </p>
-  </header>
+  <SectionHeading
+    id="titulo-como-funciona"
+    shortText="¿Cómo funciona?"
+    title="Cambia dólares de forma segura en"
+    subtitle="4 pasos simples"
+    align="center"
+  />
 
   <!-- Carousel optimizado -->
   <Carousel data={steps} visibleDesktop={3}>

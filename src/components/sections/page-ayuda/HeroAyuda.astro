@@ -10,7 +10,7 @@ import { APP_URLS } from "@/utils/navigation";
 <ContainerSection
   ariaLabelledby="hero-title"
   bgColor="bg-linear-to-b from-white to-neutral-200"
-  classContainer="flex items-center gap-16 justify-between"
+  classContainer="flex flex-col lg:flex-row items-center gap-16 justify-between"
 >
   <article class="lg:w-[55%] flex flex-col items-center lg:items-start text-center lg:text-left gap-8 lg:order-2">
     <header class="grid gap-4">
@@ -67,8 +67,8 @@ import { APP_URLS } from "@/utils/navigation";
       </div>
     </div>
 
-    <div class="bg-secondary-100 absolute -top-4 -right-4 bg-success-200 p-4 rounded-2xl shadow-xl hidden md:flex items-center gap-3 animate-bounce-slow z-20">
-      <div class="size-10 bg-success-100 bg-neutral-50 rounded-full flex items-center justify-center">
+    <div class="absolute -top-4 -right-4 bg-success-200 p-4 rounded-2xl shadow-xl hidden md:flex items-center gap-3 animate-bounce-slow z-20">
+      <div class="size-10 bg-neutral-50 rounded-full flex items-center justify-center">
         <Icon name="icon-hand-coin" class="text-success-600 size-6" aria-hidden="true" />
       </div>
       <div class="text-left">
