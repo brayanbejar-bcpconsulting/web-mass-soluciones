@@ -56,7 +56,8 @@ const faqSchema = {
   <div class="max-w-212.5 mx-auto px-6">
     <SectionHeading
       id="header-faq-home"
-      title="FAQ: Resolviendo tus dudas en segundos"
+      title="FAQ: Resolviendo tus dudas"
+      subtitle="en segundos"
       align="center"
       shortText="Preguntas Frecuentes"
     />
@@ -72,7 +73,7 @@ const faqSchema = {
               class="flex items-center justify-between p-6 cursor-pointer list-none focus:bg-neutral-50 outline-none"
               aria-expanded="false"
             >
-              <h3 class="text-base font-semibold text-neutral-800 pr-4 leading-tight">
+              <h3 class="text-sm lg:text-base font-semibold text-neutral-800 pr-4 leading-tight">
                 {faq.question}
               </h3>
               <span class="text-primary-600 transition-transform duration-300 group-open:rotate-180 shrink-0">
@@ -93,7 +94,7 @@ const faqSchema = {
             </summary>
 
             <div class="px-6 pb-6 pt-2 text-neutral-600 leading-relaxed border-t border-neutral-50 animate-fade-in">
-              <p set:html={parseSimpleMarkdown(faq.answer)} />
+              <p class="text-sm lg:text-base" set:html={parseSimpleMarkdown(faq.answer)} />
             </div>
           </details>
         ))
