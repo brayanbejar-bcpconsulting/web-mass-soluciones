@@ -1,8 +1,9 @@
 ---
-import { NAV_OPTIONS, APP_URLS, isActive as checkActive } from "@utils/navigation";
+import { NAV_OPTIONS, isActive as checkActive } from "@utils/navigation";
 
 import SignsButtons from "../ui/SignsButtons.astro";
 import NavMobile from "./NavMobile.astro";
+import BannerHeader from "./BannerHeader.astro";
 
 const { pathname } = Astro.url;
 
@@ -13,9 +14,9 @@ const activeLinkStyles = "text-white font-bold relative after:content-[''] after
 // Usar función centralizada
 const isActive = (href: string) => checkActive(href, pathname);
 ---
-
+<BannerHeader />
 <header
-  class="bg-primary-500 px-[5%]"
+  class="bg-primary-500 px-[5%] sticky top-0 z-50"
 >
   <div
     class="max-w-350 mx-auto flex justify-between items-center py-4"

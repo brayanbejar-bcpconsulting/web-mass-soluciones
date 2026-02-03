@@ -1,0 +1,114 @@
+---
+const { whatsappNumber = "51933214054" } = Astro.props;
+const message = encodeURIComponent("Hola, tengo una mejor tasa de cambio. ¿Podemos negociar?");
+const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
+---
+
+<div id="negotiation-wrapper" class="fixed bottom-24 right-6 z-999 flex flex-col items-end pointer-events-none">
+  
+  <div id="desktop-banner" class="relative hidden lg:flex pointer-events-auto bg-white border border-gray-100 shadow-2xl rounded-2xl p-5 mb-6 items-start border-l-4 border-l-green-500 w-100 animate-slide-in transition-all duration-500 mt-10">
+    
+    <div class="absolute -top-8 -left-7 bg-linear-to-br from-green-400 to-green-600 p-4 rounded-2xl shadow-xl rotate-[-10deg] z-10 border-2 border-white">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    </div>
+
+    <div class="flex-1 ml-14">
+      <div class="flex justify-between items-start">
+        <div class="pr-4">
+          <p class="text-gray-900 font-black text-xl leading-tight">¡Mejoramos cualquier tasa!</p>
+          <p class="text-gray-500 text-sm mt-1 leading-snug">Envíanos tu oferta actual y la superamos en minutos. ¡Tú ganas más aquí!</p>
+        </div>
+        
+        <button id="close-banner" class="text-gray-400 hover:text-red-500 transition-colors cursor-pointer">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    
+      <div class="mt-4">
+        <a href={whatsappUrl} target="_blank" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-lg hover:scale-105 active:scale-95">
+          🚀 Superar mi tasa
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div id="floating-icon-group" class="flex lg:hidden flex-col items-end pointer-events-auto transition-all duration-500">
+    
+    <div id="popup-text-mobile" class="lg:hidden bg-green-600 text-white text-[11px] py-1.5 px-3 rounded-xl rounded-br-none mb-2 shadow-lg font-bold whitespace-nowrap animate-float">
+      ¿Mejor tasa? Negociemos 📈
+    </div>
+
+    <div id="popup-text-desktop" class="hidden lg:block bg-green-600 text-white text-[11px] py-1.5 px-6 rounded-xl rounded-br-none mb-2 shadow-lg font-bold whitespace-nowrap animate-float">
+      Negociar tasa
+    </div>
+    
+    <a href={whatsappUrl} target="_blank" class="relative group flex items-center justify-center w-14 h-14 bg-white border-2 border-green-500 rounded-full shadow-2xl hover:scale-110 transition-transform duration-300">
+      <span class="text-2xl group-hover:rotate-12 transition-transform">💰</span>
+      <span class="absolute inset-0 rounded-full bg-green-400 animate-ping opacity-25"></span>
+    </a>
+  </div>
+</div>
+
+<script>
+  const desktopBanner = document.getElementById('desktop-banner');
+  const floatingGroup = document.getElementById('floating-icon-group');
+  const closeBtn = document.getElementById('close-banner');
+  const popupMobile = document.getElementById('popup-text-mobile');
+
+  const minimizeToButton = () => {
+    if (desktopBanner && desktopBanner.style.display !== 'none') {
+      desktopBanner.style.opacity = '0';
+      desktopBanner.style.transform = 'translateX(20px) scale(0.95)';
+      
+      setTimeout(() => {
+        desktopBanner.style.display = 'none';
+        floatingGroup?.classList.remove('lg:hidden');
+        floatingGroup?.classList.add('animate-slide-in-bottom');
+      }, 400);
+    }
+  };
+
+  closeBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    minimizeToButton();
+  });
+
+  setTimeout(minimizeToButton, 12000);
+
+  setInterval(() => {
+    if (window.innerWidth < 1024) {
+      popupMobile?.classList.toggle('opacity-0');
+    }
+  }, 5000);
+</script>
+
+<style>
+  .animate-slide-in {
+    animation: slideIn 0.8s cubic-bezier(0.17, 0.67, 0.83, 0.67) both;
+  }
+  .animate-slide-in-bottom {
+    animation: slideInBottom 0.5s ease-out both;
+  }
+  .animate-float {
+    animation: floating 3s ease-in-out infinite;
+  }
+  @keyframes slideIn {
+    0% { opacity: 0; transform: translateX(100px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slideInBottom {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes floating {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  @media (max-height: 500px) {
+    #negotiation-wrapper { display: none; }
+  }
+</style>

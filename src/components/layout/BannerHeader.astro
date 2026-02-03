@@ -1,0 +1,93 @@
+---
+// PromoBanner.astro
+---
+
+<section class="overflow-hidden bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-black w-full shadow-md border-b border-black/10 select-none">
+  <div class="max-w-7xl mx-auto h-12 flex items-center justify-between px-3 md:px-4">
+    <div class="flex items-center gap-x-2 md:gap-x-6 w-full justify-between md:justify-center">
+      
+      <div class="flex items-center gap-1.5 md:gap-2 shrink-0">
+        <span class="text-lg md:text-xl animate-bounce-subtle">🎁</span>
+        <span class="font-bold text-[11px] md:text-sm">
+          <span class="md:hidden">¡Bono exclusivo!</span> <span class="hidden md:inline">¡Consigue tu bono exclusivo ahora!</span> </span>
+      </div>
+
+      <div class="flex items-center gap-2 md:gap-6">
+        <a 
+          href="https://app.market-dollar.com/register" 
+          class="bg-gray-950 text-white text-[9px] md:text-xs font-black py-1.5 px-3 md:px-4 rounded-full shadow-lg active:scale-95 transition-transform whitespace-nowrap"
+        >
+          ¡CANJEAR YA!
+        </a>
+
+        <div 
+          class="flex items-center gap-0.5 md:gap-1 font-mono text-[11px] md:text-base font-black bg-black/10 backdrop-blur-sm px-2 md:px-3 py-1 rounded-lg border border-black/5"
+          role="timer"
+        >
+          <span id="promo-minutes">00</span><span class="animate-pulse">:</span><span id="promo-seconds">00</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .animate-shimmer {
+    animation: shimmer 3s infinite linear;
+  }
+  .animate-bounce-subtle {
+    animation: bounce-subtle 2s infinite;
+  }
+  @keyframes bounce-subtle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+</style>
+
+<script>
+  const SHARED_KEY = 'shared_promo_deadline'; 
+  const MINUTES_DEFAULT = 54; 
+
+  function setupCountdown() {
+    const mEl = document.getElementById("promo-minutes");
+    const sEl = document.getElementById("promo-seconds");
+
+    const getDeadline = () => {
+      const now = Date.now();
+      const stored = localStorage.getItem(SHARED_KEY);
+      if (stored) {
+        const parsed = parseInt(stored, 10);
+        if (parsed > now) return parsed;
+      }
+      const newDeadline = now + (MINUTES_DEFAULT * 60 * 1000);
+      localStorage.setItem(SHARED_KEY, newDeadline.toString());
+      return newDeadline;
+    };
+
+    const updateUI = () => {
+      const deadline = getDeadline();
+      const diff = deadline - Date.now();
+      if (diff <= 0) {
+        if (mEl) mEl.innerText = "00";
+        if (sEl) sEl.innerText = "00";
+        return;
+      }
+      const m = Math.floor((diff / 1000 / 60) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+      if (mEl) mEl.innerText = m.toString().padStart(2, '0');
+      if (sEl) sEl.innerText = s.toString().padStart(2, '0');
+    };
+
+    const interval = setInterval(updateUI, 1000);
+    updateUI();
+    document.addEventListener('astro:before-preparation', () => clearInterval(interval), { once: true });
+  }
+
+  setupCountdown();
+  document.addEventListener('astro:page-load', setupCountdown);
+</script>

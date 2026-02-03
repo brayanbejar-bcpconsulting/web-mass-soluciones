@@ -5,6 +5,9 @@ import Footer from "../components/layout/Footer.astro";
 import BaseHead from "../components/seo/BaseHead.astro";
 import ScriptTracking from "../components/seo/ScriptTracking.astro";
 import "@styles/global.css";
+import MessageFloat from "@/components/layout/MessageFloat.astro";
+import BtnWhatsAppFloat from "@/components/layout/BtnWhatsAppFloat.astro";
+import RoulettePromotion from "@components/layout/RoulettePromotion.astro";
 
 interface Props {
     title: string;
@@ -32,11 +35,6 @@ const { title, description, image, canonicalURL, type, noIndex } = Astro.props;
         <ScriptTracking noIndex={noIndex} />
     </head>
     <body>
-        <!-- Google Tag Manager (noscript)
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K5KJR59T"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    End Google Tag Manager (noscript) -->
-
         <!-- Skip Link para accesibilidad -->
         <a
             href="#main-content"
@@ -51,5 +49,8 @@ const { title, description, image, canonicalURL, type, noIndex } = Astro.props;
             <slot />
         </main>
         <Footer />
+        <MessageFloat />
+        <BtnWhatsAppFloat />
+        <RoulettePromotion />
     </body>
 </html>
