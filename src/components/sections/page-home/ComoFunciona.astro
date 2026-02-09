@@ -60,7 +60,7 @@ const cardPasos = [
               <Image
                 src={card.image}
                 alt={card.shortText}
-                loading={index === 0 ? "eager" : "lazy"}
+                loading="lazy"
                 fetchpriority={index === 0 ? "high" : "low"}
                 class="w-full h-auto object-contain mx-auto transition-transform duration-500 group-hover/card:scale-105"
               />

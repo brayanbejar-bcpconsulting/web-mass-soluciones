@@ -1,0 +1,177 @@
+---
+/**
+ * GameResultView - Shared result/coupon display component
+ */
+interface Props {
+	gameId: string;
+	accentColor?: string;
+	bgGradient?: string;
+}
+
+const {
+	gameId,
+	accentColor = "#FFC107",
+	bgGradient = "from-[#003d82] via-[#002855] to-[#001d3d]",
+} = Astro.props;
+
+const resultViewId = `game-${gameId}-result`;
+---
+
+<div id={resultViewId} class="hidden w-full px-4 py-4" data-view="result">
+	<div class="flex flex-col items-center text-center w-full relative overflow-hidden">
+		<!-- Celebration icon -->
+		<div class="relative mb-3">
+			<div
+				class="absolute inset-0 blur-2xl opacity-40 game-glow"
+				style={`background: ${accentColor};`}
+			></div>
+			<div class="relative text-6xl game-victory">🎉</div>
+		</div>
+
+		<!-- Title -->
+		<h3
+			class="font-black text-2xl tracking-wider mb-4"
+			style={`color: ${accentColor};`}
+		>
+			¡FELICIDADES!
+		</h3>
+
+		<!-- Coupon card -->
+		<div class="w-full mb-4 relative">
+			<div
+				class="absolute -inset-2 blur-xl game-glow"
+				style={`background: linear-gradient(to right, ${accentColor}30, ${accentColor}50, ${accentColor}30);`}
+			></div>
+
+			<div
+				class={`relative bg-gradient-to-br ${bgGradient} border-2 rounded-xl overflow-hidden backdrop-blur-xl`}
+				style={`border-color: ${accentColor}60; box-shadow: 0 0 40px ${accentColor}50;`}
+			>
+				<div class="relative p-5">
+					<!-- Header -->
+					<div class="flex items-center justify-center gap-2 mb-2">
+						<div
+							class="w-1.5 h-1.5 rounded-full animate-pulse"
+							style={`background: ${accentColor}; box-shadow: 0 0 8px ${accentColor};`}
+						></div>
+						<span
+							class="text-[10px] uppercase font-semibold tracking-widest"
+							style={`color: ${accentColor};`}
+						>
+							Tu código
+						</span>
+						<div
+							class="w-1.5 h-1.5 rounded-full animate-pulse"
+							style={`background: ${accentColor}; box-shadow: 0 0 8px ${accentColor};`}
+						></div>
+					</div>
+
+					<!-- Code display -->
+					<div
+						class="game-result-code text-white mb-3"
+						data-coupon-code
+					>
+						--
+					</div>
+
+					<!-- Separator -->
+					<div
+						class="relative h-[1px] mb-3"
+						style={`background: linear-gradient(to right, transparent, ${accentColor}, transparent);`}
+					></div>
+
+					<!-- Description -->
+					<div
+						class="rounded-lg p-3 border"
+						style={`background: rgba(0,30,79,0.5); border-color: ${accentColor}20;`}
+					>
+						<p class="text-white text-sm leading-snug font-medium" data-coupon-description>
+							--
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Expiration info -->
+		<div
+			class={`flex items-center justify-center gap-3 mb-4 bg-gradient-to-r ${bgGradient} px-4 py-2.5 rounded-lg border backdrop-blur-sm`}
+			style={`border-color: ${accentColor}30;`}
+		>
+			<span class="text-2xl">⏱️</span>
+			<div class="text-left">
+				<span
+					class="text-[10px] font-semibold uppercase block tracking-wide"
+					style={`color: ${accentColor};`}
+				>
+					Válido hasta
+				</span>
+				<div class="text-white font-bold text-sm" data-expiration-date>--</div>
+			</div>
+		</div>
+
+		<!-- Action buttons -->
+		<div class="w-full flex gap-2">
+			<!-- Info button -->
+			<button
+				class="game-info-btn"
+				style={`background: ${accentColor}20; color: ${accentColor}; border-color: ${accentColor}50;`}
+				data-action="show-info"
+				title="¿Cómo reclamar?"
+			>
+				ℹ️
+			</button>
+
+			<!-- Copy button -->
+			<button
+				class="game-result-button flex-1"
+				style={`background: linear-gradient(to right, ${accentColor}, ${accentColor}dd, ${accentColor}); color: #002855; border-color: #002855;`}
+				data-action="copy-code"
+			>
+				<span data-copy-text>Copiar Código</span>
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path>
+				</svg>
+			</button>
+		</div>
+
+		<!-- Claim instructions (subtle) -->
+		<p class="text-white/50 text-[10px] mt-3 text-center">
+			Usa este código al hacer tu cambio en <a href="https://app.market-dollar.com" class="underline hover:text-white/70">app.market-dollar.com</a>
+		</p>
+	</div>
+</div>
+
+<script define:vars={{ resultViewId }}>
+(function() {
+	const container = document.getElementById(resultViewId);
+	const copyBtn = container?.querySelector('[data-action="copy-code"]');
+	const copyText = container?.querySelector('[data-copy-text]');
+	const codeEl = container?.querySelector('[data-coupon-code]');
+
+	copyBtn?.addEventListener('click', async () => {
+		const code = codeEl?.textContent || '';
+		if (!code || code === '--') return;
+
+		try {
+			await navigator.clipboard.writeText(code);
+			if (copyText) copyText.textContent = '¡Copiado!';
+			setTimeout(() => {
+				if (copyText) copyText.textContent = 'Copiar Código';
+			}, 2000);
+		} catch {
+			// Fallback for older browsers
+			const textarea = document.createElement('textarea');
+			textarea.value = code;
+			document.body.appendChild(textarea);
+			textarea.select();
+			document.execCommand('copy');
+			document.body.removeChild(textarea);
+			if (copyText) copyText.textContent = '¡Copiado!';
+			setTimeout(() => {
+				if (copyText) copyText.textContent = 'Copiar Código';
+			}, 2000);
+		}
+	});
+})();
+</script>

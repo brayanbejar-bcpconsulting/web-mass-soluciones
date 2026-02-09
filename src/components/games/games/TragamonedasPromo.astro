@@ -1,0 +1,1312 @@
+﻿---
+// ClassicSlotMachine.astro - Tragamonedas con API Real
+const API_BASE = import.meta.env.MARKET_DOLLAR_API_URL || "https://app.market-dollar.com";
+
+const {
+  apiConfigUrl = `${API_BASE}/api/v1/games/config`,
+  apiPlayUrl = `${API_BASE}/api/v1/games/play-guest`,
+} = Astro.props;
+
+const SYMBOLS = ["💲", "🔔", "🍒", "⭐", "🪙", "🎁", "💎", "7️⃣"];
+const EXTENDED = [
+  ...SYMBOLS,
+  ...SYMBOLS,
+  ...SYMBOLS,
+  ...SYMBOLS,
+  ...SYMBOLS,
+  ...SYMBOLS,
+];
+---
+
+<script
+  src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"
+></script>
+
+<!-- Backdrop mobile -->
+<div
+  id="classic-mobile-backdrop"
+  class="fixed inset-0 bg-black/90 z-[40] hidden opacity-0 transition-opacity duration-300 md:hidden backdrop-blur-md"
+  aria-hidden="true"
+>
+</div>
+
+<!-- Contenedor principal - MÁS COMPACTO -->
+<div
+  class="fixed left-0 z-[50] flex items-center font-sans transition-all duration-300
+          bottom-4 scale-75 origin-bottom-left
+          md:top-1/2 md:bottom-auto md:scale-90 md:-translate-y-1/2"
+  id="classic-promo-container"
+>
+  <!-- Tab lateral - MÁS PEQUEÑO -->
+  <div
+    id="classic-promo-tab"
+    class="relative overflow-hidden bg-gradient-to-br from-[#0A2540] via-[#1565C0] to-[#0A2540] h-44 w-12 rounded-r-2xl flex flex-col items-center justify-center cursor-pointer shadow-[0_0_30px_rgba(30,136,229,0.6)] transition-all duration-500 border-r-[3px] border-y-[3px] border-[#1E88E5] z-20 hover:w-16 hover:shadow-[0_0_50px_rgba(30,136,229,0.9)] active:scale-95 group"
+  >
+    <div
+      class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shine"
+    >
+    </div>
+    <div class="relative mb-3">
+      <div
+        class="absolute inset-0 blur-lg bg-gradient-to-br from-[#1E88E5] to-[#facc15] animate-pulse opacity-60"
+      >
+      </div>
+      <span
+        class="relative text-4xl animate-float filter drop-shadow-[0_0_8px_rgba(30,136,229,1)]"
+        >🎰</span
+      >
+    </div>
+    <span
+      class="uppercase font-black text-[10px] text-[#1E88E5] [writing-mode:vertical-lr] tracking-[0.4em] drop-shadow-[0_0_8px_rgba(30,136,229,0.8)] transform rotate-180 group-hover:text-[#facc15] transition-colors"
+    >
+      JUEGA
+    </span>
+  </div>
+
+  <!-- Card principal - MÁS COMPACTA -->
+  <div
+    id="classic-promo-card"
+    class="absolute left-0 flex flex-col bg-gradient-to-br from-[#0A2540] via-[#1565C0] to-[#0A2540] rounded-r-2xl shadow-[40px_15px_100px_rgba(0,0,0,0.9)]
+            w-[300px] md:w-[380px]
+            translate-x-[-110%] opacity-0 transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)]
+            border-l-0 z-10 pointer-events-none overflow-hidden backdrop-blur-2xl border-[3px] border-[#1E88E5]"
+  >
+    <!-- Close button -->
+    <button
+      id="classic-close-btn"
+      class="absolute top-3 right-3 z-30 bg-gradient-to-br from-red-600/20 to-red-700/20 hover:from-red-500/40 hover:to-red-600/40 text-red-300 rounded-lg w-8 h-8 flex items-center justify-center text-xs font-bold transition-all duration-300 cursor-pointer shadow-[0_0_15px_rgba(239,68,68,0.3)] backdrop-blur-sm border border-red-500/30 hover:scale-110 group"
+    >
+      <span class="group-hover:rotate-90 transition-transform duration-300"
+        >✕</span
+      >
+    </button>
+
+    <div
+      class="bg-gradient-to-br from-[#0A2540]/90 via-[#1565C0]/80 to-[#0A2540]/90 backdrop-blur-xl rounded-r-[16px] w-full border-2 border-[#1E88E5]/40 overflow-y-auto overflow-x-hidden relative z-10"
+      style="min-height: 420px; max-height: 85vh;"
+    >
+      <!-- ─── INPUT VIEW ─── -->
+      <div id="classic-input-view" class="w-full px-3 py-4">
+        <div class="flex flex-col items-center text-center w-full">
+          <div class="relative mb-4 w-full">
+            <div
+              class="relative bg-gradient-to-b from-[#1E88E5] via-[#1976D2] to-[#1565C0] rounded-xl p-3 mb-4 shadow-[0_6px_24px_rgba(0,0,0,0.8)] border-[3px] border-[#facc15]"
+            >
+              <div
+                class="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-black/20 rounded-xl"
+              >
+              </div>
+              <h3
+                class="relative text-white font-black text-xl uppercase tracking-wider drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)]"
+              >
+                ⭐ Market Dollar ⭐
+              </h3>
+              <div
+                class="relative text-[#facc15] font-bold text-[10px] uppercase tracking-[0.2em] mt-1"
+              >
+                Casa de Cambio Online
+              </div>
+            </div>
+            <div class="flex items-center justify-center gap-2 mb-3">
+              <div
+                class="h-[2px] w-10 bg-gradient-to-r from-transparent to-[#1E88E5]"
+              >
+              </div>
+              <p
+                class="text-[#1E88E5] text-xs font-bold uppercase tracking-widest"
+              >
+                Ingresa tu Monto
+              </p>
+              <div
+                class="h-[2px] w-10 bg-gradient-to-l from-transparent to-[#1E88E5]"
+              >
+              </div>
+            </div>
+          </div>
+
+          <div class="w-full mb-4">
+            <div
+              class="relative bg-gradient-to-b from-[#0A2540] to-[#1565C0] rounded-lg p-4 border-[3px] border-[#1E88E5] shadow-[0_15px_50px_rgba(0,0,0,0.9)]"
+            >
+              <label class="text-[#1E88E5] text-xs font-semibold mb-2 block"
+                >Monto en USD</label
+              >
+              <div class="relative">
+                <span
+                  class="absolute left-3 top-1/2 -translate-y-1/2 text-[#1E88E5]/80 text-xl font-bold"
+                  >$</span
+                >
+                <input
+                  type="number"
+                  id="classic-amount-input"
+                  min="100"
+                  max="25000"
+                  step="100"
+                  value="2500"
+                  class="w-full bg-gradient-to-br from-[#0A2540] to-[#1565C0] border-2 border-[#1E88E5] rounded-lg px-10 py-3 text-[#1E88E5] text-2xl font-bold text-center focus:outline-none focus:border-[#00C853] focus:shadow-[0_0_15px_rgba(0,200,83,0.4)] transition-all"
+                />
+                <span
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-[#1E88E5]/80 text-sm font-semibold"
+                  >USD</span
+                >
+              </div>
+              <div class="flex gap-2 mt-3 justify-center flex-wrap">
+                {
+                  [2500, 5000, 10000, 15000, 20000].map((amt) => (
+                    <button
+                      class="classic-quick-amount px-3 py-1.5 bg-gradient-to-b from-[#1E88E5] to-[#1565C0] border-2 border-[#facc15]/30 rounded-lg text-white text-xs font-bold hover:from-[#facc15] hover:to-[#f59e0b] hover:border-[#facc15] transition-all shadow-[0_3px_10px_rgba(0,0,0,0.5)]"
+                      data-amount={amt}
+                    >
+                      ${amt.toLocaleString()}
+                    </button>
+                  ))
+                }
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="relative inline-block px-4 py-2 bg-gradient-to-r from-[#facc15] via-[#f59e0b] to-[#facc15] rounded-lg border-2 border-[#1E88E5] mb-4 shadow-[0_6px_20px_rgba(0,0,0,0.8)]"
+          >
+            <div class="flex items-center gap-2 relative z-10">
+              <span class="text-2xl">🎁</span>
+              <p class="text-white text-xs font-bold">
+                ¡Juega y gana cupones exclusivos!
+              </p>
+            </div>
+          </div>
+
+          <button
+            id="classic-continue-btn"
+            class="w-full group relative overflow-hidden"
+          >
+            <div
+              class="absolute -inset-1 bg-gradient-to-b from-[#1E88E5] via-[#facc15] to-[#1E88E5] rounded-xl blur opacity-75 group-hover:opacity-100 transition-opacity"
+            >
+            </div>
+            <div
+              class="relative bg-gradient-to-b from-[#1E88E5] via-[#1976D2] to-[#1565C0] py-3 px-4 rounded-xl font-black text-lg uppercase tracking-wide transition-all duration-300 group-hover:scale-[1.02] shadow-[0_6px_24px_rgba(0,0,0,0.9)] flex items-center justify-center gap-2 border-[3px] border-[#facc15] group-active:translate-y-1"
+            >
+              <span
+                class="relative z-10 text-white drop-shadow-[2px_2px_4px_rgba(0,0,0,0.3)]"
+                >🎰 CONTINUAR</span
+              >
+            </div>
+          </button>
+          <p class="text-[#1E88E5]/50 text-[10px] mt-3 text-center italic">
+            El beneficio depende del monto de cambio ingresado.
+          </p>
+        </div>
+      </div>
+
+      <!-- ─── MACHINE VIEW ─── -->
+      <div id="classic-machine-view" class="hidden w-full px-3 py-4">
+        <div class="flex flex-col items-center text-center w-full">
+          <div class="relative w-full max-w-md">
+            <!-- HEADER -->
+            <div
+              class="relative bg-gradient-to-b from-[#1E88E5] via-[#1976D2] to-[#1565C0] rounded-t-2xl px-6 py-3 shadow-[0_6px_20px_rgba(0,0,0,0.8)] border-[3px] border-b-0 border-[#facc15]"
+            >
+              <div class="absolute -top-5 left-1/2 -translate-x-1/2">
+                <div
+                  class="text-4xl filter drop-shadow-[0_0_15px_rgba(30,136,229,1)]"
+                >
+                  ⭐
+                </div>
+              </div>
+              <h3
+                class="relative text-white font-black text-xl uppercase tracking-wider drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)] pt-1"
+              >
+                MARKET DOLLAR
+              </h3>
+            </div>
+
+            <!-- CUERPO - MÁS COMPACTO -->
+            <div
+              class="relative bg-gradient-to-b from-[#0A2540] via-[#1565C0] to-[#0A2540] border-[3px] border-[#1E88E5] shadow-[0_25px_70px_rgba(0,0,0,0.9)] rounded-b-2xl overflow-hidden"
+              id="classic-machine-body"
+            >
+              <!-- Luces superiores - MÁS PEQUEÑAS -->
+              <div
+                class="relative bg-gradient-to-b from-[#0A2540] via-[#1565C0] to-[#1565C0] p-3 border-b-[3px] border-[#1E88E5]"
+              >
+                <div class="flex justify-around">
+                  <div
+                    class="w-3 h-3 bg-[#1E88E5] rounded-full animate-pulse shadow-[0_0_12px_rgba(30,136,229,1)]"
+                  >
+                  </div>
+                  <div
+                    class="w-3 h-3 bg-[#facc15] rounded-full animate-pulse shadow-[0_0_12px_rgba(250,204,21,1)]"
+                    style="animation-delay:0.2s"
+                  >
+                  </div>
+                  <div
+                    class="w-3 h-3 bg-[#1E88E5] rounded-full animate-pulse shadow-[0_0_12px_rgba(30,136,229,1)]"
+                    style="animation-delay:0.4s"
+                  >
+                  </div>
+                  <div
+                    class="w-3 h-3 bg-[#facc15] rounded-full animate-pulse shadow-[0_0_12px_rgba(250,204,21,1)]"
+                    style="animation-delay:0.6s"
+                  >
+                  </div>
+                  <div
+                    class="w-3 h-3 bg-[#1E88E5] rounded-full animate-pulse shadow-[0_0_12px_rgba(30,136,229,1)]"
+                    style="animation-delay:0.8s"
+                  >
+                  </div>
+                </div>
+              </div>
+
+              <!-- CARRETES - ALTURA REDUCIDA a 250px -->
+              <div
+                class="relative bg-gradient-to-b from-[#0A2540] to-[#000000] p-4"
+              >
+                <div
+                  class="absolute inset-4 border-[3px] border-[#1E88E5] rounded-lg pointer-events-none z-20 shadow-[inset_0_0_25px_rgba(30,136,229,0.2),0_0_25px_rgba(30,136,229,0.4)]"
+                >
+                </div>
+
+                <div class="relative flex gap-2" id="classic-reels-wrapper">
+                  <!-- REEL 1 -->
+                  <div
+                    class="flex-1 rounded-lg overflow-hidden border-[5px] border-[#0A2540] shadow-[0_6px_20px_rgba(0,0,0,0.9)] relative"
+                    id="classic-reel-frame-1"
+                    style="height:250px;"
+                  >
+                    <div
+                      class="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-white/40 to-transparent z-10 pointer-events-none"
+                    >
+                    </div>
+                    <div
+                      class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-black/40 to-transparent z-10 pointer-events-none"
+                    >
+                    </div>
+                    <div
+                      id="classic-reel-1"
+                      style="position:absolute;top:0;left:0;width:100%;will-change:transform;transform:translateY(-666.64px);"
+                    >
+                      {
+                        EXTENDED.map((symbol, idx) => (
+                          <div
+                            style="height:83.33px;display:flex;align-items:center;justify-content:center;font-size:2.8rem;border-bottom:2px solid #e5e7eb;background:linear-gradient(to bottom,#fff,#f3f4f6);"
+                            data-idx={idx}
+                          >
+                            {symbol}
+                          </div>
+                        ))
+                      }
+                    </div>
+                  </div>
+
+                  <!-- REEL 2 -->
+                  <div
+                    class="flex-1 rounded-lg overflow-hidden border-[5px] border-[#0A2540] shadow-[0_6px_20px_rgba(0,0,0,0.9)] relative"
+                    id="classic-reel-frame-2"
+                    style="height:250px;"
+                  >
+                    <div
+                      class="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-white/40 to-transparent z-10 pointer-events-none"
+                    >
+                    </div>
+                    <div
+                      class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-black/40 to-transparent z-10 pointer-events-none"
+                    >
+                    </div>
+                    <div
+                      id="classic-reel-2"
+                      style="position:absolute;top:0;left:0;width:100%;will-change:transform;transform:translateY(-833.3px);"
+                    >
+                      {
+                        EXTENDED.map((symbol, idx) => (
+                          <div
+                            style="height:83.33px;display:flex;align-items:center;justify-content:center;font-size:2.8rem;border-bottom:2px solid #e5e7eb;background:linear-gradient(to bottom,#fff,#f3f4f6);"
+                            data-idx={idx}
+                          >
+                            {symbol}
+                          </div>
+                        ))
+                      }
+                    </div>
+                  </div>
+
+                  <!-- REEL 3 -->
+                  <div
+                    class="flex-1 rounded-lg overflow-hidden border-[5px] border-[#0A2540] shadow-[0_6px_20px_rgba(0,0,0,0.9)] relative"
+                    id="classic-reel-frame-3"
+                    style="height:250px;"
+                  >
+                    <div
+                      class="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-white/40 to-transparent z-10 pointer-events-none"
+                    >
+                    </div>
+                    <div
+                      class="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-black/40 to-transparent z-10 pointer-events-none"
+                    >
+                    </div>
+                    <div
+                      id="classic-reel-3"
+                      style="position:absolute;top:0;left:0;width:100%;will-change:transform;transform:translateY(-749.97px);"
+                    >
+                      {
+                        EXTENDED.map((symbol, idx) => (
+                          <div
+                            style="height:83.33px;display:flex;align-items:center;justify-content:center;font-size:2.8rem;border-bottom:2px solid #e5e7eb;background:linear-gradient(to bottom,#fff,#f3f4f6);"
+                            data-idx={idx}
+                          >
+                            {symbol}
+                          </div>
+                        ))
+                      }
+                    </div>
+                  </div>
+
+                  <!-- LÍNEA DE PAGO ajustada a nueva altura -->
+                  <div
+                    id="classic-payline"
+                    class="absolute left-0 right-0 pointer-events-none z-30"
+                    style="top:123px;height:4px;"
+                  >
+                    <div
+                      style="width:100%;height:100%;background:linear-gradient(to right,transparent,#1E88E5 30%,#1E88E5 70%,transparent);box-shadow:0 0 15px rgba(30,136,229,0.9),0 0 35px rgba(30,136,229,0.4);"
+                    >
+                    </div>
+                  </div>
+                  <!-- Marcadores -->
+                  <div
+                    class="absolute left-0 z-30 pointer-events-none"
+                    style="top:118px;"
+                  >
+                    <div
+                      style="width:24px;height:24px;background:#1E88E5;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:11px;border:2px solid #facc15;box-shadow:0 0 12px rgba(30,136,229,0.9);"
+                    >
+                      ▶
+                    </div>
+                  </div>
+                  <div
+                    class="absolute right-0 z-30 pointer-events-none"
+                    style="top:118px;"
+                  >
+                    <div
+                      style="width:24px;height:24px;background:#1E88E5;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:11px;border:2px solid #facc15;box-shadow:0 0 12px rgba(30,136,229,0.9);"
+                    >
+                      ◀
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Luces inferiores + PALANCA -->
+              <div
+                class="relative bg-gradient-to-b from-[#1565C0] via-[#0A2540] to-[#0A2540] p-3 border-t-[3px] border-[#1E88E5]"
+              >
+                <div class="flex justify-around mb-2">
+                  <div
+                    class="w-3 h-3 bg-[#facc15] rounded-full animate-pulse shadow-[0_0_12px_rgba(250,204,21,1)]"
+                    style="animation-delay:0.1s"
+                  >
+                  </div>
+                  <div
+                    class="w-3 h-3 bg-[#1E88E5] rounded-full animate-pulse shadow-[0_0_12px_rgba(30,136,229,1)]"
+                    style="animation-delay:0.3s"
+                  >
+                  </div>
+                  <div
+                    class="w-3 h-3 bg-[#facc15] rounded-full animate-pulse shadow-[0_0_12px_rgba(250,204,21,1)]"
+                    style="animation-delay:0.5s"
+                  >
+                  </div>
+                  <div
+                    class="w-3 h-3 bg-[#1E88E5] rounded-full animate-pulse shadow-[0_0_12px_rgba(30,136,229,1)]"
+                    style="animation-delay:0.7s"
+                  >
+                  </div>
+                  <div
+                    class="w-3 h-3 bg-[#facc15] rounded-full animate-pulse shadow-[0_0_12px_rgba(250,204,21,1)]"
+                    style="animation-delay:0.9s"
+                  >
+                  </div>
+                </div>
+
+                <!-- PALANCA - MÁS PEQUEÑA -->
+                <div class="flex justify-center">
+                  <button
+                    id="classic-lever-btn"
+                    class="lever-button relative group"
+                    style="width:65px;height:100px;"
+                  >
+                    <div
+                      class="absolute bottom-0 left-1/2 -translate-x-1/2 w-10 h-5 bg-gradient-to-b from-[#1E88E5] to-[#1565C0] rounded-lg border-2 border-[#facc15] shadow-[0_3px_10px_rgba(0,0,0,0.8)]"
+                    >
+                    </div>
+                    <div
+                      class="lever-handle absolute left-1/2 w-2.5 bg-gradient-to-r from-[#1E88E5] via-[#1565C0] to-[#0A2540] rounded-full border-2 border-[#facc15]/50 shadow-[inset_-2px_0_4px_rgba(0,0,0,0.5)]"
+                      style="bottom:20px;height:65px;transform:translateX(-50%);transform-origin:bottom center;transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1);"
+                    >
+                    </div>
+                    <div
+                      class="lever-ball absolute left-1/2 w-8 h-8 bg-gradient-to-br from-[#facc15] via-[#f59e0b] to-[#d97706] rounded-full border-[3px] border-[#1E88E5] shadow-[0_0_20px_rgba(250,204,21,0.8)] cursor-pointer group-hover:shadow-[0_0_30px_rgba(250,204,21,1)]"
+                      style="top:0;transform:translateX(-50%);transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1);"
+                    >
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status text -->
+          <div
+            class="mt-4 bg-gradient-to-r from-transparent via-[#1E88E5]/20 to-transparent p-2 rounded-lg"
+          >
+            <p
+              class="text-[#1E88E5] text-sm font-bold animate-pulse"
+              id="classic-status-text"
+            >
+              ¡Tira la palanca para comenzar!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── RESULT VIEW ─── -->
+      <div id="classic-result-view" class="hidden w-full px-4 py-4">
+        <div
+          class="flex flex-col items-center text-center w-full relative overflow-hidden"
+        >
+          <div class="relative z-10 w-full">
+            <div
+              class="relative bg-gradient-to-b from-[#1E88E5] via-[#1976D2] to-[#1565C0] rounded-xl p-3 mb-4 shadow-[0_6px_24px_rgba(0,0,0,0.8)] border-[3px] border-[#facc15]"
+            >
+              <h3
+                class="relative text-white font-black text-xl uppercase tracking-wider drop-shadow-[2px_2px_4px_rgba(0,0,0,0.5)]"
+              >
+                🎉 ¡GANASTE! 🎉
+              </h3>
+            </div>
+
+            <div class="flex justify-center gap-3 mb-4">
+              <div
+                class="text-5xl animate-bounce filter drop-shadow-[0_0_15px_rgba(30,136,229,0.8)]"
+                id="classic-symbol-1"
+              >
+                🎁
+              </div>
+              <div
+                class="text-5xl animate-bounce filter drop-shadow-[0_0_15px_rgba(30,136,229,0.8)]"
+                id="classic-symbol-2"
+                style="animation-delay:0.2s"
+              >
+                🎁
+              </div>
+              <div
+                class="text-5xl animate-bounce filter drop-shadow-[0_0_15px_rgba(30,136,229,0.8)]"
+                id="classic-symbol-3"
+                style="animation-delay:0.4s"
+              >
+                🎁
+              </div>
+            </div>
+
+            <div class="w-full mb-3 relative">
+              <div
+                class="relative bg-gradient-to-br from-[#0A2540] via-[#1565C0] to-[#0A2540] border-[3px] border-[#1E88E5] rounded-lg overflow-hidden shadow-[0_0_30px_rgba(30,136,229,0.5)]"
+              >
+                <div
+                  class="relative p-4 bg-gradient-to-b from-white/5 to-transparent"
+                >
+                  <div class="flex items-center justify-center gap-2 mb-2">
+                    <span
+                      class="text-[9px] text-[#80c3ff] uppercase font-semibold tracking-widest"
+                      >Tu código ganador</span
+                    >
+                  </div>
+                  <div
+                    id="classic-coupon-code"
+                    class="text-[#84c6ff] font-mono text-xl font-black tracking-wide break-all mb-2 drop-shadow-[0_0_8px_rgba(30,136,229,1)]"
+                  >
+                    --
+                  </div>
+                  <div
+                    class="relative h-[2px] bg-gradient-to-r from-transparent via-[#1E88E5] to-transparent mb-2"
+                  >
+                  </div>
+                  <div
+                    class="bg-gradient-to-br from-[#0A2540]/70 to-[#1565C0]/70 rounded-lg p-2 border-2 border-[#1E88E5]/30"
+                  >
+                    <p
+                      class="text-white text-xs leading-snug font-medium"
+                      id="classic-coupon-description"
+                    >
+                      --
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="flex items-center justify-center gap-2 mb-3 bg-gradient-to-r from-[#0A2540] via-[#1565C0] to-[#0A2540] px-3 py-2 rounded-lg border-2 border-[#1E88E5]/30 shadow-[0_6px_14px_rgba(0,0,0,0.6)]"
+            >
+              <span class="text-xl">⏱️</span>
+              <div class="text-left">
+                <span
+                  class="text-[9px] text-[#1E88E5] font-semibold uppercase block tracking-wide"
+                  >Válido hasta</span
+                >
+                <div
+                  id="classic-expiration-date"
+                  class="text-white font-bold text-xs"
+                >
+                  --
+                </div>
+              </div>
+            </div>
+
+            <button
+              id="classic-claim-btn"
+              class="w-full group relative overflow-hidden"
+            >
+              <div
+                class="absolute -inset-1 bg-gradient-to-b from-[#1E88E5] via-[#facc15] to-[#1E88E5] rounded-xl blur opacity-75 group-hover:opacity-100 transition-opacity"
+              >
+              </div>
+              <div
+                class="relative bg-gradient-to-b from-[#1E88E5] via-[#1976D2] to-[#1565C0] py-3 px-4 rounded-xl font-black text-sm uppercase tracking-wide transition-all duration-300 group-hover:scale-[1.02] shadow-[0_6px_24px_rgba(0,0,0,0.9)] flex items-center justify-center gap-2 border-[3px] border-[#facc15]"
+              >
+                <span
+                  id="classic-claim-text"
+                  class="relative z-10 text-white drop-shadow-[2px_2px_4px_rgba(0,0,0,0.3)]"
+                  >Copiar Código</span
+                >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4 relative z-10 text-white group-hover:rotate-12 transition-transform"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2.5"
+                    d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"
+                  ></path>
+                </svg>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  @keyframes shine {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  .animate-shine {
+    animation: shine 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  .animate-float {
+    animation: float 2s ease-in-out infinite;
+  }
+
+  .state-open-card {
+    translate: 0 !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+  .state-hide-tab {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  .backdrop-active {
+    display: block !important;
+    opacity: 1 !important;
+  }
+
+  .lever-button.pulling .lever-handle {
+    transform: translateX(-50%) rotate(35deg) !important;
+  }
+  .lever-button.pulling .lever-ball {
+    transform: translateX(-50%) translateY(45px) scale(0.95) !important;
+  }
+
+  @keyframes reel-shake {
+    0% {
+      transform: translateX(0);
+    }
+    15% {
+      transform: translateX(-3px);
+    }
+    30% {
+      transform: translateX(3px);
+    }
+    45% {
+      transform: translateX(-1.5px);
+    }
+    60% {
+      transform: translateX(1.5px);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+  .reel-shake {
+    animation: reel-shake 0.25s cubic-bezier(0.36, 0.07, 0.19, 0.97) forwards;
+  }
+
+  @keyframes machine-shake {
+    0%,
+    100% {
+      transform: translateX(0) translateY(0);
+    }
+    25% {
+      transform: translateX(-1.5px) translateY(0.8px);
+    }
+    50% {
+      transform: translateX(1.5px) translateY(-0.8px);
+    }
+    75% {
+      transform: translateX(-0.8px) translateY(0);
+    }
+  }
+  .machine-shake {
+    animation: machine-shake 0.25s ease-out forwards;
+  }
+
+  @keyframes payline-flash {
+    0%,
+    100% {
+      opacity: 1;
+      filter: brightness(1);
+    }
+    35% {
+      opacity: 1;
+      filter: brightness(2.5) drop-shadow(0 0 20px #1e88e5);
+    }
+    65% {
+      opacity: 0.7;
+      filter: brightness(1.8);
+    }
+  }
+  .payline-flash > div:first-child {
+    animation: payline-flash 0.45s ease-out 3;
+  }
+
+  @media (max-width: 768px) {
+    #classic-promo-container.mobile-popup-active {
+      position: fixed !important;
+      inset: 0 !important;
+      display: flex !important;
+      justify-content: center !important;
+      align-items: flex-end !important;
+      z-index: 9999 !important;
+      padding-bottom: max(20px, env(safe-area-inset-bottom));
+    }
+    #classic-promo-container.mobile-popup-active #classic-promo-card {
+      position: relative !important;
+      transform: none !important;
+      translate: 0 0 !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      width: 95vw !important;
+      max-width: 380px !important;
+      margin: 0 auto !important;
+      max-height: 90vh !important;
+      border-radius: 20px !important;
+      animation: mobile-slide-up 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+    }
+    @keyframes mobile-slide-up {
+      0% {
+        opacity: 0;
+        transform: translateY(100px) scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+  }
+</style>
+
+<script define:vars={{ apiConfigUrl, apiPlayUrl }}>
+  (function () {
+    "use strict";
+
+    /* CONSTANTES ACTUALIZADAS para altura 250px */
+    const SYM_H = 83.33; // 250px / 3 símbolos visibles
+    const VIEWPORT_H = 250;
+    const PAYLINE_TOP = SYM_H; // Centro del símbolo del medio
+
+    const BASE = ["💲", "🔔", "🍒", "⭐", "🪙", "🎁", "💎", "7️⃣"];
+    const BASE_H = BASE.length * SYM_H; // 666.64px (un ciclo)
+    const EXTENDED_H = BASE_H * 6; // 3999.84px (6 ciclos completos)
+
+    // Mapeo de símbolos API a emojis
+    const SYMBOL_MAP = {
+      C: "🍒",
+      B: "🔔",
+      S: "⭐",
+      D: "💎",
+      M: "💲",
+      G: "🎁",
+      W: "🪙",
+      "7": "7️⃣",
+    };
+
+    const el = {
+      inputView: document.getElementById("classic-input-view"),
+      machineView: document.getElementById("classic-machine-view"),
+      resultView: document.getElementById("classic-result-view"),
+      amountInput: document.getElementById("classic-amount-input"),
+      continueBtn: document.getElementById("classic-continue-btn"),
+      leverBtn: document.getElementById("classic-lever-btn"),
+      quickBtns: document.querySelectorAll(".classic-quick-amount"),
+      strips: [
+        document.getElementById("classic-reel-1"),
+        document.getElementById("classic-reel-2"),
+        document.getElementById("classic-reel-3"),
+      ],
+      frames: [
+        document.getElementById("classic-reel-frame-1"),
+        document.getElementById("classic-reel-frame-2"),
+        document.getElementById("classic-reel-frame-3"),
+      ],
+      sym1: document.getElementById("classic-symbol-1"),
+      sym2: document.getElementById("classic-symbol-2"),
+      sym3: document.getElementById("classic-symbol-3"),
+      couponCode: document.getElementById("classic-coupon-code"),
+      couponDesc: document.getElementById("classic-coupon-description"),
+      expDate: document.getElementById("classic-expiration-date"),
+      claimBtn: document.getElementById("classic-claim-btn"),
+      claimText: document.getElementById("classic-claim-text"),
+      statusText: document.getElementById("classic-status-text"),
+      container: document.getElementById("classic-promo-container"),
+      card: document.getElementById("classic-promo-card"),
+      backdrop: document.getElementById("classic-mobile-backdrop"),
+      tab: document.getElementById("classic-promo-tab"),
+      closeBtn: document.getElementById("classic-close-btn"),
+      machineBody: document.getElementById("classic-machine-body"),
+      payline: document.getElementById("classic-payline"),
+    };
+
+    const state = {
+      autoHideTimer: null,
+      hasInteracted: false,
+      isPlaying: false,
+      currentAmount: 2500,
+      gameConfig: null,
+      slotsGame: null,
+      gameId: null,
+      reelY: [-666.64, -833.3, -749.97],
+    };
+
+    // ═══════════════════════════════════════════════════════════════
+    // CARGAR CONFIGURACIÓN DESDE API
+    // ═══════════════════════════════════════════════════════════════
+    async function loadGameConfig() {
+      try {
+        const response = await fetch(apiConfigUrl);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log("Configuración de la API recibida:", data);
+
+        // Buscar el PRIMER juego de tipo SLOTS activo (solo uno por tipo)
+        state.slotsGame = data.games.find(
+          (game) => game.game_type === "SLOTS" && game.active,
+        );
+
+        if (state.slotsGame) {
+          console.log("Juego de slots encontrado:", state.slotsGame);
+          state.gameId = state.slotsGame.id; // Guardar el gameId dinámico
+          state.gameConfig = data;
+        } else {
+          throw new Error("No se encontró ningún juego de SLOTS activo");
+        }
+      } catch (error) {
+        console.error("Error al cargar la configuración del juego:", error);
+        // Fallback a configuración local si falla la API
+        state.slotsGame = {
+          id: "fallback",
+          name: "Tragamonedas Classic",
+          game_type: "SLOTS",
+          active: true,
+          tiers: [
+            {
+              id: "tier_1",
+              label: "basic",
+              visual_symbols: ["C", "C", "C"],
+            },
+            {
+              id: "tier_2",
+              label: "mid",
+              visual_symbols: ["B", "B", "B"],
+            },
+            {
+              id: "tier_3",
+              label: "top",
+              visual_symbols: ["S", "S", "S"],
+            },
+          ],
+        };
+        state.gameId = state.slotsGame.id;
+      }
+    }
+
+    function showView(name) {
+      [el.inputView, el.machineView, el.resultView].forEach((v) => {
+        if (v) {
+          v.classList.add("hidden");
+          v.style.display = "none";
+        }
+      });
+      const m = {
+        input: el.inputView,
+        machine: el.machineView,
+        result: el.resultView,
+      };
+      if (m[name]) {
+        m[name].classList.remove("hidden");
+        m[name].style.display = "block";
+
+        if (name === "machine") {
+          void m[name].offsetHeight;
+          el.strips.forEach((strip, i) => {
+            strip.style.transform = `translateY(${state.reelY[i]}px)`;
+          });
+        }
+      }
+    }
+
+    function openPromo() {
+      if (state.autoHideTimer) {
+        clearTimeout(state.autoHideTimer);
+        state.autoHideTimer = null;
+      }
+      if (window.innerWidth < 768) {
+        if (el.container) el.container.classList.add("mobile-popup-active");
+        if (el.backdrop) el.backdrop.classList.add("backdrop-active");
+      } else {
+        if (el.card) el.card.classList.add("state-open-card");
+      }
+      if (el.tab) el.tab.classList.add("state-hide-tab");
+    }
+
+    function closePromo() {
+      if (el.container) el.container.classList.remove("mobile-popup-active");
+      if (el.backdrop) el.backdrop.classList.remove("backdrop-active");
+      if (el.card) el.card.classList.remove("state-open-card");
+      if (el.tab) el.tab.classList.remove("state-hide-tab");
+    }
+
+    function targetYForSymbol(sym) {
+      const idx = BASE.indexOf(sym);
+      return PAYLINE_TOP - (BASE.length + idx) * SYM_H;
+    }
+
+    function normalizeY(y) {
+      const targetOffset = y % BASE_H;
+      let normalized = y;
+      const minY = -EXTENDED_H + VIEWPORT_H;
+      const maxY = -PAYLINE_TOP;
+
+      while (normalized < minY) normalized += BASE_H;
+      while (normalized > maxY) normalized -= BASE_H;
+
+      return normalized;
+    }
+
+    function spinReel(reelIdx, targetSym, duration) {
+      return new Promise((resolve) => {
+        const strip = el.strips[reelIdx];
+        const frame = el.frames[reelIdx];
+        const startY = state.reelY[reelIdx];
+        const targetY = targetYForSymbol(targetSym);
+
+        let travel = targetY - startY;
+        while (travel > -BASE_H * 3) travel -= BASE_H;
+        travel -= BASE_H * (3 + Math.floor(Math.random() * 2));
+
+        const rawEnd = startY + travel;
+        const finalY = normalizeY(rawEnd);
+        const actualTravel = finalY - startY;
+
+        const overshoot = 15;
+        const t0 = performance.now();
+
+        function easeOutExpo(t) {
+          return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+        }
+
+        function easeOutBack(t) {
+          const c1 = 1.70158;
+          const c3 = c1 + 1;
+          return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+        }
+
+        function easeInCubic(t) {
+          return t * t * t;
+        }
+
+        function animate(now) {
+          const elapsed = now - t0;
+          const progress = Math.min(elapsed / duration, 1);
+          let pos, blurAmount;
+
+          if (progress < 0.1) {
+            const t = progress / 0.1;
+            const eased = easeInCubic(t);
+            pos = startY + actualTravel * eased * 0.08;
+            blurAmount = eased * 7;
+          } else if (progress < 0.8) {
+            const t = (progress - 0.1) / 0.7;
+            const eased = t;
+            pos = startY + actualTravel * (0.08 + eased * 0.72);
+            blurAmount = 7;
+          } else if (progress < 0.92) {
+            const t = (progress - 0.8) / 0.12;
+            const eased = easeOutExpo(t);
+            pos = startY + actualTravel * (0.8 + eased * 0.15);
+            blurAmount = 7 * (1 - eased);
+          } else {
+            const t = (progress - 0.92) / 0.08;
+            const eased = easeOutBack(t);
+            const nearEnd = startY + actualTravel * 0.95;
+            pos = finalY - (finalY - nearEnd) * (1 - eased);
+            blurAmount = 0;
+          }
+
+          strip.style.transform = `translateY(${pos}px)`;
+          strip.style.filter =
+            blurAmount > 0.5 ? `blur(${blurAmount}px)` : "none";
+
+          if (progress < 1) {
+            requestAnimationFrame(animate);
+          } else {
+            strip.style.filter = "none";
+            strip.style.transform = `translateY(${finalY}px)`;
+            state.reelY[reelIdx] = finalY;
+
+            frame.classList.remove("reel-shake");
+            void frame.offsetWidth;
+            frame.classList.add("reel-shake");
+
+            setTimeout(() => {
+              resolve(finalY);
+            }, 50);
+          }
+        }
+
+        requestAnimationFrame(animate);
+      });
+    }
+
+    async function playSlotAnimation(targets) {
+      el.statusText.textContent = "¡Girando los carretes!";
+
+      el.machineBody.classList.remove("machine-shake");
+      void el.machineBody.offsetWidth;
+      el.machineBody.classList.add("machine-shake");
+
+      const d0 = 2500 + Math.random() * 400;
+      const d1 = d0 + 700 + Math.random() * 300;
+      const d2 = d1 + 700 + Math.random() * 300;
+
+      const p0 = spinReel(0, targets[0], d0);
+      const p1 = spinReel(1, targets[1], d1);
+      const p2 = spinReel(2, targets[2], d2);
+
+      setTimeout(() => {
+        el.statusText.textContent = "Primer carrete... 🎯";
+      }, d0 + 100);
+
+      setTimeout(() => {
+        el.statusText.textContent = "Dos carretes... ¡vamos! 🔥";
+      }, d1 + 100);
+
+      setTimeout(() => {
+        el.statusText.textContent = "Último carrete... 🤞";
+      }, d2 - 300);
+
+      await Promise.all([p0, p1, p2]);
+
+      await new Promise((r) => setTimeout(r, 400));
+      el.payline.classList.remove("payline-flash");
+      void el.payline.offsetWidth;
+      el.payline.classList.add("payline-flash");
+
+      el.statusText.textContent = "¡VERIFICANDO PREMIO! ✨";
+      await new Promise((r) => setTimeout(r, 1200));
+    }
+
+    async function playGame() {
+      try {
+        el.statusText.textContent = "Conectando con el servidor...";
+
+        const response = await fetch(apiPlayUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            gameId: state.gameId, // Usar el gameId dinámico del endpoint
+          }),
+        });
+
+        const result = await response.json();
+        console.log("Resultado del juego:", result);
+        
+        // Handle rate limited response
+        if (result.error === "rate_limited") {
+          const nextPlayAt = result.cooldown?.next_play_at 
+            ? new Date(result.cooldown.next_play_at).toLocaleString("es-PE", { dateStyle: "short", timeStyle: "short" })
+            : "mañana";
+          return { 
+            rateLimited: true, 
+            message: `¡Ya jugaste hoy! Vuelve: ${nextPlayAt}` 
+          };
+        }
+
+        if (!response.ok) {
+          throw new Error(`Error del servidor: ${response.status}`);
+        }
+
+        return result;
+      } catch (error) {
+        console.error("Error al jugar:", error);
+        throw error;
+      }
+    }
+
+    async function pullLever() {
+      if (state.isPlaying) return;
+      if (!state.slotsGame) {
+        el.statusText.textContent = "Error: Juego no configurado";
+        return;
+      }
+
+      state.isPlaying = true;
+
+      el.leverBtn.classList.add("pulling");
+      await new Promise((r) => setTimeout(r, 220));
+      el.leverBtn.classList.remove("pulling");
+      await new Promise((r) => setTimeout(r, 80));
+
+      try {
+        // Llamar a la API para jugar
+        const gameResult = await playGame();
+        
+        // Check for rate limited
+        if (gameResult.rateLimited) {
+          el.statusText.textContent = gameResult.message;
+          el.statusText.style.color = "#FFC107";
+          state.isPlaying = false;
+          return;
+        }
+
+        // Convertir símbolos de la API a emojis
+        const symbols = gameResult.result.visual_symbols.map(
+          (sym) => SYMBOL_MAP[sym] || sym,
+        );
+
+        // Guardar resultado en localStorage
+        const savedResult = {
+          token: gameResult.claim.token,
+          tierLabel: gameResult.result?.tier_label || 'especial',
+          expiresAt: gameResult.claim.expires_at,
+          visualSymbols: gameResult.result.visual_symbols
+        };
+        localStorage.setItem('md_slots_saved_result', JSON.stringify(savedResult));
+        
+        // Animar los carretes con los símbolos ganadores
+        await playSlotAnimation(symbols);
+
+        // Mostrar resultado
+        showWinResult(gameResult);
+      } catch (error) {
+        console.error("Error en el juego:", error);
+        el.statusText.textContent = "Error al conectar. Inténtalo de nuevo.";
+        state.isPlaying = false;
+      }
+    }
+
+    function showWinResult(result) {
+      // Convertir símbolos de la API a emojis
+      const symbols = result.result.visual_symbols.map(
+        (sym) => SYMBOL_MAP[sym] || sym,
+      );
+
+      el.sym1.textContent = symbols[0];
+      el.sym2.textContent = symbols[1];
+      el.sym3.textContent = symbols[2];
+
+      el.couponCode.textContent = result.claim.token;
+      el.couponDesc.textContent = `Cupón ganador - Tier: ${result.result.tier_label}`;
+
+      // Formatear fecha de expiración
+      const expDate = new Date(result.claim.expires_at);
+      el.expDate.textContent = expDate.toLocaleDateString("es-ES", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+
+      showView("result");
+
+      if (typeof confetti === "function") {
+        const end = Date.now() + 2500;
+        (function f() {
+          confetti({
+            particleCount: 3,
+            angle: 60,
+            spread: 50,
+            origin: { x: 0, y: 0.6 },
+            colors: ["#1E88E5", "#facc15", "#1976D2"],
+          });
+          confetti({
+            particleCount: 3,
+            angle: 120,
+            spread: 50,
+            origin: { x: 1, y: 0.6 },
+            colors: ["#1E88E5", "#facc15", "#1976D2"],
+          });
+          if (Date.now() < end) requestAnimationFrame(f);
+        })();
+      }
+      state.isPlaying = false;
+    }
+
+    async function init() {
+      // Cargar configuración desde API
+      await loadGameConfig();
+      
+      // Registrar event listeners básicos PRIMERO (antes de chequear resultado guardado)
+      el.tab?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        state.hasInteracted = true;
+        openPromo();
+      });
+
+      el.closeBtn?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        state.hasInteracted = true;
+        closePromo();
+      });
+
+      el.backdrop?.addEventListener("click", () => closePromo());
+
+      el.container?.addEventListener("mouseenter", () => {
+        if (!state.isPlaying) {
+          openPromo();
+          state.hasInteracted = true;
+        }
+      });
+      
+      // Cargar resultado guardado si existe
+      const savedResult = localStorage.getItem('md_slots_saved_result');
+      if (savedResult) {
+        try {
+          const result = JSON.parse(savedResult);
+          // Verificar si no ha expirado
+          const expiresAt = new Date(result.expiresAt);
+          if (expiresAt > new Date()) {
+            // Mostrar resultado guardado
+            const mockResult = {
+              claim: { token: result.token, expires_at: result.expiresAt },
+              result: { 
+                tier_label: result.tierLabel, 
+                visual_symbols: result.visualSymbols 
+              }
+            };
+            showWinResult(mockResult);
+            return; // No continuar con la inicialización de juego
+          } else {
+            // Limpiar resultado expirado
+            localStorage.removeItem('md_slots_saved_result');
+          }
+        } catch (e) {
+          console.error('Error loading saved result:', e);
+        }
+      }
+
+      // Inicializar posiciones
+      el.strips.forEach((strip, i) => {
+        const currentTransform = strip.style.transform;
+        const match = currentTransform.match(/translateY\(([-\d.]+)px\)/);
+        if (match) {
+          state.reelY[i] = parseFloat(match[1]);
+        }
+      });
+
+      // Event listeners de juego (solo si no hay resultado guardado)
+      el.quickBtns?.forEach((btn) =>
+        btn.addEventListener("click", () => {
+          if (el.amountInput) el.amountInput.value = btn.dataset.amount;
+        }),
+      );
+
+      el.continueBtn?.addEventListener("click", () => showView("machine"));
+      el.leverBtn?.addEventListener("click", pullLever);
+
+      el.claimBtn?.addEventListener("click", () => {
+        const code = el.couponCode.innerText;
+        navigator.clipboard
+          .writeText(code)
+          .then(() => {
+            el.claimText.innerText = "¡Copiado!";
+            setTimeout(() => {
+              window.location.href = "https://app.market-dollar.com/dashboard";
+            }, 1000);
+          })
+          .catch(() => {
+            const t = document.createElement("textarea");
+            t.value = code;
+            document.body.appendChild(t);
+            t.select();
+            document.execCommand("copy");
+            document.body.removeChild(t);
+            el.claimText.innerText = "¡Copiado!";
+            setTimeout(() => {
+              window.location.href = "https://app.market-dollar.com/dashboard";
+            }, 1000);
+          });
+      });
+
+      showView("input");
+
+      // Auto-open en desktop
+      setTimeout(() => {
+        if (!state.hasInteracted && window.innerWidth >= 768) {
+          openPromo();
+          state.autoHideTimer = setTimeout(() => {
+            if (!state.hasInteracted && !state.isPlaying) closePromo();
+          }, 8000);
+        }
+      }, 2000);
+    }
+
+    if (document.readyState === "loading")
+      document.addEventListener("DOMContentLoaded", init);
+    else init();
+  })();
+</script>

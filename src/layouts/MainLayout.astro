@@ -1,14 +1,19 @@
 ---
 import Header from "../components/layout/Header.astro";
-import SubHeader from "../components/layout/SubHeader.astro";
 import Footer from "../components/layout/Footer.astro";
 import BaseHead from "../components/seo/BaseHead.astro";
 import ScriptTracking from "../components/seo/ScriptTracking.astro";
 import "@styles/global.css";
+
+import PoppupInformativo from '@components/layout/PoppupInformativo.astro'
+
 import MessageFloat from "@/components/layout/MessageFloat.astro";
 import BtnWhatsAppFloat from "@/components/layout/BtnWhatsAppFloat.astro";
-import RoulettePromotion from "@components/layout/RoulettePromotion.astro";
 import BannerHeader from "@/components/layout/BannerHeader.astro";
+import TragamonedasPromo from "@/components/games/games/TragamonedasPromo.astro";
+import CofresPromo from "@/components/games/games/CofresPromo.astro";
+import RuletaPromo from "@/components/games/games/RuletaPromo.astro";
+import { GAME_ROTATION } from "@/config/games";
 
 interface Props {
     title: string;
@@ -20,38 +25,52 @@ interface Props {
 }
 
 const { title, description, image, canonicalURL, type, noIndex } = Astro.props;
+
+// Calculate today's game based on rotation from config
+const today = new Date();
+const startOfYear = new Date(today.getFullYear(), 0, 0);
+const diff = today.getTime() - startOfYear.getTime();
+const oneDay = 1000 * 60 * 60 * 24;
+const dayOfYear = Math.floor(diff / oneDay);
+const todaysGame = GAME_ROTATION[dayOfYear % GAME_ROTATION.length];
 ---
 
 <!doctype html>
 <html lang="es">
-    <head>
-        <BaseHead
-            title={title}
-            description={description}
-            image={image}
-            canonicalURL={canonicalURL}
-            type={type}
-            noIndex={noIndex}
-        />
-        <ScriptTracking noIndex={noIndex} />
-    </head>
-    <body>
-        <!-- Skip Link para accesibilidad -->
-        <a
-            href="#main-content"
-            class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-100 focus:px-4 focus:py-2 focus:bg-white focus:text-primary-700 focus:rounded-lg focus:shadow-lg focus:font-medium"
-        >
-            Saltar al contenido principal
-        </a>
+<head>
+    <BaseHead
+        title={title}
+        description={description}
+        image={image}
+        canonicalURL={canonicalURL}
+        type={type}
+        noIndex={noIndex}
+    />
+    <ScriptTracking noIndex={noIndex} />
+</head>
+<body>
+    <!-- Skip Link para accesibilidad -->
+    <a
+        href="#main-content"
+        class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-100 focus:px-4 focus:py-2 focus:bg-white focus:text-primary-700 focus:rounded-lg focus:shadow-lg focus:font-medium"
+    >
+        Saltar al contenido principal
+    </a>
 
-        <BannerHeader />
-        <Header />
-        <main id="main-content" tabindex="-1">
-            <slot />
-        </main>
-        <Footer />
-        <!-- <MessageFloat />
-        <BtnWhatsAppFloat />
-        <RoulettePromotion /> -->
-    </body>
+    <!-- Game Components - One game per day rotation -->
+    {todaysGame === "CUPS" && <CofresPromo />}
+    {todaysGame === "ROULETTE" && <RuletaPromo />}
+    {todaysGame === "SLOTS" && <TragamonedasPromo />}
+
+    <PoppupInformativo />
+
+    <BannerHeader />
+    <Header />
+    <main id="main-content" tabindex="-1">
+        <slot />
+    </main>
+    <Footer />
+    <MessageFloat />
+    <BtnWhatsAppFloat />
+</body>
 </html>

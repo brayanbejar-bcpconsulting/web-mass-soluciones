@@ -1,0 +1,169 @@
+---
+/**
+ * GamePromoContainer - Shared container for all game promotions
+ * Provides the collapsible tab + expandable card pattern
+ */
+interface Props {
+	gameId: string;
+	icon: string;
+	label: string;
+	tabColor?: string; // Background color class
+	accentColor?: string; // Accent color for borders/glow
+	position?: "bottom" | "middle";
+}
+
+const {
+	gameId,
+	icon,
+	label,
+	tabColor = "from-[#003d82] via-[#002855] to-[#001d3d]",
+	accentColor = "#FFC107",
+	position = "middle",
+} = Astro.props;
+
+const containerId = `game-${gameId}-container`;
+const tabId = `game-${gameId}-tab`;
+const cardId = `game-${gameId}-card`;
+const backdropId = `game-${gameId}-backdrop`;
+---
+
+<!-- Backdrop for mobile -->
+<div
+	id={backdropId}
+	class="game-backdrop md:hidden"
+	aria-hidden="true"
+></div>
+
+<!-- Main Container -->
+<div
+	id={containerId}
+	class:list={[
+		"game-promo-container",
+		position === "bottom" ? "game-promo-container--bottom" : "game-promo-container--middle",
+	]}
+	data-game-id={gameId}
+>
+	<!-- Tab (collapsed state) -->
+	<div
+		id={tabId}
+		class:list={[
+			"game-promo-tab",
+			`bg-gradient-to-br ${tabColor}`,
+		]}
+		style={`border-color: ${accentColor}; box-shadow: 0 0 30px ${accentColor}60;`}
+	>
+		<div class="game-shine"></div>
+		<div class="relative mb-3">
+			<div
+				class="absolute inset-0 blur-lg animate-pulse opacity-60"
+				style={`background: linear-gradient(to bottom right, ${accentColor}, ${accentColor}80);`}
+			></div>
+			<span class="relative text-4xl game-float" style={`filter: drop-shadow(0 0 8px ${accentColor});`}>
+				{icon}
+			</span>
+		</div>
+		<span
+			class="uppercase font-black text-[10px] [writing-mode:vertical-lr] tracking-[0.4em] transform rotate-180 transition-colors"
+			style={`color: ${accentColor}; text-shadow: 0 0 8px ${accentColor}80;`}
+		>
+			{label}
+		</span>
+	</div>
+
+	<!-- Card (expanded state) -->
+	<div
+		id={cardId}
+		class:list={[
+			"game-promo-card",
+			`bg-gradient-to-br ${tabColor}`,
+		]}
+		style={`border-color: ${accentColor}60; box-shadow: 40px 15px 100px rgba(0,0,0,0.9);`}
+	>
+		<!-- Close button -->
+		<button
+			class="game-close-btn bg-red-600/20 hover:bg-red-500/40 text-red-300 border-red-500/30"
+			data-action="close"
+		>
+			<span class="hover:rotate-90 transition-transform duration-300">✕</span>
+		</button>
+
+		<!-- Content area -->
+		<div
+			class="game-scrollable backdrop-blur-xl rounded-r-[16px] w-full overflow-y-auto overflow-x-hidden relative z-10"
+			style="min-height: 420px; max-height: 85vh;"
+		>
+			<slot />
+		</div>
+	</div>
+</div>
+
+<script define:vars={{ containerId, tabId, cardId, backdropId }}>
+(function() {
+	const container = document.getElementById(containerId);
+	const tab = document.getElementById(tabId);
+	const card = document.getElementById(cardId);
+	const backdrop = document.getElementById(backdropId);
+	const closeBtn = card?.querySelector('[data-action="close"]');
+
+	let autoHideTimer = null;
+	let hasInteracted = false;
+
+	function openPromo() {
+		if (autoHideTimer) {
+			clearTimeout(autoHideTimer);
+			autoHideTimer = null;
+		}
+
+		if (window.innerWidth < 768) {
+			container.classList.add('mobile-popup-active');
+			backdrop.classList.add('state-visible');
+		} else {
+			card.classList.add('state-open');
+		}
+		tab.classList.add('state-hidden');
+	}
+
+	function closePromo() {
+		container.classList.remove('mobile-popup-active');
+		backdrop.classList.remove('state-visible');
+		card.classList.remove('state-open');
+		tab.classList.remove('state-hidden');
+	}
+
+	// Event listeners
+	tab?.addEventListener('click', (e) => {
+		e.stopPropagation();
+		hasInteracted = true;
+		openPromo();
+	});
+
+	container?.addEventListener('mouseenter', () => {
+		if (window.innerWidth >= 768) {
+			openPromo();
+			hasInteracted = true;
+		}
+	});
+
+	closeBtn?.addEventListener('click', (e) => {
+		e.stopPropagation();
+		hasInteracted = true;
+		closePromo();
+	});
+
+	backdrop?.addEventListener('click', closePromo);
+
+	// Auto-open on desktop after delay
+	setTimeout(() => {
+		if (!hasInteracted && window.innerWidth >= 768) {
+			openPromo();
+			autoHideTimer = setTimeout(() => {
+				if (!hasInteracted) closePromo();
+			}, 8000);
+		}
+	}, 2000);
+
+	// Expose methods globally for child components
+	window[`${containerId}_open`] = openPromo;
+	window[`${containerId}_close`] = closePromo;
+})();
+</script>

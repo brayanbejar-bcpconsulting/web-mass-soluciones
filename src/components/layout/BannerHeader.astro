@@ -1,17 +1,17 @@
 ---
 // PromoBanner.astro
 ---
-
-<section class="overflow-hidden bg-linear-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-black w-full shadow-md border-b border-black/10 select-none">
+<section class="overflow-hidden bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 text-black w-full shadow-md border-b border-black/10 select-none">
   <div class="max-w-7xl mx-auto h-12 flex items-center justify-between px-3 md:px-4">
     <div class="flex items-center gap-x-2 md:gap-x-6 w-full justify-between md:justify-center">
       
       <div class="flex items-center gap-1.5 md:gap-2 shrink-0">
         <span class="text-lg md:text-xl animate-bounce-subtle">🎁</span>
         <span class="font-bold text-[11px] md:text-sm">
-          <span class="md:hidden">¡Bono exclusivo!</span> <span class="hidden md:inline">¡Consigue tu bono exclusivo ahora!</span> </span>
+          <span class="md:hidden">¡Bono exclusivo!</span> 
+          <span class="hidden md:inline">¡Consigue tu bono exclusivo ahora!</span> 
+        </span>
       </div>
-
       <div class="flex items-center gap-2 md:gap-6">
         <a 
           href="https://app.market-dollar.com/register" 
@@ -19,27 +19,18 @@
         >
           ¡CANJEAR YA!
         </a>
-
         <div 
           class="flex items-center gap-0.5 md:gap-1 font-mono text-[11px] md:text-base font-black bg-black/10 backdrop-blur-sm px-2 md:px-3 py-1 rounded-lg border border-black/5"
           role="timer"
         >
-          <span id="promo-minutes">00</span><span class="animate-pulse">:</span><span id="promo-seconds">00</span>
+          <span id="promo-minutes">05</span><span class="animate-pulse">:</span><span id="promo-seconds">00</span>
         </div>
       </div>
-
     </div>
   </div>
 </section>
 
 <style>
-  @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-  }
-  .animate-shimmer {
-    animation: shimmer 3s infinite linear;
-  }
   .animate-bounce-subtle {
     animation: bounce-subtle 2s infinite;
   }
@@ -50,44 +41,77 @@
 </style>
 
 <script>
-  const SHARED_KEY = 'shared_promo_deadline'; 
-  const MINUTES_DEFAULT = 54; 
+  let timerInterval: ReturnType<typeof setInterval> | null = null;
 
-  function setupCountdown() {
+  function initTimer() {
+    const MINUTES_DEFAULT = 5;
+    const STORAGE_KEY = 'promo_v3_deadline';
+    
     const mEl = document.getElementById("promo-minutes");
     const sEl = document.getElementById("promo-seconds");
+    if (!mEl || !sEl) return;
 
-    const getDeadline = () => {
-      const now = Date.now();
-      const stored = localStorage.getItem(SHARED_KEY);
-      if (stored) {
-        const parsed = parseInt(stored, 10);
-        if (parsed > now) return parsed;
-      }
-      const newDeadline = now + (MINUTES_DEFAULT * 60 * 1000);
-      localStorage.setItem(SHARED_KEY, newDeadline.toString());
-      return newDeadline;
-    };
+    // Limpiar intervalo previo si existe
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
 
-    const updateUI = () => {
-      const deadline = getDeadline();
-      const diff = deadline - Date.now();
+    // Obtener o crear el deadline
+    let deadline = localStorage.getItem(STORAGE_KEY);
+    let targetTime = deadline ? parseInt(deadline, 10) : 0;
+    const now = Date.now();
+
+    // Si no hay tiempo o ya expiró, resetear a 5 minutos
+    if (!targetTime || targetTime <= now) {
+      targetTime = now + (MINUTES_DEFAULT * 60 * 1000);
+      localStorage.setItem(STORAGE_KEY, targetTime.toString());
+    }
+
+    // Función de actualización
+    const update = () => {
+      const currentTime = Date.now();
+      const diff = targetTime - currentTime;
+
       if (diff <= 0) {
-        if (mEl) mEl.innerText = "00";
-        if (sEl) sEl.innerText = "00";
+        mEl.textContent = "00";
+        sEl.textContent = "00";
+        localStorage.removeItem(STORAGE_KEY);
+        if (timerInterval) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
         return;
       }
-      const m = Math.floor((diff / 1000 / 60) % 60);
+
+      const m = Math.floor(diff / (1000 * 60));
       const s = Math.floor((diff / 1000) % 60);
-      if (mEl) mEl.innerText = m.toString().padStart(2, '0');
-      if (sEl) sEl.innerText = s.toString().padStart(2, '0');
+      mEl.textContent = m.toString().padStart(2, '0');
+      sEl.textContent = s.toString().padStart(2, '0');
     };
 
-    const interval = setInterval(updateUI, 1000);
-    updateUI();
-    document.addEventListener('astro:before-preparation', () => clearInterval(interval), { once: true });
+    // Primera actualización inmediata
+    update();
+    
+    // Iniciar intervalo
+    timerInterval = setInterval(update, 1000);
   }
 
-  setupCountdown();
-  document.addEventListener('astro:page-load', setupCountdown);
+  // Para carga inicial (sin View Transitions)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTimer);
+  } else {
+    initTimer();
+  }
+
+  // Para navegación con View Transitions (si están habilitadas)
+  document.addEventListener('astro:page-load', initTimer);
+  
+  // Limpieza antes de navegación
+  document.addEventListener('astro:before-preparation', () => {
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+  });
 </script>

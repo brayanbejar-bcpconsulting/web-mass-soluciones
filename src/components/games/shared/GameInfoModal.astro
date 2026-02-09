@@ -1,0 +1,148 @@
+---
+/**
+ * GameInfoModal - Instructions on how to claim your prize
+ */
+interface Props {
+	gameId: string;
+	accentColor?: string;
+}
+
+const { gameId, accentColor = "#FFC107" } = Astro.props;
+const modalId = `game-${gameId}-info-modal`;
+---
+
+<div id={modalId} class="game-info-modal">
+	<div class="game-info-modal-backdrop" data-action="close-modal"></div>
+
+	<div
+		class="game-info-modal-content bg-gradient-to-br from-[#003d82] via-[#002855] to-[#001d3d] border-2"
+		style={`border-color: ${accentColor}60;`}
+	>
+		<!-- Close button -->
+		<button
+			class="absolute top-3 right-3 text-white/60 hover:text-white text-xl transition-colors"
+			data-action="close-modal"
+		>
+			✕
+		</button>
+
+		<!-- Header -->
+		<div class="text-center mb-4">
+			<div class="text-4xl mb-2">🎁</div>
+			<h3
+				class="font-bold text-xl"
+				style={`color: ${accentColor};`}
+			>
+				¿Cómo reclamar tu premio?
+			</h3>
+		</div>
+
+		<!-- Steps -->
+		<div class="space-y-3 mb-4">
+			<div class="flex gap-3 items-start">
+				<div
+					class="w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold shrink-0"
+					style={`background: ${accentColor}; color: #002855;`}
+				>
+					1
+				</div>
+				<div class="text-white/90 text-sm">
+					<strong>Copia el código</strong> que ganaste presionando el botón "Copiar Código"
+				</div>
+			</div>
+
+			<div class="flex gap-3 items-start">
+				<div
+					class="w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold shrink-0"
+					style={`background: ${accentColor}; color: #002855;`}
+				>
+					2
+				</div>
+				<div class="text-white/90 text-sm">
+					<strong>Ingresa a</strong> <a href="https://app.market-dollar.com" class="underline" style={`color: ${accentColor};`}>app.market-dollar.com</a> e inicia sesión
+				</div>
+			</div>
+
+			<div class="flex gap-3 items-start">
+				<div
+					class="w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold shrink-0"
+					style={`background: ${accentColor}; color: #002855;`}
+				>
+					3
+				</div>
+				<div class="text-white/90 text-sm">
+					<strong>Realiza un cambio</strong> de divisas y aplica tu código en el campo de cupón
+				</div>
+			</div>
+
+			<div class="flex gap-3 items-start">
+				<div
+					class="w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold shrink-0"
+					style={`background: ${accentColor}; color: #002855;`}
+				>
+					4
+				</div>
+				<div class="text-white/90 text-sm">
+					<strong>¡Disfruta tu descuento!</strong> Se aplicará automáticamente a tu operación
+				</div>
+			</div>
+		</div>
+
+		<!-- Note -->
+		<div
+			class="p-3 rounded-lg text-sm"
+			style={`background: ${accentColor}15; border: 1px solid ${accentColor}30;`}
+		>
+			<p class="text-white/80">
+				<span style={`color: ${accentColor};`}>⚠️</span> Los códigos tienen fecha de expiración. ¡Úsalo antes de que venza!
+			</p>
+		</div>
+
+		<!-- Close button -->
+		<button
+			class="w-full mt-4 py-2.5 rounded-lg font-bold transition-all hover:scale-[1.02]"
+			style={`background: ${accentColor}; color: #002855;`}
+			data-action="close-modal"
+		>
+			Entendido
+		</button>
+	</div>
+</div>
+
+<script define:vars={{ modalId }}>
+(function() {
+	const modal = document.getElementById(modalId);
+	const closeBtns = modal?.querySelectorAll('[data-action="close-modal"]');
+	const infoBtn = document.querySelector(`[data-game-id] [data-action="show-info"]`);
+
+	function openModal() {
+		modal?.classList.add('state-open');
+	}
+
+	function closeModal() {
+		modal?.classList.remove('state-open');
+	}
+
+	// Listen for info button clicks in the same game container
+	document.addEventListener('click', (e) => {
+		const target = e.target;
+		if (target.closest('[data-action="show-info"]')) {
+			// Only open if this modal belongs to the same game
+			const container = target.closest('[data-game-id]');
+			const gameId = container?.getAttribute('data-game-id');
+			if (modalId === `game-${gameId}-info-modal`) {
+				openModal();
+			}
+		}
+	});
+
+	closeBtns?.forEach(btn => {
+		btn.addEventListener('click', closeModal);
+	});
+
+	// Close on escape
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape') closeModal();
+	});
+})();
+</script>
