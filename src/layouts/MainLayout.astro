@@ -8,6 +8,7 @@ import "@styles/global.css";
 import MessageFloat from "@/components/layout/MessageFloat.astro";
 import BtnWhatsAppFloat from "@/components/layout/BtnWhatsAppFloat.astro";
 import RoulettePromotion from "@components/layout/RoulettePromotion.astro";
+import BannerHeader from "@/components/layout/BannerHeader.astro";
 
 interface Props {
     title: string;
@@ -43,14 +44,14 @@ const { title, description, image, canonicalURL, type, noIndex } = Astro.props;
             Saltar al contenido principal
         </a>
 
+        <BannerHeader />
         <Header />
-        <SubHeader />
         <main id="main-content" tabindex="-1">
             <slot />
         </main>
         <Footer />
-        <MessageFloat />
+        <!-- <MessageFloat />
         <BtnWhatsAppFloat />
-        <RoulettePromotion />
+        <RoulettePromotion /> -->
     </body>
 </html>

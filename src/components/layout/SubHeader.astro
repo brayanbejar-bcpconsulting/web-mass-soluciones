@@ -1,8 +1,6 @@
 ---
 /**
- * SubHeader - Navegación secundaria Personas/Empresas
- * Muestra tabs de navegación y badges de confianza
- * Solo visible en desktop (lg+)
+ * SubHeader - Rediseño Minimalista
  */
 import Icon from "@components/ui/Icon.astro";
 import { getClientTabs, TRUST_BADGES } from "@utils/navigation";
@@ -12,58 +10,70 @@ const { pathname } = Astro.url;
 // Usar función centralizada para tabs
 const tabs = getClientTabs(pathname);
 
-// Badges de confianza desde config centralizada
+// Badges de confianza
 const badges = TRUST_BADGES;
 
-// Estilos
-const tabBase = "flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary-600";
-const tabActive = "bg-white text-primary-700 shadow-sm";
-const tabInactive = "text-primary-100 hover:text-white hover:bg-primary-400/50";
+// Estilos de los Tabs
+const tabBase = "relative flex items-center gap-2 px-6 py-3 text-sm font-bold transition-all duration-300 group focus-visible:outline-none";
+const tabActive = "text-primary-700";
+const tabInactive = "text-neutral-400 hover:text-primary-500";
 ---
 
 <nav 
   id="sub-header"
-  class="hidden lg:block px-[5%] bg-primary-500 border-t border-primary-500/20 relative z-40 transition-all duration-300 will-change-transform"
+  class="hidden lg:block w-full bg-neutral-50 border-b border-neutral-200 z-40"
   aria-label="Navegación por tipo de cliente"
 >
-  <div class="max-w-350 flex items-center justify-center lg:justify-between py-2 mx-auto">
+  <div class="max-w-350 flex items-center justify-between mx-auto">
     
-    <!-- Tabs: Personas | Empresas -->
     <div 
-      class="flex items-center gap-1 bg-primary-800/50 p-1 rounded-full"
-      role="group"
-      aria-label="Tipo de cliente"
+      class="flex items-center" 
+      role="tablist"
     >
       {tabs.map((tab) => (
         <a 
           href={tab.href}
           class:list={[tabBase, tab.active ? tabActive : tabInactive]}
           aria-current={tab.active ? 'page' : undefined}
-          title={tab.description}
         >
-          <Icon name={tab.icon} class="size-4" aria-hidden="true" />
+          <Icon name={tab.icon} class:list={["size-4", tab.active ? "text-primary-600" : "text-neutral-400 group-hover:text-primary-400"]} />
           <span>{tab.name}</span>
+
+          {/* Línea indicadora de estado activo */}
+          {tab.active ? (
+            <div class="absolute bottom-0 left-0 w-full h-0.5 bg-primary-600 shadow-[0_-2px_8px_rgba(22,139,81,0.3)]" />
+          ) : (
+            <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-400 transition-all duration-300 group-hover:w-full" />
+          )}
         </a>
       ))}
     </div>
 
-    <!-- Badges de confianza -->
     <aside 
-      class="hidden md:flex items-center gap-2 text-sm text-primary-100 font-semibold"
+      class="flex items-center gap-6"
       aria-label="Indicadores de confianza"
     >
       {badges.map((badge, index) => (
-        <>
-          {index > 0 && (
-            <span class="w-px h-4 bg-primary-500/30" aria-hidden="true"></span>
-          )}
-          <span class="flex items-center gap-2">
-            <Icon name={badge.icon} class="size-4 text-secondary-200" aria-hidden="true" />
-            <span>{badge.text}</span>
+        <div class="flex items-center gap-2 group/badge">
+          <div class="p-1.5 rounded-lg bg-primary-50 text-primary-700 group-hover/badge:bg-primary-100 transition-colors">
+            <Icon name={badge.icon} class="size-4" aria-hidden="true" />
+          </div>
+          <span class="text-xs font-bold text-neutral-600 uppercase tracking-wide">
+            {badge.text}
           </span>
-        </>
+          {index < badges.length - 1 && (
+            <span class="ml-4 w-1 h-1 bg-neutral-300 rounded-full" aria-hidden="true"></span>
+          )}
+        </div>
       ))}
     </aside>
 
   </div>
 </nav>
+
+<style>
+  /* Suavizado de la transición del sub-header si se usa con scroll scripts */
+  #sub-header {
+    will-change: transform, opacity;
+  }
+</style>
