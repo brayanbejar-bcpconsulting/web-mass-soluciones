@@ -1,59 +1,85 @@
 ---
 import ContainerSection from "@/components/ui/ContainerSection.astro";
 import { Image } from "astro:assets";
+import Icon from "@/components/ui/Icon.astro";
 
-// Imágenes
-import sbsLogo from "@assets/home/sbs-logo.webp";
+// Componentes internos
 import Calculadora from "@/components/Calculadora.astro";
 import RateHistoryTable from "@/components/RateHistoryTable.astro";
+import WidgetExchange from "@/components/WidgetExchange.astro";
+
+// Data de beneficios (Copywriting enfocado a Mass Soluciones)
+const statsHero = [
+  {
+    icon: "shield-check",
+    title: "Seguridad Legal",
+    text: "Registrados ante la SBS",
+    color: "text-primary-600",
+    bg: "bg-primary-50"
+  },
+  {
+    icon: "trending-up",
+    title: "+3,000 Millones",
+    text: "Cambiados con éxito",
+    color: "text-secondary-600",
+    bg: "bg-secondary-50"
+  },
+  {
+    icon: "zap",
+    title: "Tasa Preferencial",
+    text: "Mejoramos tu propuesta",
+    color: "text-success-600",
+    bg: "bg-neutral-200"
+  }
+];
 ---
 
 <ContainerSection
   ariaLabelledby="hero-heading"
-  bgColor="bg-linear-to-b from-primary-500 to-primary-800"
-  classContainer="text-neutral-cool-50 text-center flex flex-col lg:flex-row items-center lg:justify-between lg:gap-8 gap-12"
+  bgColor="bg-neutral-100"
+  classContainer="text-neutral-700 text-center flex flex-col lg:flex-row items-center lg:justify-between lg:gap-8 gap-12"
+  maxWidth="max-w-7xl"
 >
   <header
-    class="flex flex-col items-center lg:items-start gap-4 lg:text-left lg:w-[45%]"
+    class="flex flex-col items-center lg:items-start gap-6 lg:text-left lg:w-[60%] bg-primary-600 p-8 rounded-2xl"
   >
-    <span
-      class="w-fit bg-primary-100 px-4 py-1 rounded-full text-primary-700 font-bold"
-    >
-      Cambia Dólares Online
-    </span>
-    <h1 id="hero-heading">
-      El tipo de cambio que tu dinero merece: <strong class="text-secondary-200"
-        >Seguro, rápido y 100% online.</strong
-      >
-    </h1>
+    <div class="flex flex-col gap-4 items-center lg:items-start">
+      <span class="w-fit bg-primary-100 px-4 py-1 rounded-xl text-primary-700 font-bold text-sm">
+        Cambia Dólares Online
+      </span>
+      
+      <h1 id="hero-heading" class="font-medium text-balance text-neutral-100">
+        El tipo de cambio que tu dinero merece: <strong class="text-primary-200">Seguro, rápido y 100% online.</strong>
+      </h1>
 
-    <p class="text-sm lg:text-base">
-      Ahorra en cada transacción con la casa de cambio digital que entiende el
-      valor de tu esfuerzo. <strong>Cambia tus dólares y soles</strong> desde cualquier
-      lugar del Perú con respaldo legal y rapidez bancaria.
-    </p>
-
-    <article class="flex flex-col gap-4">
-      <p>
-        <strong> Estamos registrados ante la SBS: </strong>
+      <p class="text-sm lg:text-base text-neutral-200 max-w-lg">
+        Optimiza tus finanzas con la tasa más competitiva del mercado peruano. 
+        <strong>Operaciones inmediatas</strong> con total respaldo legal.
       </p>
+    </div>
 
-      <div class="bg-neutral-cool-50 px-6 py-2 rounded-full max-w-65">
-        <Image
-          src={sbsLogo}
-          alt="Logo SBS"
-          quality={85}
-          loading="eager"
-          fetchpriority="high"
-        />
-      </div>
-    </article>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full">
+      {statsHero.map((item) => (
+        <article class="flex flex-row lg:flex-col items-center lg:items-start gap-3 p-3 bg-white rounded-2xl border border-neutral-200 shadow-sm transition-hover duration-300 hover:shadow-lg">
+          <div class:list={["p-2 rounded-xl shrink-0", item.bg, item.color]}>
+            <Icon name={item.icon} class="size-5" />
+          </div>
+          <header class="text-left">
+            <h3 class="text-base font-bold text-neutral-900 uppercase tracking-tight leading-none mb-1">
+              {item.title}
+            </h3>
+            <p class="text-xs font-medium text-neutral-500 leading-none">
+              {item.text}
+            </p>
+          </header>
+        </article>
+      ))}
+    </div>
   </header>
 
   <article
-    class="flex flex-col items-center justify-end lg:flex-row gap-8 lg:w-[55%]"
+    class="flex flex-col items-center justify-end lg:flex-row gap-8 lg:w-[40%] z-10"
   >
-    <RateHistoryTable />
-    <Calculadora />
+    <WidgetExchange />
   </article>
 </ContainerSection>

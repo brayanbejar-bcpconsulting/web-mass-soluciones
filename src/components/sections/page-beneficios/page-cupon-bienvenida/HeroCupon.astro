@@ -5,19 +5,20 @@ import { Image } from "astro:assets";
 
 // Imágenes
 import logoSBS from "@assets/home/sbs-logo.webp";
+import ContainerSection from "@/components/ui/ContainerSection.astro";
 ---
 
-<section
-  id="hero-home"
-  class="relative bg-linear-to-b from-primary-600 via-primary-700 to-primary-950 text-white px-[5%] flex flex-col lg:flex-row justify-center lg:items-center py-12 lg:py-16 lg:min-h-[85vh] overflow-hidden gap-10 lg:gap-0"
+<ContainerSection
+  ariaLabelledby="titulo-hero-cupones"
+  class="py-8!"
+  classContainer="flex flex-col lg:flex-row items-center bg-linear-to-br from-primary-400 to-primary-800 p-8 rounded-4xl"
 >
-  <!-- Contenido izquierdo -->
-  <article
-    class="lg:w-[45%] flex flex-col items-center lg:items-start gap-6 lg:gap-4 text-center lg:text-left"
+  <header
+    class="lg:w-[60%] flex flex-col items-center lg:items-start gap-6 lg:gap-4 text-center lg:text-left"
   >
     <!-- Badge superior mejorado -->
     <div
-      class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm"
+      class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 border border-white/20 backdrop-blur-sm"
     >
       <span class="relative flex h-2 w-2">
         <span
@@ -30,10 +31,10 @@ import logoSBS from "@assets/home/sbs-logo.webp";
     </div>
 
     <!-- Título principal mejorado -->
-    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight">
+    <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-neutral-100">
       La Tasa
       <span
-        class="block mt-2 bg-linear-to-r from-secondary-100 via-secondary-4200 to-secondary-400 bg-clip-text text-transparent"
+        class="mt-2 bg-linear-to-r from-secondary-100 via-secondary-200 to-secondary-300 bg-clip-text text-transparent"
       >
         más baja del mercado,
       </span>
@@ -41,7 +42,7 @@ import logoSBS from "@assets/home/sbs-logo.webp";
     </h1>
 
     <!-- Descripción mejorada -->
-    <p class="text-lg lg:text-xl text-primary-50/90 leading-relaxed max-w-xl">
+    <p class="hidden md:inline-block lg:text-lg text-primary-50/90 leading-relaxed max-w-xl">
       <strong class="text-white">Ahorra frente a los bancos</strong>, recibe tu
       dinero en minutos y opera desde una plataforma
       <strong class="text-white">100% digital, clara y segura</strong>.
@@ -115,20 +116,17 @@ import logoSBS from "@assets/home/sbs-logo.webp";
         />
       </div>
     </div>
-  </article>
+  </header>
 
   <!-- Contenido derecho (Conversor y Cupones) -->
   <article
-    class="lg:w-[50%] xl:w-[55%] flex flex-col-reverse md:flex-row gap-12 lg:gap-8 xl:justify-end justify-center items-stretch lg:items-center"
+    class="lg:w-[40%] flex flex-col-reverse md:flex-row gap-12 lg:gap-8 xl:justify-end justify-center items-stretch lg:items-center"
   >
-    <div class="flex-1 max-w-md mx-auto md:mx-0">
-      <Calculadora />
-    </div>
     <div class="flex-1 max-w-md mx-auto md:mx-0">
       <CuponesEnHero />
     </div>
   </article>
-</section>
+</ContainerSection>
 
 <style>
   /* Optimización para reduced motion */

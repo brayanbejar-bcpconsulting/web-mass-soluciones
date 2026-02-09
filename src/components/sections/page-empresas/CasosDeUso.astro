@@ -37,20 +37,22 @@ const cardsCasos = [
 ] as const;
 ---
 
-<ContainerSection ariaLabelledby="casos-uso-title">
+<ContainerSection ariaLabelledby="casos-uso-title" bgColor="bg-linear-to-b from-primary-600 to-primary-900">
   <SectionHeading
     id="casos-uso-title"
     title="¿Cómo ayuda Mass Soluciones a la"
     subtitle="operatividad de tu empresa?"
     shortText="Casos de Uso"
     align="center"
+    class="text-neutral-50"
+    textColor="text-neutral-200"
     description="Cubrimos todas las necesidades de divisas de tu negocio con rapidez y transparencia."
   />
 
   <div class="grid md:grid-cols-2 gap-8 mx-auto mt-6" role="list" aria-label="Casos de uso para empresas">
     {cardsCasos.map((card) => (
       <article
-        class="flex items-center gap-5 p-4 rounded-2xl hover:bg-neutral-50 border border-transparent hover:border-primary-300 transition-colors duration-300"
+        class="flex items-center gap-5 p-4 rounded-2xl bg-neutral-200 hover:bg-primary-200 border border-transparent hover:border-primary-300 transition-colors duration-300"
         role="listitem"
       >
         <Image

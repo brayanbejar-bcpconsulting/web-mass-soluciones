@@ -4,10 +4,10 @@ import ContainerSection from "@/components/ui/ContainerSection.astro";
 import { Image } from "astro:assets";
 
 // Iconos
-import iconHorario from "@assets/icons/icon-horario.webp"
-import iconSoporte from "@assets/icons/icon-soporte.webp"
-import iconAhorro from "@assets/icons/icon-ahorro.webp"
-import iconSeguridad from "@assets/icons/icon-seguridad.webp"
+import iconHorario from "@assets/icons/icon-horario.png"
+import iconSoporte from "@assets/icons/icon-soporte.png"
+import iconAhorro from "@assets/icons/icon-ahorro.png"
+import iconSeguridad from "@assets/icons/icon-seguridad.png"
 import Carousel from "@/components/ui/Carousel.astro";
 
 const cardsVentajas = [
@@ -27,7 +27,7 @@ const cardsVentajas = [
     image: iconAhorro
   },
   {
-    title: 'Seguridad SBS y UIF',
+    title: 'Seguridad 100% garantizada',
     description: 'Operaciones 100% bancarizadas y supervisadas. Tu dinero siempre seguro.',
     image: iconSeguridad
   }
@@ -35,6 +35,7 @@ const cardsVentajas = [
 ---
 <ContainerSection
   ariaLabelledby="titulo-por-que-elegirnos"
+  bgColor="bg-neutral-100"
 >
 
   <SectionHeading
@@ -44,7 +45,6 @@ const cardsVentajas = [
     subtitle="tipo de cambio"
     description="Diseñamos una experiencia pensando en lo que realmente te importa: tu tiempo, tu seguridad y tu dinero."
     align="center"
-    class="mb-10"
   />
 
   <Carousel
@@ -54,19 +54,21 @@ const cardsVentajas = [
   >
     {cardsVentajas.map((card, index) => (
         <article class="ventaja-card group/card">
-          <div class="flex flex-col gap-4 items-center justify-center border-2 border-neutral-100 rounded-2xl bg-white p-8 h-full transition-all duration-300 hover:border-primary-200 hover:shadow-xl hover:shadow-primary-900/5">
+          <div class="flex flex-col gap-4 items-center justify-center border-2 border-neutral-100 rounded-2xl bg-neutral-50 p-8 h-full transition-all shadow-lg duration-300 hover:border-primary-200 hover:shadow-xl hover:shadow-primary-900/5">
             <Image
               src={card.image}
               alt={card.title}
+              format="webp"
               width={250}
               height={250}
               loading="lazy"
               class="w-32 h-32 md:w-40 md:h-40 -mt-20 drop-shadow-2xl object-contain transition-transform duration-500 group-hover/card:scale-110"
             />
-            <h3 class="text-xl font-bold text-neutral-900 mt-2">
+            <h3 class="text-xl font-bold text-neutral-900 mt-2 text-center">
               {card.title}
             </h3>
-            <p class="text-neutral-600 leading-relaxed">
+            <span class="h-1 rounded-full bg-linear-to-br from-primary-400 to-secondary-400 w-[30%]"></span>
+            <p class="text-neutral-600 leading-relaxed text-sm text-center">
               {card.description}
             </p>
           </div>

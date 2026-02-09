@@ -4,12 +4,13 @@ import Icon from "@components/ui/Icon.astro";
 import { Image } from "astro:assets";
 
 // Imágenes Bancos
-import bancoBCP from "@assets/bancos/banco-bcp.webp";
+import bancoBCP from "@assets/bancos/banco-bcp-blanco.webp";
 import bancoBBVA from "@assets/bancos/banco-bbva.webp";
 import bancoScotiabank from "@assets/bancos/banco-scotiabank.webp";
 import bancoBanbif from "@assets/bancos/banco-banbif.webp";
 import bancoInterbank from "@assets/bancos/banco-interbank.webp";
 import bancoPichincha from "@assets/bancos/banco-pichincha.webp";
+import SectionHeading from "@/components/ui/SectionHeading.astro";
 
 const bancosInmediatos = [
   { src: bancoBCP, alt: "Transferencia inmediata con Banco BCP Perú" },
@@ -27,80 +28,58 @@ const bancosInterbancarios = [
 <ContainerSection
   maxWidth="max-w-300"
   ariaLabelledby="title-banner"
-  class="bg-[linear-gradient(to_bottom,var(--color-primary-800)_0%,var(--color-primary-950)_50%,var(--color-white)_50%,var(--color-white)_100%)] py-10"
-  classContainer="w-[90%] lg:w-[85%] py-10 px-8 flex flex-col gap-8 bg-primary-600 text-white mx-auto rounded-3xl shadow-2xl border border-white/10"
+  bgColor="bg-primary-800"
+  classContainer="w-[90%] lg:w-[85%] flex flex-col gap-8 text-white mx-auto"
 >
-  <header class="text-center flex flex-col items-center gap-3">
-    <span
-      class="text-xs font-black text-primary-200 uppercase tracking-[0.2em]"
-    >
-      Velocidad y Respaldo Bancario
-    </span>
-    <h2 class="text-2xl md:text-3xl font-bold text-secondary-200">
-      Transfiere con seguridad desde cualquier banco
-    </h2>
-  </header>
+  <SectionHeading
+    id="titulo-banner-bancos"
+    title="Transferencias fáciles, rápidas y"
+    subtitle="con seguridad bancaria"
+    description="Tenemos el respaldo de la SBS para que tu dinero este completamente seguro."
+    textColor="text-neutral-100"
+    align="center"
+  />
 
-  <div
-    class="flex flex-col lg:flex-row items-center justify-between gap-6 xl:gap-12"
-  >
-    <div class="hidden xl:flex items-center justify-center">
-      <Icon
-        name="timer-check"
-        class="size-20 text-secondary-200 drop-shadow-lg"
-      />
-    </div>
-
-    <article
-      class="flex flex-col items-center lg:items-start text-center lg:text-left"
-    >
-      <h3 class="text-lg font-bold text-secondary-200 mb-1">
-        Recibe tu dinero en minutos
+  <div class="flex flex-col md:flex-row justify-center gap-6">
+    <article class="border border-neutral-300 p-4 rounded-2xl">
+      <h3 class="text-xl lg:text-2xl">
+        Transferencias inmediatas
       </h3>
-      <p class="text-neutral-100 text-sm mb-4">
-        Tiempo promedio: <strong>15 a 45 min</strong>
-      </p>
-      <div>
-        {
-          bancosInmediatos.map((banco) => (
-            <Image
-              src={banco.src}
-              alt={banco.alt}
-              quality="high"
-              format="webp"
-              class="h-6 md:h-9 w-auto object-contain brightness-0 invert"
-            />
-          ))
-        }
-      </div>
+      <p class="text-sm mb-4 text-neutral-300">Recibe en menos de 15 min</p>
+      {
+        bancosInmediatos.map((bancos) => (
+          <Image
+            src={bancos.src}
+            alt={bancos.alt}
+            width={100}
+            height={100}
+            class="size-15 rounded-xl"
+          />
+        ))
+      }
     </article>
 
-    <div class="hidden lg:block w-px h-20 bg-primary-400/30" aria-hidden="true">
-    </div>
-
-    <article
-      class="flex flex-col items-center lg:items-start text-center lg:text-left"
-    >
-      <h3 class="text-lg font-bold text-secondary-200 mb-1">
-        Cobertura Nacional
+    <article class="border border-neutral-300 p-4 rounded-2xl">
+      <h3 class="text-xl lg:text-2xl">
+        Transferencias Interbancarias
       </h3>
-      <p class="text-neutral-100 text-sm mb-4">
-        Transferencias interbancarias <strong>(Hasta 24h)</strong>
-      </p>
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-6 items-center">
+      <p class="text-sm mb-4 text-neutral-300">Recibe en menos de 15 min</p>
+      <div class="flex justify-center sm:justify-start gap-4 flex-wrap">
         {
-          bancosInterbancarios.map((banco) => (
+          bancosInterbancarios.map((bancos) => (
             <Image
-              src={banco.src}
-              alt={banco.alt}
-              quality="high"
-              class="h-6 md:h-7 w-auto mx-auto md:mx-0 object-contain brightness-0 invert"
+              src={bancos.src}
+              alt={bancos.alt}
+              width={100}
+              height={100}
+              class="size-15 rounded-xl"
             />
           ))
         }
       </div>
     </article>
   </div>
+
   <a
     href="/terminos-condiciones"
     class="underline underline-offset-4 text-neutral-300 text-xs self-end lg:pr-10 -mt-10"
