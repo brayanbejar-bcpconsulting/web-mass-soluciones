@@ -4,164 +4,169 @@ import Button from '@/components/ui/Button.astro';
 import { APP_URLS } from '@/utils/navigation';
 ---
 
-<div 
-  id="calc-container" 
-  class="w-full max-w-md font-sans"
->
-  <div class="text-center mb-6">
-    <p class="text-neutral-200 text-h5 font-bold m-0">¡Precio del dólar hoy en Perú!</p>
-    <div class="flex justify-center items-center gap-4 mt-1">
-      <span class="text-neutral-200 text-btn">Compra: <strong id="display-compra" class="font-bold">
-        <span class="inline-block w-12 h-5 bg-neutral-400/50 rounded animate-pulse"></span>
-      </strong></span>
-      |
-      <span class="text-neutral-200 text-btn">Venta: <strong id="display-venta" class="font-bold">
-        <span class="inline-block w-12 h-5 bg-neutral-400/50 rounded animate-pulse"></span>
-      </strong></span>
-    </div>
+<div id="calc-container" class="w-full max-w-md mx-auto">
+  <div class="flex bg-primary-600 p-1 rounded-xl mb-6 relative border border-white/10 shadow-inner">
+    <button id="mode-buy" data-mode="buy" class="cursor-pointer mode-btn flex-1 py-2.5 px-4 rounded-lg text-sm font-bold transition-all z-10">
+      Quiero Vender 
+      <span class="block text-xs font-bold opacity-80" id="display-compra">
+        <span class="inline-block w-8 h-3 bg-white/20 animate-pulse rounded"></span>
+      </span>
+    </button>
+    <button id="mode-sell" data-mode="sell" class="mode-btn cursor-pointer flex-1 py-2.5 px-4 rounded-lg text-sm font-bold transition-all z-10">
+      Quiero Comprar 
+      <span class="block text-xs font-bold opacity-80" id="display-venta">
+        <span class="inline-block w-8 h-3 bg-white/20 animate-pulse rounded"></span>
+      </span>
+    </button>
   </div>
 
   <div class="space-y-3 relative">
-    <div class="p-4 bg-neutral-50 rounded-2xl border-2 border-transparent focus-within:border-primary-500 transition-all">
-      <span class="text-xs font-bold text-neutral-500 uppercase tracking-tight">Tú Envías</span>
+    <section class="p-4 bg-neutral-50 rounded-2xl border-2 border-transparent focus-within:border-secondary-400 transition-all shadow-sm">
+      <label for="input-envio" class="text-xs font-bold text-neutral-400 uppercase tracking-wider">Tú Envías</label>
       <div class="flex justify-between items-center mt-1">
-        <span id="label-envio" class="text-xl font-extrabold text-primary-950">Dólares</span>
-        <input 
-          type="number" 
-          id="input-envio" 
-          value="1000"
-          class="w-1/2 text-right text-2xl font-extrabold bg-transparent outline-none text-neutral-700"
-        />
+        <span class="flex items-center gap-3 text-xl font-extrabold text-primary-950">
+          <Icon name='flag-usa' class="size-6" id="icon-envio" />
+          <span id="text-envio">Dólares</span>
+        </span>
+        <input type="number" id="input-envio" step="any" placeholder="0.00" class="no-spinner w-1/2 text-right text-2xl font-black bg-transparent outline-none text-neutral-700" />
       </div>
-    </div>
+    </section>
 
-    <button 
-      id="btn-switch"
-      aria-label="Cambiar tipo de moneda"
-      title="Invertir monedas"
-      class="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 bg-secondary-400 p-2 rounded-full shadow-md border border-neutral-200 hover:scale-110 transition-transform active:rotate-180 duration-300"
-    >
-      <Icon name="refresh" />
+    <button id="btn-switch" aria-label="Invertir monedas" class="cursor-pointer absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 bg-primary-600 p-2.5 rounded-full shadow-lg border-4 border-white hover:scale-110 transition-all active:rotate-180 duration-500">
+      <Icon name="refresh" class="size-5 text-primary-50" />
     </button>
 
-    <div class="p-4 bg-neutral-50 rounded-2xl border-2 border-transparent focus-within:border-success-500 transition-all">
-      <span class="text-xs font-bold text-neutral-500 uppercase tracking-tight">Tú Recibes</span>
+    <section class="p-4 bg-neutral-100 rounded-2xl border-2 border-transparent focus-within:border-success-500 transition-all shadow-sm">
+      <label for="input-recibo" class="text-xs font-bold text-neutral-400 uppercase tracking-wider">Tú Recibes</label>
       <div class="flex justify-between items-center mt-1">
-        <span id="label-recibo" class="text-xl font-extrabold text-primary-950">Soles</span>
-        <input 
-          type="number" 
-          id="input-recibo" 
-          readonly
-          class="w-1/2 text-right text-2xl font-black bg-transparent outline-none text-success-600 text-secondary-400"
-        />
+        <span class="flex items-center gap-3 text-xl font-extrabold text-primary-950">
+          <Icon name='flag-peru' class="size-6" id="icon-recibo" />
+          <span id="text-recibo">Soles</span>
+        </span>
+        <input type="number" id="input-recibo" step="any" placeholder="0.00" class="no-spinner w-1/2 text-right text-2xl font-black bg-transparent outline-none text-success-600" />
       </div>
-    </div>
+    </section>
   </div>
 
-  <Button
-    href={APP_URLS.login} 
-    data-app-link="true"
-    variant="secondary"
-    class="text-neutral-800! mt-6 font-bold! text-shadow-none w-full"
-    target='_self'
-  >
+  <Button href={APP_URLS.login} variant="primary" class="mt-6 w-full font-bold py-4 shadow-lg active:scale-[0.98] transition-transform">
     Cambiar ahora
   </Button>
-
-  <ul class="my-4 flex flex-col gap-4 text-sm">
-    <li class="flex gap-2 items-center justify-center text-start">
-      <Icon name='icon-hand-coin' class='size-14'/>
-      <span class="mb-0">Solicita una tasa preferencial por montos mayores a <strong>$5.000</strong> o <strong>S/. 18.000</strong></span>
-    </li>
-    <li class="flex gap-2 items-center justify-center text-start">
-      <Icon name='shield-check' class='size-14'/>
-      <span class="mb-0 font-bold">Registrados en la Superintendencia de Banca y Seguros y AFP</span>
-    </li>
-  </ul>
 </div>
 
+<style>
+  .no-spinner::-webkit-inner-spin-button, .no-spinner::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  .no-spinner { -moz-appearance: textfield; }
+
+  /* Clase de activo solicitada */
+  .mode-btn.active {
+    background-color: white;
+    color: var(--color-primary-600);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  }
+  .mode-btn:not(.active) {
+    color: white;
+  }
+</style>
+
 <script>
-  import { APP_URLS } from '@/utils/navigation';
-import { buildURLWithUTM } from '@/utils/queryParams';
+  interface ExchangeRates { compra: number; venta: number; }
+  const FALLBACK: ExchangeRates = { compra: 3.354, venta: 3.365 };
   
-  // Variables globales para los precios
-  let compra = 0;
-  let venta = 0;
-  let tipoOperacion: 'USD' | 'PEN' = 'USD';
+  let rates = { ...FALLBACK };
+  let isSendUsd = true; 
 
-  // Elementos del DOM
-  const container = document.querySelector('#calc-container') as HTMLElement;
-  const inputEnvio = document.querySelector('#input-envio') as HTMLInputElement;
-  const inputRecibo = document.querySelector('#input-recibo') as HTMLInputElement;
-  const btnSwitch = document.querySelector('#btn-switch');
-  const labelEnvio = document.querySelector('#label-envio');
-  const labelRecibo = document.querySelector('#label-recibo');
-  const displayCompra = document.querySelector('#display-compra');
-  const displayVenta = document.querySelector('#display-venta');
-  const btnCambiarAhora = document.querySelector('#btn-cambiar-ahora') as HTMLButtonElement;
+  const inputEnvio = document.getElementById('input-envio') as HTMLInputElement;
+  const inputRecibo = document.getElementById('input-recibo') as HTMLInputElement;
+  const iconEnvio = document.getElementById('icon-envio') as HTMLElement;
+  const iconRecibo = document.getElementById('icon-recibo') as HTMLElement;
+  const textEnvio = document.getElementById('text-envio');
+  const textRecibo = document.getElementById('text-recibo');
+  const btnBuy = document.getElementById('mode-buy');
+  const btnSell = document.getElementById('mode-sell');
 
-  // Redirigir a la app con UTMs preservados
-  if (btnCambiarAhora) {
-    btnCambiarAhora.addEventListener('click', () => {
-      const appUrl = buildURLWithUTM(`${APP_URLS.login}`);
-      window.location.href = appUrl;
-    });
-  }
+  // Sincronización Maestra
+  function syncState(sendUsd: boolean) {
+    isSendUsd = sendUsd;
 
-  function calcular() {
-    if (compra === 0 || venta === 0) return; // Esperar a que carguen los datos
-    
-    const monto = Number(inputEnvio.value);
-    let resultado = 0;
-
-    if (tipoOperacion === 'USD') {
-      resultado = monto * compra;
+    // 1. Actualizar Buttons Superiores (UI Activa)
+    if (isSendUsd) {
+      btnBuy?.classList.add('active');
+      btnSell?.classList.remove('active');
     } else {
-      resultado = monto / venta;
+      btnSell?.classList.add('active');
+      btnBuy?.classList.remove('active');
     }
-    
-    inputRecibo.value = resultado.toFixed(2);
+
+    // 2. Actualizar Textos e Iconos de Inputs
+    if (textEnvio && textRecibo) {
+      textEnvio.textContent = isSendUsd ? 'Dólares' : 'Soles';
+      textRecibo.textContent = isSendUsd ? 'Soles' : 'Dólares';
+    }
+
+    const nameEnvio = isSendUsd ? 'flag-usa' : 'flag-peru';
+    const nameRecibo = isSendUsd ? 'flag-peru' : 'flag-usa';
+    updateIcon(iconEnvio, nameEnvio);
+    updateIcon(iconRecibo, nameRecibo);
+
+    calcular('envio');
   }
 
-  async function fetchRates() {
-    try {
-      const response = await fetch('/api/exchange-rate');
-      if (!response.ok) throw new Error('Error al obtener tasas');
-      
-      const data = await response.json();
-      compra = data.compra;
-      venta = data.venta;
-
-      // Actualizar UI con los precios reales
-      if (displayCompra) displayCompra.textContent = compra.toFixed(3);
-      if (displayVenta) displayVenta.textContent = venta.toFixed(3);
-
-      // Calcular con los nuevos valores
-      calcular();
-    } catch (error) {
-      console.error('Error cargando tasas:', error);
-      // Fallback en caso de error
-      compra = 3.353;
-      venta = 3.356;
-      if (displayCompra) displayCompra.textContent = compra.toFixed(3);
-      if (displayVenta) displayVenta.textContent = venta.toFixed(3);
-      calcular();
+  function updateIcon(el: HTMLElement | null, name: string) {
+    if (!el) return;
+    const useTag = el.querySelector('use');
+    if (useTag) {
+      const currentHref = useTag.getAttribute('href') || '';
+      const basePath = currentHref.split('#')[0];
+      useTag.setAttribute('href', `${basePath}#${name}`);
     }
   }
 
-  btnSwitch?.addEventListener('click', () => {
-    tipoOperacion = tipoOperacion === 'USD' ? 'PEN' : 'USD';
+  function calcular(source: 'envio' | 'recibo') {
+    if (!inputEnvio || !inputRecibo) return;
     
-    if(labelEnvio && labelRecibo) {
-      labelEnvio.textContent = tipoOperacion === 'USD' ? 'Dólares' : 'Soles';
-      labelRecibo.textContent = tipoOperacion === 'USD' ? 'Soles' : 'Dólares';
+    // Tasa: Si mando USD uso COMPRA. Si mando PEN uso VENTA.
+    const tasa = isSendUsd ? rates.compra : rates.venta;
+
+    if (source === 'envio') {
+      const monto = parseFloat(inputEnvio.value) || 0;
+      const res = isSendUsd ? monto * tasa : monto / tasa;
+      inputRecibo.value = monto > 0 ? res.toFixed(2) : "";
+    } else {
+      const monto = parseFloat(inputRecibo.value) || 0;
+      const res = isSendUsd ? monto / tasa : monto * tasa;
+      inputEnvio.value = monto > 0 ? res.toFixed(2) : "";
     }
-    
-    calcular();
+  }
+
+  // Eventos de Inputs
+  inputEnvio?.addEventListener('input', () => calcular('envio'));
+  inputRecibo?.addEventListener('input', () => calcular('recibo'));
+
+  // Evento Botones Superiores (Modo)
+  btnBuy?.addEventListener('click', () => syncState(true));
+  btnSell?.addEventListener('click', () => syncState(false));
+
+  // Evento Botón Switch Central (Invertir)
+  document.getElementById('btn-switch')?.addEventListener('click', () => {
+    syncState(!isSendUsd);
   });
 
-  inputEnvio.addEventListener('input', calcular);
+  async function init() {
+    try {
+      const res = await fetch('/api/exchange-rate');
+      if(res.ok) rates = await res.json();
+    } catch {
+      console.warn("Usando fallbacks");
+    }
+    
+    if (document.getElementById('display-compra')) 
+      document.getElementById('display-compra')!.textContent = `S/ ${rates.compra.toFixed(3)}`;
+    if (document.getElementById('display-venta')) 
+      document.getElementById('display-venta')!.textContent = `S/ ${rates.venta.toFixed(3)}`;
+    
+    inputEnvio.value = "1000";
+    syncState(true); // Iniciar como "Vender Dólares" (Quiero Vender activo)
+  }
 
-  // Cargar tasas al iniciar
-  fetchRates();
+  init();
 </script>

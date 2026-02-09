@@ -1,0 +1,107 @@
+---
+import Calculadora from './Calculadora.astro';
+import RateHistoryTable from './RateHistoryTable.astro';
+import Icon from './ui/Icon.astro';
+
+---
+
+<section class="w-full sm:w-110 max-w-md bg-white backdrop-blur-md rounded-3xl border border-white/20 overflow-hidden shadow-2xl">
+  <nav class="flex p-2 gap-2 bg-neutral-100" aria-label="Opciones de tipo de cambio">
+    <button
+      data-target="calc"
+      class="tab-btn text-sm md:text-base flex gap-2 lg:gap-4 items-center justify-center flex-1 py-3 px-4 rounded-2xl font-bold font-montserrat transition-all duration-300 ease-out cursor-pointer"
+    >
+      <Icon name='calculator'/>
+      Calculadora
+    </button>
+    <button
+      data-target="history"
+      class="tab-btn text-sm md:text-base flex gap-2 lg:gap-4 items-center justify-center flex-1 py-3 px-4 rounded-2xl font-bold transition-all duration-300 ease-out cursor-pointer"
+    >
+      <Icon name='history-table'/>
+      Historial
+    </button>
+  </nav>
+
+  <div id="widget-content" class="p-6 flex min-h-110 flex-col items-center" data-active-tab="calc">
+    <article id="panel-calc" class="w-full transition-opacity duration-300">
+      <Calculadora />
+    </article>
+    
+    <article id="panel-history" class="w-full transition-opacity duration-300 hidden">
+      <RateHistoryTable />
+    </article>
+  </div>
+</section>
+
+<style>
+  /* Estilos específicos para el estado de los botones usando colores globales */
+  .tab-btn {
+    color: var(--color-primary-600);
+    background-color: var(--color-neutral-200);
+  }
+
+  /* Botón activo: Calculadora */
+  [data-active-tab="calc"] ~ nav [data-target="calc"],
+  .tab-btn.active {
+    background-color: var(--color-primary-600);
+    color: var(--color-neutral-50);
+    box-shadow: 0 4px 15px -5px var(--color-scondary-400);
+  }
+
+  /* Control de visibilidad sin divs extra */
+  #widget-content:not([data-active-tab="calc"]) #panel-calc {
+    display: none;
+  }
+  
+  #widget-content:not([data-active-tab="history"]) #panel-history {
+    display: none;
+  }
+
+  #widget-content[data-active-tab="history"] #panel-history {
+    display: block;
+    animation: fadeIn 0.4s ease-out;
+  }
+
+  #widget-content[data-active-tab="calc"] #panel-calc {
+    display: block;
+    animation: fadeIn 0.4s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<script>
+  const setupTabs = () => {
+    const container = document.getElementById('widget-content');
+    const buttons = document.querySelectorAll('.tab-btn');
+
+    // Estado inicial
+    const setActiveTab = (target: string) => {
+      if (!container) return;
+      container.setAttribute('data-active-tab', target);
+      
+      buttons.forEach(btn => {
+        const isSelected = btn.getAttribute('data-target') === target;
+        btn.classList.toggle('active', isSelected);
+        btn.setAttribute('aria-selected', isSelected.toString());
+      });
+    };
+
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        const target = button.getAttribute('data-target');
+        if (target) setActiveTab(target);
+      });
+    });
+
+    // Inicializar primer tab
+    setActiveTab('calc');
+  };
+
+  // Ejecutar en carga de página
+  setupTabs();
+</script>

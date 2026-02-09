@@ -3,15 +3,15 @@
 // Los datos se cargan desde el cliente para no bloquear el renderizado
 ---
 
-<div id="price-history-container" class="md:hidden xl:inline-block w-full max-w-sm bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
-  <h3 class="text-lg font-bold text-neutral-100 mb-3 text-center">
+<div id="price-history-container" class="md:hidden xl:inline-block w-full max-w-sm rounded-2xl p-4">
+  <h3 class="text-lg font-bold text-neutral-600 mb-3 text-center">
     Historial de Precios
   </h3>
   
-  <div class="overflow-hidden rounded-xl">
+  <div class="overflow-hidden rounded-xl border-neutral-400 border">
     <table class="w-full text-sm">
       <thead>
-        <tr class="bg-primary-800/50 text-neutral-200">
+        <tr class="bg-primary-600 text-neutral-100">
           <th class="py-2 px-3 text-left font-semibold">Fecha</th>
           <th class="py-2 px-3 text-center font-semibold">Compra</th>
           <th class="py-2 px-3 text-center font-semibold">Venta</th>
@@ -20,15 +20,15 @@
       <tbody id="history-table-body">
         <!-- Skeleton rows mientras carga -->
         {Array.from({ length: 7 }).map((_, i) => (
-          <tr class="skeleton-row border-b border-white/10 last:border-0">
+          <tr class="skeleton-row border-b border-neutral-300 last:border-0">
             <td class="py-2 px-3">
-              <span class="inline-block w-16 h-4 bg-neutral-400/30 rounded animate-pulse"></span>
+              <span class="inline-block w-16 h-4 bg-neutral-400 rounded animate-pulse"></span>
             </td>
             <td class="py-2 px-3 text-center">
-              <span class="inline-block w-12 h-4 bg-neutral-400/30 rounded animate-pulse"></span>
+              <span class="inline-block w-12 h-4 bg-neutral-400 rounded animate-pulse"></span>
             </td>
             <td class="py-2 px-3 text-center">
-              <span class="inline-block w-12 h-4 bg-neutral-400/30 rounded animate-pulse"></span>
+              <span class="inline-block w-12 h-4 bg-neutral-400 rounded animate-pulse"></span>
             </td>
           </tr>
         ))}
@@ -36,7 +36,7 @@
     </table>
   </div>
   
-  <p id="last-update" class="text-xs text-neutral-300 text-center mt-3 opacity-70">
+  <p id="last-update" class="text-xs text-neutral-500 text-center mt-3 opacity-70">
     Cargando...
   </p>
 </div>
@@ -88,7 +88,7 @@
 
       if (tableBody) {
         tableBody.innerHTML = last7.map((item, index) => `
-          <tr class="border-b border-white/10 last:border-0 ${index === 0 ? 'bg-secondary-400/20' : ''} text-neutral-100 hover:bg-white/5 transition-colors">
+          <tr class="border-b border-neutral-300 last:border-0 ${index === 0 ? 'bg-secondary-400/20' : ''} text-neutral-500 hover:bg-white/5 transition-colors">
             <td class="py-2 px-3 font-medium">${formatDate(item.fecha)}</td>
             <td class="py-2 px-3 text-center font-semibold text-success-400">${item.compra.toFixed(3)}</td>
             <td class="py-2 px-3 text-center font-semibold text-error-400">${item.venta.toFixed(3)}</td>
@@ -98,7 +98,7 @@
         // Si no hay datos, mostrar mensaje
         if (last7.length === 0) {
           tableBody.innerHTML = `
-            <tr class="text-neutral-300">
+            <tr class="text-neutral-600">
               <td colspan="3" class="py-4 text-center">Sin datos disponibles</td>
             </tr>
           `;
@@ -113,7 +113,7 @@
       console.error('Error cargando historial:', error);
       if (tableBody) {
         tableBody.innerHTML = `
-          <tr class="text-neutral-300">
+          <tr class="text-neutral-500">
             <td colspan="3" class="py-4 text-center">Error al cargar datos</td>
           </tr>
         `;
