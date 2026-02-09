@@ -3,14 +3,15 @@ import { parseSimpleMarkdown } from "@utils/markdown"
 
 interface Props {
   title: string;
-  shortText?: string,
-  description?: string,
+  shortText?: string;
+  description?: string;
   subtitle?: string;
   id: string;
   align?: 'left' | 'center';
   barColor?: string;
   textColor?: string;
   class?: string;
+  textGradient?: 'primary' | 'secondary';
 }
 
 const { 
@@ -22,8 +23,17 @@ const {
   align = 'left',
   barColor = 'bg-secondary-400',
   textColor = 'text-neutral-600',
-  class: className = '' 
+  textGradient = 'secondary', // Valor por defecto
+  class: className = ''
 } = Astro.props;
+
+const gradientStyles = {
+  primary: 'bg-linear-to-br from-primary-400 via-primary-500 to-primary-600 bg-clip-text text-transparent',
+  secondary: 'bg-linear-to-br from-secondary-400 via-secondary-500 to-secondary-600 bg-clip-text text-transparent'
+};
+
+// Seleccionamos la clase basada en el prop
+const selectedGradient = gradientStyles[textGradient];
 
 const alignmentClass = align === 'center' ? 'text-center lg:w-[85%] mx-auto' : 'text-left';
 const barAlignmentClass = align === 'center' ? 'mx-auto' : 'mx-0';
@@ -33,21 +43,26 @@ const parsedDescription = description ? parseSimpleMarkdown(description) : '';
 
 <header class={`${alignmentClass} ${className}`}>
   {shortText && (
-    <span class="text-primary-600 font-bold text-xs uppercase tracking-[0.2em] bg-primary-50 px-4 py-1.5 rounded-full w-fit mx-auto lg:mx-0">
+    <span class="text-primary-600 font-bold text-xs uppercase tracking-[0.2em] bg-primary-50 px-4 py-1.5 rounded-full w-fit mb-4 inline-block">
       {shortText}
     </span>
   )}
-  <h2 id={id} class="text-2xl lg:text-4xl font-bold my-4">
+  
+  <h2 id={id} class="text-2xl lg:text-4xl font-bold my-4 text-balance">
     {title}
     {subtitle && (
-      <span class="bg-linear-to-r from-secondary-500 via-secondary-600 to-secondary-700 bg-clip-text text-transparent">{subtitle}</span>
+      <span class={`${selectedGradient}`}>
+        {subtitle}
+      </span>
     )}
   </h2>
+
   <div 
     class={`h-1.5 ${barColor} w-20 rounded-full my-4 ${barAlignmentClass}`} 
     aria-hidden="true"
   ></div>
+
   {description && (
-    <p class=`mb-0 ${textColor}` set:html={parsedDescription} />
+    <p class={`text-sm lg:text-lg leading-relaxed ${textColor}`} set:html={parsedDescription} />
   )}
 </header>
