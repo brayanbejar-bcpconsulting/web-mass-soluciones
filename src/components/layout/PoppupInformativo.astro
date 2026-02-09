@@ -1,0 +1,83 @@
+---
+// Puedes recibir la imagen o el link como props si lo deseas
+const { src = "/masspopup.webp" } = Astro.props;
+---
+
+<div 
+  id="promo-overlay" 
+  class="fixed inset-0 z-9999 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300 ease-in-out"
+  aria-hidden="true"
+  role="dialog"
+>
+  <div class="modal-container relative w-full max-w-137.5 scale-90 opacity-0 transition-all duration-500 ease-out">
+    <button 
+      id="close-promo"
+      class="cursor-pointer absolute -top-3 -right-3 lg:top-4 lg:right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-primary-600 text-white shadow-lg hover:bg-primary-700 transition-colors border-2 border-white"
+      aria-label="Cerrar promoción"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <div class="block overflow-hidden rounded-2xl shadow-2xl">
+      <img
+        src={src}
+        alt="Promoción Market Dollar"
+        class="h-auto w-full max-h-[85vh] object-contain"
+        loading="eager"
+      />
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Control de estados mediante una sola clase en el padre */
+  #promo-overlay.active {
+    @apply opacity-100 pointer-events-auto;
+  }
+  #promo-overlay.active .modal-container {
+    @apply scale-100 opacity-100;
+  }
+</style>
+
+<script>
+  const overlay = document.getElementById("promo-overlay");
+  const closeBtn = document.getElementById("close-promo");
+
+  const openModal = () => {
+    // Verificamos si ya lo vio en esta sesión para no ser intrusivos
+    if (!sessionStorage.getItem("promo-viewed")) {
+      setTimeout(() => {
+        overlay?.classList.add("active");
+        document.body.style.overflow = "hidden"; // Evita scroll de fondo
+      }, 1500);
+    }
+  };
+
+  const closeModal = () => {
+    overlay?.classList.remove("active");
+    document.body.style.overflow = "";
+    sessionStorage.setItem("promo-viewed", "true");
+  };
+
+  // Eventos
+  closeBtn?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    closeModal();
+  });
+
+  overlay?.addEventListener("click", (e) => {
+    if (e.target === overlay) closeModal();
+  });
+
+  // Cerrar con tecla ESC
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && overlay?.classList.contains("active")) {
+      closeModal();
+    }
+  });
+
+  // Ejecutar al cargar
+  openModal();
+</script>
